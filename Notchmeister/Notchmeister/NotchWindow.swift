@@ -49,7 +49,7 @@ extension NSScreen {
 		let screenFrame = self.frame
 		let visibleFrame = self.visibleFrame
 		
-		let fakeNotchSize = NSSize(width:200, height:screenFrame.maxY - visibleFrame.maxY)
+		let fakeNotchSize = NSSize(width:220, height:screenFrame.maxY - visibleFrame.maxY)
 
         let x = self.frame.midX - (fakeNotchSize.width / 2)
         let y = self.frame.maxY - fakeNotchSize.height
@@ -86,6 +86,7 @@ class NotchWindow: NSWindow {
         //self.level = .screenSaver - 1
 		self.level = .popUpMenu // NOTE: I think this is a better guess. -ch
         self.hidesOnDeactivate = false
+        self.canHide = false
         self.isMovable = false
         self.isOpaque = false
         self.hasShadow = false
