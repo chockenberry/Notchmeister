@@ -16,6 +16,7 @@ class NotchView: NSView {
 	
 	override var isFlipped: Bool {
 		get {
+			// things are easier if the view and layer origins are in the upper left corner
 			return true
 		}
 	}
@@ -77,12 +78,11 @@ class NotchView: NSView {
 	override func mouseMoved(with event: NSEvent) {
 		if mouseInView {
 			let locationInWindow = event.locationInWindow
-			let locationInView = self.convert(locationInWindow, to: nil)
+			let locationInView = self.convert(locationInWindow, from: nil)
 			debugLog("point = \(locationInView)")
-			CATransaction.begin()
-			CATransaction.setDisableActions(true)
-			self.sublayer?.position = locationInView
-			CATransaction.commit()
+			CATransaction.withActionsDisabled {
+				self.sublayer?.position = locationInView
+			}
 		}
 	}
 	

@@ -15,13 +15,20 @@ class ViewController: NSViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 
-		notchWindow = NotchWindow(fakeANotch: FAKE_NOTCH)
+		let padding: CGFloat = 20
+		
+		notchWindow = NotchWindow(padding: padding)
 		if let notchWindow = notchWindow {
 			let contentView = NSView(frame: notchWindow.frame)
 			contentView.wantsLayer = true;
 			
-			let notchView = NotchView(frame: contentView.bounds)
-			contentView.addSubview(notchView)
+			if let notchRect = NSScreen.notched?.notchRect {
+				let contentBounds = contentView.bounds
+				let notchFrame = CGRect(origin: CGPoint(x: contentBounds.midX - notchRect.width / 2, y: contentBounds.maxY - notchRect.height), size: notchRect.size)
+				let notchView = NotchView(frame: notchFrame)
+				contentView.addSubview(notchView)
+			}
+
 			notchWindow.contentView = contentView
 			
 			notchWindow.orderFront(self)

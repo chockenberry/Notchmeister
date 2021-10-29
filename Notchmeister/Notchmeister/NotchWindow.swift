@@ -5,6 +5,33 @@
 import Cocoa
 
 extension NSScreen {
+	
+	static var notched: NSScreen? {
+		// NOTE: I'm pretty sure a laptop screen will always be first. Don't want to use
+		// main since that returns the screen with keyboard focus. -ch
+		//
+		// TODO: Verify laptop and if it's not always first, loop over all screens looking
+		// for any that report aux areas also may need to watch for display arranement changes?
+		
+		guard let screen = NSScreen.screens.first else {
+			return nil;
+		}
+		
+		return screen
+	}
+	
+	var notchRect: NSRect {
+		if let notchArea = self.notchArea {
+			return notchArea
+		}
+		else if FAKE_NOTCH {
+			return self.fakeNotchArea
+		}
+		else {
+			return .zero
+		}
+	}
+	
     var notchArea: NSRect? {
         guard let topLeft = topLeftSafeArea, let topRight = topRightSafeArea else {
             return nil
@@ -50,29 +77,10 @@ extension NSScreen {
 
 class NotchWindow: NSWindow {
 
-    required init?(fakeANotch: Bool) {
-
-        // TODO: is the laptop screen always main? probably not
-        // could loop over all screens looking for any that report aux areas
-        // also may need to watch for display arranement changes?
-		
-        // NOTE: I'm pretty sure a laptop screen will always be first. Don't want to use
-		// main since that returns the screen with keyboard focus. -ch
-		guard let screen = NSScreen.screens.first else {
-            return nil;
-        }
+    required init?(padding: CGFloat) {
+		guard let notchRect = NSScreen.notched?.notchRect else { return nil }
         
-        let contentRect: NSRect
-        if let notchArea = screen.notchArea {
-            contentRect = notchArea
-        }
-        else if fakeANotch {
-            contentRect = screen.fakeNotchArea
-        }
-        else {
-            return nil
-        }
-        
+		let contentRect = CGRect(x: notchRect.origin.x - padding, y: notchRect.origin.y - padding, width: notchRect.width + (padding * 2), height: notchRect.height + padding)
         super.init(contentRect: contentRect, styleMask: .borderless, backing: .buffered, defer: false)
         
         //self.level = .screenSaver - 1
