@@ -14,6 +14,7 @@
 		441C5AC1272CA0790094507E /* NotchWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 441C5AC0272CA0780094507E /* NotchWindow.swift */; };
 		441C5AC3272CA5310094507E /* NotchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 441C5AC2272CA5310094507E /* NotchView.swift */; };
 		441C5AC5272CA72F0094507E /* Debug.swift in Sources */ = {isa = PBXBuildFile; fileRef = 441C5AC4272CA72F0094507E /* Debug.swift */; };
+		441C5AC7272CB2B00094507E /* CoreAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 441C5AC6272CB2B00094507E /* CoreAnimation.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		441C5AC0272CA0780094507E /* NotchWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotchWindow.swift; sourceTree = "<group>"; };
 		441C5AC2272CA5310094507E /* NotchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotchView.swift; sourceTree = "<group>"; };
 		441C5AC4272CA72F0094507E /* Debug.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Debug.swift; sourceTree = "<group>"; };
+		441C5AC6272CB2B00094507E /* CoreAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreAnimation.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,6 +64,7 @@
 				441C5AB3272C9FD10094507E /* ViewController.swift */,
 				441C5AC0272CA0780094507E /* NotchWindow.swift */,
 				441C5AC2272CA5310094507E /* NotchView.swift */,
+				441C5AC6272CB2B00094507E /* CoreAnimation.swift */,
 				441C5AC4272CA72F0094507E /* Debug.swift */,
 				441C5AB5272C9FD30094507E /* Assets.xcassets */,
 				441C5AB7272C9FD30094507E /* Main.storyboard */,
@@ -143,6 +146,7 @@
 				441C5AC1272CA0790094507E /* NotchWindow.swift in Sources */,
 				441C5AC5272CA72F0094507E /* Debug.swift in Sources */,
 				441C5AC3272CA5310094507E /* NotchView.swift in Sources */,
+				441C5AC7272CB2B00094507E /* CoreAnimation.swift in Sources */,
 				441C5AB4272C9FD10094507E /* ViewController.swift in Sources */,
 				441C5AB2272C9FD10094507E /* AppDelegate.swift in Sources */,
 			);
