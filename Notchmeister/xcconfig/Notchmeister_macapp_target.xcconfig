@@ -1,0 +1,45 @@
+// developers can locally override the Xcode settings for code signing
+// by creating a DeveloperSettings.xcconfig file locally at the appropriate path
+// This allows a pristine project to have code signing set up with the appropriate
+// developer ID and certificates, and for dev to be able to have local settings
+// without needing to check in anything into source control
+//
+// As an example, make a ../../SharedXcodeSettings/DeveloperSettings.xcconfig file and
+// give it the contents
+//
+//    CODE_SIGN_IDENTITY[sdk=macosx*] = Mac Developer
+//    CODE_SIGN_IDENTITY[sdk=iphoneos*] = iPhone Developer
+//    CODE_SIGN_IDENTITY[sdk=iphonesimulator*] = iPhone Developer
+//    DEVELOPMENT_TEAM = <Your Team ID>
+//    ORGANIZATION_IDENTIFIER = <Your Domain Name Reversed>
+//    CODE_SIGN_STYLE = Automatic
+//    DEVELOPER_ENTITLEMENTS = -dev
+//    PROVISIONING_PROFILE_SPECIFIER =
+//
+// And you should be able to build without code signing errors and without modifying
+// the Notchmeister Xcode project.
+//
+// Example:  if your Notchmeister Xcode project file is at
+//     /Users/Shared/git/Notchmeister/Notchmeister.xcodeproj
+// create your DeveloperSettings.xcconfig file at
+//     /Users/Shared/git/SharedXcodeSettings/DeveloperSettings.xcconfig
+//
+
+#include? "../../SharedXcodeSettings/DeveloperSettings.xcconfig"
+
+MARKETING_VERSION = 1.0
+CURRENT_PROJECT_VERSION = 1
+
+ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO
+ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon
+COMBINE_HIDPI_IMAGES = YES
+
+ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO
+ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon
+INFOPLIST_FILE = Notchmeister/Info.plist
+PRODUCT_NAME = Notchmeister
+LD_RUNPATH_SEARCH_PATHS = $(inherited) @executable_path/../Frameworks
+
+CODE_SIGN_ENTITLEMENTS = Notchmeister/Notchmeister.entitlements
+PRODUCT_BUNDLE_IDENTIFIER = $(ORGANIZATION_IDENTIFIER).Notchmeister
