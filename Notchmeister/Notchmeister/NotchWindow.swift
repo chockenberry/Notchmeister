@@ -5,11 +5,15 @@
 import Cocoa
 
 extension NSScreen {
-	
+
 	static var notched: NSScreen? {
-		// The order of the screens doesn't reliably predict which one has the notch or not.
-		// For now, just report the first screen that has a non-empty notchRect.
-		return NSScreen.screens.first { $0.notchRect != .zero }
+		// Always favor a physical screen with a notch, but return the first screen if we're faking it.
+		let physicallyNotched = NSScreen.screens.first { $0.notchArea != nil }
+		if physicallyNotched != nil {
+			return physicallyNotched
+		} else {
+			return Defaults.shouldFakeNotch ? NSScreen.screens.first : nil
+		}
 	}
 	
 	var notchRect: NSRect {
