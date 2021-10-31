@@ -711,19 +711,60 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DQb-Wa-YfR">
-                                <rect key="frame" x="133" y="127" width="215" height="16"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" title="Move your mouse under the notch!" id="D7s-5M-fM7">
-                                    <font key="font" usesAppearanceFont="YES"/>
+                                <rect key="frame" x="112" y="231" width="257" height="19"/>
+                                <textFieldCell key="cell" controlSize="large" lineBreakMode="clipping" title="Move your mouse under the notch!" id="D7s-5M-fM7">
+                                    <font key="font" metaFont="system" size="16"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Qh7-pz-oeU">
+                                <rect key="frame" x="204" y="176" width="161" height="18"/>
+                                <buttonCell key="cell" type="check" title="Enable debug drawing" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="dmw-rr-miI">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="debugDrawingValueChanged:" target="XfG-lQ-9wD" id="pK1-vN-0wH"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="GpJ-jA-PUB">
+                                <rect key="frame" x="204" y="154" width="245" height="18"/>
+                                <buttonCell key="cell" type="check" title="Counterfeit notch for the notch-less" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="9af-4Q-E6A">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="fakeNotchValueChanged:" target="XfG-lQ-9wD" id="o7F-gL-vB3"/>
+                                </connections>
+                            </button>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="EFD-t6-idF">
+                                <rect key="frame" x="112" y="177" width="88" height="16"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="Development:" id="9Py-Sc-DOI">
+                                    <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
                         </subviews>
                         <constraints>
+                            <constraint firstItem="Qh7-pz-oeU" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="EFD-t6-idF" secondAttribute="trailing" constant="8" symbolic="YES" id="BGl-5f-rW4"/>
+                            <constraint firstItem="EFD-t6-idF" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="114" id="GrS-dR-oYY"/>
+                            <constraint firstItem="Qh7-pz-oeU" firstAttribute="baseline" secondItem="EFD-t6-idF" secondAttribute="baseline" id="PK6-5Q-MG8"/>
                             <constraint firstItem="DQb-Wa-YfR" firstAttribute="centerX" secondItem="m2S-Jp-Qdl" secondAttribute="centerX" id="Rt6-GL-ImR"/>
-                            <constraint firstItem="DQb-Wa-YfR" firstAttribute="centerY" secondItem="m2S-Jp-Qdl" secondAttribute="centerY" id="wXQ-Fe-Kup"/>
+                            <constraint firstItem="Qh7-pz-oeU" firstAttribute="top" secondItem="DQb-Wa-YfR" secondAttribute="bottom" constant="38" id="Xld-7C-Vxy"/>
+                            <constraint firstAttribute="trailing" secondItem="Qh7-pz-oeU" secondAttribute="trailing" constant="115" id="enO-TC-Ooi"/>
+                            <constraint firstItem="GpJ-jA-PUB" firstAttribute="top" secondItem="Qh7-pz-oeU" secondAttribute="bottom" constant="6" symbolic="YES" id="iUx-pB-Dih"/>
+                            <constraint firstAttribute="trailing" secondItem="GpJ-jA-PUB" secondAttribute="trailing" constant="31" id="jfJ-hE-jLu"/>
+                            <constraint firstItem="DQb-Wa-YfR" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="20" symbolic="YES" id="obc-h5-hEI"/>
+                            <constraint firstItem="Qh7-pz-oeU" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="206" id="vFP-ga-oth"/>
+                            <constraint firstItem="Qh7-pz-oeU" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="GpJ-jA-PUB" secondAttribute="leading" id="wbX-Da-qu3"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="debugDrawingCheckbox" destination="Qh7-pz-oeU" id="ZIs-Cn-n5R"/>
+                        <outlet property="fakeNotchCheckbox" destination="GpJ-jA-PUB" id="8HI-d4-d7b"/>
+                    </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>

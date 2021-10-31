@@ -24,7 +24,7 @@ extension NSScreen {
 		if let notchArea = self.notchArea {
 			return notchArea
 		}
-		else if FAKE_NOTCH {
+        else if Defaults.shouldFakeNotch {
 			return self.fakeNotchArea
 		}
 		else {
@@ -93,12 +93,12 @@ class NotchWindow: NSWindow {
         self.collectionBehavior = [.transient, .canJoinAllSpaces]
 		self.acceptsMouseMovedEvents = true
 		
-		if DEBUG_DRAWING {
+        if Defaults.shouldDebugDrawing {
 			self.backgroundColor = .systemPurple
 		}
 		else {
 			self.backgroundColor = .clear
 		}
     }
-    
+
 }

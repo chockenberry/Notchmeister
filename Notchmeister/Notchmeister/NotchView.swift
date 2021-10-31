@@ -32,7 +32,7 @@ class NotchView: NSView {
 			// create a layer hosting view
 			wantsLayer = true
 			layer?.masksToBounds = false
-			if DEBUG_DRAWING {
+            if Defaults.shouldDebugDrawing {
 				self.layer?.backgroundColor = NSColor.systemRed.cgColor
 			}
 			else {
@@ -46,7 +46,7 @@ class NotchView: NSView {
 				sublayer.bounds = CGRect(origin: .zero, size: CGSize(width: dimension, height: dimension))
 				sublayer.cornerRadius = dimension / 2
 				sublayer.masksToBounds = false
-				if DEBUG_DRAWING {
+                if Defaults.shouldDebugDrawing {
 					sublayer.backgroundColor = NSColor.yellow.cgColor
 				}
 				else {

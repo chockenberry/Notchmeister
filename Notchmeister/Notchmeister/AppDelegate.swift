@@ -7,21 +7,11 @@
 
 import Cocoa
 
-#if DEBUG
-	let DEBUG_DRAWING = true
-	let FAKE_NOTCH = true
-#else
-	let DEBUG_DRAWING = false
-	let FAKE_NOTCH = false
-#endif
-
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
 
-
-
 	func applicationDidFinishLaunching(_ aNotification: Notification) {
-		// Insert code here to initialize your application
+        Defaults.register()
 	}
 
 	func applicationWillTerminate(_ aNotification: Notification) {
