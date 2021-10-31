@@ -6,17 +6,16 @@ import Cocoa
 
 extension NSScreen {
 
-	static var notched: NSScreen? {
-		// Always favor a physical screen with a notch, but return the first screen if we're faking it.
-		let physicallyNotched = NSScreen.screens.first { $0.notchArea != nil }
-		if physicallyNotched != nil {
-			return physicallyNotched
+	static var notchedScreens: [NSScreen] {
+		// Always favor physical screens with a notch, but return all screens if we're faking notches.
+		if Defaults.shouldFakeNotch {
+			return NSScreen.screens
 		} else {
-			return Defaults.shouldFakeNotch ? NSScreen.screens.first : nil
+			return NSScreen.screens.filter { $0.notchArea != nil }
 		}
 	}
 	
-	var notchRect: NSRect {
+	var notchRect: NSRect? {
 		if let notchArea = self.notchArea {
 			return notchArea
 		}
@@ -24,7 +23,7 @@ extension NSScreen {
 			return self.fakeNotchArea
 		}
 		else {
-			return .zero
+			return nil
 		}
 	}
 	
@@ -73,8 +72,8 @@ extension NSScreen {
 
 class NotchWindow: NSWindow {
 
-    required init?(padding: CGFloat) {
-		guard let notchRect = NSScreen.notched?.notchRect else { return nil }
+	required init?(screen: NSScreen, padding: CGFloat) {
+		guard let notchRect = screen.notchRect else { return nil }
         
 		let contentRect = CGRect(x: notchRect.origin.x - padding, y: notchRect.origin.y - padding, width: notchRect.width + (padding * 2), height: notchRect.height + padding)
         super.init(contentRect: contentRect, styleMask: .borderless, backing: .buffered, defer: false)

@@ -9,8 +9,8 @@ import Cocoa
 
 class ViewController: NSViewController {
 
-	var notchWindow: NotchWindow?
-	var notchView: NotchView?
+	var notchWindows: [NotchWindow] = []
+	var notchViews: [NotchView] = []
 	
     @IBOutlet weak var debugDrawingCheckbox: NSButton!
     
@@ -22,7 +22,7 @@ class ViewController: NSViewController {
         super.viewDidLoad()
         
         configureForDefaults()
-        createNotchWindow()
+        createNotchWindows()
     }
     
     private func configureForDefaults() {
@@ -38,41 +38,42 @@ class ViewController: NSViewController {
         }
     }
     
-    private func createNotchWindow() {
+    private func createNotchWindows() {
         let padding: CGFloat = 50
         
-        if let oldWindow = notchWindow {
+        for oldWindow in notchWindows {
             oldWindow.orderOut(self)
         }
-        
-        notchWindow = NotchWindow(padding: padding)
-        if let notchWindow = notchWindow {
-            let contentView = NSView(frame: notchWindow.frame)
-            contentView.wantsLayer = true;
-            
-            if let notchRect = NSScreen.notched?.notchRect {
-                let contentBounds = contentView.bounds
-                let notchFrame = CGRect(origin: CGPoint(x: contentBounds.midX - notchRect.width / 2, y: contentBounds.maxY - notchRect.height), size: notchRect.size)
-                let notchView = NotchView(frame: notchFrame)
-                contentView.addSubview(notchView)
-            }
 
-            notchWindow.contentView = contentView
-            
-            notchWindow.orderFront(self)
-        }
+		for screen in NSScreen.notchedScreens {
+			if let notchWindow = NotchWindow(screen: screen, padding: padding) {
+				let contentView = NSView(frame: notchWindow.frame)
+				contentView.wantsLayer = true;
+
+				if let notchRect = screen.notchRect {
+					let contentBounds = contentView.bounds
+					let notchFrame = CGRect(origin: CGPoint(x: contentBounds.midX - notchRect.width / 2, y: contentBounds.maxY - notchRect.height), size: notchRect.size)
+					let notchView = NotchView(frame: notchFrame)
+					contentView.addSubview(notchView)
+				}
+
+				notchWindow.contentView = contentView
+
+				notchWindow.orderFront(self)
+			}
+		}
     }
     
     //MARK: - Actions
     
     @IBAction func debugDrawingValueChanged(_ sender: Any) {
         Defaults.shouldDebugDrawing = (debugDrawingCheckbox.state == .on)
-        createNotchWindow()
+        createNotchWindows()
     }
     
     @IBAction func fakeNotchValueChanged(_ sender: Any) {
         Defaults.shouldFakeNotch = (fakeNotchCheckbox.state == .on)
-        createNotchWindow()
+        createNotchWindows()
     }
 }
 
