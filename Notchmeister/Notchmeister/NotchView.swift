@@ -31,31 +31,32 @@ class NotchView: NSView {
 			
 			// create a layer hosting view
 			wantsLayer = true
-			layer?.masksToBounds = false
-            if Defaults.shouldDebugDrawing {
-				self.layer?.backgroundColor = NSColor.systemRed.cgColor
-			}
-			else {
-				self.layer?.backgroundColor = NSColor.black.cgColor
-			}
-			
-			// create a sublayer that will follow mouse movements
-			sublayer = CALayer()
-			if let sublayer = sublayer {
-				let dimension: CGFloat = 20
-				sublayer.bounds = CGRect(origin: .zero, size: CGSize(width: dimension, height: dimension))
-				sublayer.cornerRadius = dimension / 2
-				sublayer.masksToBounds = false
-                if Defaults.shouldDebugDrawing {
-					sublayer.backgroundColor = NSColor.yellow.cgColor
+			if let layer = layer {
+				layer.masksToBounds = false
+				if Defaults.shouldDebugDrawing {
+					layer.backgroundColor = NSColor.systemRed.cgColor
 				}
 				else {
-					sublayer.backgroundColor = NSColor.white.cgColor
+					layer.backgroundColor = NSColor.black.cgColor
 				}
-				sublayer.position = .zero
-				sublayer.opacity = 0
 				
-				layer?.addSublayer(sublayer)
+				// create a sublayer that will follow mouse movements
+				sublayer = CALayer()
+				if let sublayer = sublayer {
+					let dimension: CGFloat = 20
+					sublayer.bounds = CGRect(origin: .zero, size: CGSize(width: dimension, height: dimension))
+					sublayer.masksToBounds = false
+					if Defaults.shouldDebugDrawing {
+						sublayer.backgroundColor = NSColor.systemBlue.cgColor
+					}
+					else {
+						sublayer.backgroundColor = NSColor.clear.cgColor
+					}
+					sublayer.position = .zero
+					sublayer.opacity = 0
+					
+					layer.addSublayer(sublayer)
+				}
 			}
 		}
 		else {
@@ -72,16 +73,53 @@ class NotchView: NSView {
 	override func mouseEntered(with event: NSEvent) {
 		debugLog()
 		mouseInView = true
-		self.sublayer?.opacity = 1
+		
+		//NSCursor.hide() // NOTE: This only works when the app is frontmost, which in this case is unlikely.
+
+		if let sublayer = sublayer {
+			let cursor = NSCursor.current
+			let cursorSize = cursor.image.size
+			let hotSpot = cursor.hotSpot
+			
+			// record the hot spot in normalized coordinates relative to the center of the cursor since that's where we're scaling the image from
+			let normalizedHotSpotPoint = NSPoint(x: (hotSpot.x / cursorSize.width) - 0.5, y: (hotSpot.y / cursorSize.height) - 0.5)
+
+			var proposedRect = CGRect(origin: .zero, size: cursorSize)
+			if let cgImage = cursor.image.cgImage(forProposedRect: &proposedRect, context: nil, hints: nil) {
+				let ciImage = CIImage(cgImage: cgImage)
+				// NOTE: The image processing here will be more complicated, this is just a placeholder.
+				if let filter = CIFilter(name: "CIGaussianBlur") {
+					let blurScale: CGFloat = 6
+					
+					filter.setDefaults()
+					filter.setValue(ciImage, forKey: kCIInputImageKey)
+					filter.setValue(blurScale, forKey: kCIInputRadiusKey)
+					
+					let context = CIContext(options: nil)
+					if let filteredCiImage = filter.outputImage {
+						if let sublayerCgImage = context.createCGImage(filteredCiImage, from: filteredCiImage.extent) {
+							let sublayerSize = CGSize(width: sublayerCgImage.width, height: sublayerCgImage.height)
+							sublayer.bounds = CGRect(origin: .zero, size: sublayerSize)
+							sublayer.anchorPoint = CGPoint(x: 0.5 + (normalizedHotSpotPoint.x / blurScale), y: 0.5 + (normalizedHotSpotPoint.y / blurScale))
+							sublayer.contents = sublayerCgImage
+						}
+					}
+				}
+			}
+			
+			sublayer.opacity = 1
+		}
 	}
 	
 	override func mouseMoved(with event: NSEvent) {
 		if mouseInView {
-			let locationInWindow = event.locationInWindow
-			let locationInView = self.convert(locationInWindow, from: nil)
-			debugLog("point = \(locationInView)")
-			CATransaction.withActionsDisabled {
-				self.sublayer?.position = locationInView
+			if let sublayer = sublayer {
+				let locationInWindow = event.locationInWindow
+				let locationInView = self.convert(locationInWindow, from: nil)
+				//debugLog("point = \(locationInView)")
+				CATransaction.withActionsDisabled {
+					sublayer.position = locationInView
+				}
 			}
 		}
 	}
@@ -89,7 +127,12 @@ class NotchView: NSView {
 	override func mouseExited(with event: NSEvent) {
 		debugLog()
 		mouseInView = false
-		self.sublayer?.opacity = 0
+
+		//NSCursor.unhide() // NOTE: This only works when the app is frontmost, which in this case is unlikely.
+		
+		if let sublayer = sublayer {
+			sublayer.opacity = 0
+		}
 	}
 	
 }

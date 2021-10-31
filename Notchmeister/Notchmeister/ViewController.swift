@@ -39,7 +39,7 @@ class ViewController: NSViewController {
     }
     
     private func createNotchWindow() {
-        let padding: CGFloat = 20
+        let padding: CGFloat = 50
         
         if let oldWindow = notchWindow {
             oldWindow.orderOut(self)
