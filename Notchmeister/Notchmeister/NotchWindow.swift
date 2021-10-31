@@ -7,17 +7,9 @@ import Cocoa
 extension NSScreen {
 	
 	static var notched: NSScreen? {
-		// NOTE: I'm pretty sure a laptop screen will always be first. Don't want to use
-		// main since that returns the screen with keyboard focus. -ch
-		//
-		// TODO: Verify laptop and if it's not always first, loop over all screens looking
-		// for any that report aux areas also may need to watch for display arranement changes?
-		
-		guard let screen = NSScreen.screens.first else {
-			return nil;
-		}
-		
-		return screen
+		// The order of the screens doesn't reliably predict which one has the notch or not.
+		// For now, just report the first screen that has a non-empty notchRect.
+		return NSScreen.screens.first { $0.notchRect != .zero }
 	}
 	
 	var notchRect: NSRect {
