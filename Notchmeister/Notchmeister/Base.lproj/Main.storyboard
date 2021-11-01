@@ -738,6 +738,17 @@
                                     <action selector="fakeNotchValueChanged:" target="XfG-lQ-9wD" id="o7F-gL-vB3"/>
                                 </connections>
                             </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rKO-N3-Lc5">
+                                <rect key="frame" x="204" y="132" width="131" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="check" title="Outline the notch" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="ohU-Sq-GOo">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="outlineNotchValueChanaged:" target="XfG-lQ-9wD" id="V12-TG-VN9"/>
+                                </connections>
+                            </button>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="EFD-t6-idF">
                                 <rect key="frame" x="112" y="177" width="88" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Development:" id="9Py-Sc-DOI">
@@ -746,6 +757,17 @@
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="n8l-IV-LaP">
+                                <rect key="frame" x="204" y="110" width="105" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="check" title="Fill the notch" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="lhG-hn-ete">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="fillNotchValueChanged:" target="XfG-lQ-9wD" id="ZDg-eE-ytM"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <constraints>
                             <constraint firstItem="Qh7-pz-oeU" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="EFD-t6-idF" secondAttribute="trailing" constant="8" symbolic="YES" id="BGl-5f-rW4"/>
@@ -764,6 +786,8 @@
                     <connections>
                         <outlet property="debugDrawingCheckbox" destination="Qh7-pz-oeU" id="ZIs-Cn-n5R"/>
                         <outlet property="fakeNotchCheckbox" destination="GpJ-jA-PUB" id="8HI-d4-d7b"/>
+                        <outlet property="fillNotchCheckbox" destination="n8l-IV-LaP" id="bUl-15-XHo"/>
+                        <outlet property="outlineNotchCheckbox" destination="rKO-N3-Lc5" id="HwJ-52-J7q"/>
                     </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>

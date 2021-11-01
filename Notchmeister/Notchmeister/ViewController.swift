@@ -13,8 +13,9 @@ class ViewController: NSViewController {
 	var notchViews: [NotchView] = []
 	
     @IBOutlet weak var debugDrawingCheckbox: NSButton!
-    
     @IBOutlet weak var fakeNotchCheckbox: NSButton!
+    @IBOutlet weak var outlineNotchCheckbox: NSButton!
+    @IBOutlet weak var fillNotchCheckbox: NSButton!
     
     //MARK: - Life Cycle
     
@@ -28,6 +29,8 @@ class ViewController: NSViewController {
     private func configureForDefaults() {
         debugDrawingCheckbox.state = .off
         fakeNotchCheckbox.state = .off
+        outlineNotchCheckbox.state = .off
+        fillNotchCheckbox.state = .off
         
         if Defaults.shouldDebugDrawing {
             debugDrawingCheckbox.state = .on
@@ -35,6 +38,14 @@ class ViewController: NSViewController {
         
         if Defaults.shouldFakeNotch {
             fakeNotchCheckbox.state = .on
+        }
+        
+        if Defaults.shouldDrawNotchOutline {
+            outlineNotchCheckbox.state = .on
+        }
+        
+        if Defaults.shouldDrawNotchFill {
+            fillNotchCheckbox.state = .on
         }
     }
     
@@ -45,6 +56,9 @@ class ViewController: NSViewController {
             oldWindow.orderOut(self)
         }
 
+        notchWindows.removeAll()
+        notchViews.removeAll()
+        
 		for screen in NSScreen.notchedScreens {
 			if let notchWindow = NotchWindow(screen: screen, padding: padding) {
 				let contentView = NSView(frame: notchWindow.frame)
@@ -55,11 +69,13 @@ class ViewController: NSViewController {
 					let notchFrame = CGRect(origin: CGPoint(x: contentBounds.midX - notchRect.width / 2, y: contentBounds.maxY - notchRect.height), size: notchRect.size)
 					let notchView = NotchView(frame: notchFrame)
 					contentView.addSubview(notchView)
+                    notchViews.append(notchView)
 				}
 
 				notchWindow.contentView = contentView
-
 				notchWindow.orderFront(self)
+        
+                notchWindows.append(notchWindow)
 			}
 		}
     }
@@ -74,6 +90,20 @@ class ViewController: NSViewController {
     @IBAction func fakeNotchValueChanged(_ sender: Any) {
         Defaults.shouldFakeNotch = (fakeNotchCheckbox.state == .on)
         createNotchWindows()
+    }
+    
+    @IBAction func outlineNotchValueChanaged(_ sender: Any) {
+        Defaults.shouldDrawNotchOutline = (outlineNotchCheckbox.state == .on)
+        notchViews.forEach {
+            $0.needsDisplay = true
+        }
+    }
+    
+    @IBAction func fillNotchValueChanged(_ sender: Any) {
+        Defaults.shouldDrawNotchFill = (fillNotchCheckbox.state == .on)
+        notchViews.forEach {
+            $0.needsDisplay = true
+        }
     }
 }
 

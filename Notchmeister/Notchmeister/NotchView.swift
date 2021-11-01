@@ -13,7 +13,10 @@ class NotchView: NSView {
 	var mouseInView: Bool = false
 	
 	var sublayer: CALayer?
+    var notchOutlineLayer: CAShapeLayer?
 	
+    // MARK: - NSView
+    
 	override var isFlipped: Bool {
 		get {
 			// things are easier if the view and layer origins are in the upper left corner
@@ -21,6 +24,14 @@ class NotchView: NSView {
 		}
 	}
 
+    override func updateLayer() {
+        guard let notchOutlineLayer = notchOutlineLayer else { return }
+
+        notchOutlineLayer.fillColor = Defaults.shouldDrawNotchFill ? NSColor.black.cgColor : NSColor.clear.cgColor
+        notchOutlineLayer.strokeColor = Defaults.shouldDrawNotchOutline ? NSColor.white.cgColor : NSColor.clear.cgColor
+        notchOutlineLayer.lineWidth = 1.0
+    }
+    
 	override func viewDidMoveToSuperview() {
 		if self.superview != nil {
 			// create a tracking area for mouse movements
@@ -37,9 +48,11 @@ class NotchView: NSView {
 					layer.backgroundColor = NSColor.systemRed.cgColor
 				}
 				else {
-					layer.backgroundColor = NSColor.black.cgColor
+					layer.backgroundColor = NSColor.clear.cgColor
 				}
 				
+                createOutlineLayer()
+                
 				// create a sublayer that will follow mouse movements
 				sublayer = CALayer()
 				if let sublayer = sublayer {
@@ -70,6 +83,24 @@ class NotchView: NSView {
 		}
 	}
 	
+    private func createOutlineLayer() {
+        guard let layer = layer else { return }
+        
+        let outlineLayer = CAShapeLayer.notchOutlineLayer(for: bounds.size)
+                
+        outlineLayer.masksToBounds = false
+        
+        outlineLayer.anchorPoint = .zero
+        outlineLayer.autoresizingMask = [.layerHeightSizable, .layerWidthSizable]
+        layer.addSublayer(outlineLayer)
+        
+        outlineLayer.isGeometryFlipped = isFlipped
+
+        notchOutlineLayer = outlineLayer
+    }
+    
+    //MARK: - NSResponder
+    
 	override func mouseEntered(with event: NSEvent) {
 		debugLog()
 		mouseInView = true
@@ -136,3 +167,4 @@ class NotchView: NSView {
 	}
 	
 }
+
