@@ -29,7 +29,7 @@ class NotchView: NSView {
 
         notchOutlineLayer.fillColor = Defaults.shouldDrawNotchFill ? NSColor.black.cgColor : NSColor.clear.cgColor
         notchOutlineLayer.strokeColor = Defaults.shouldDrawNotchOutline ? NSColor.white.cgColor : NSColor.clear.cgColor
-        notchOutlineLayer.lineWidth = 1.0
+        notchOutlineLayer.lineWidth = 2.0
     }
     
 	override func viewDidMoveToSuperview() {
