@@ -27,26 +27,10 @@ class ViewController: NSViewController {
     }
     
     private func configureForDefaults() {
-        debugDrawingCheckbox.state = .off
-        fakeNotchCheckbox.state = .off
-        outlineNotchCheckbox.state = .off
-        fillNotchCheckbox.state = .off
-        
-        if Defaults.shouldDebugDrawing {
-            debugDrawingCheckbox.state = .on
-        }
-        
-        if Defaults.shouldFakeNotch {
-            fakeNotchCheckbox.state = .on
-        }
-        
-        if Defaults.shouldDrawNotchOutline {
-            outlineNotchCheckbox.state = .on
-        }
-        
-        if Defaults.shouldDrawNotchFill {
-            fillNotchCheckbox.state = .on
-        }
+        debugDrawingCheckbox.state = Defaults.shouldDebugDrawing ? .on : .off
+        fakeNotchCheckbox.state = Defaults.shouldFakeNotch ? .on : .off
+        outlineNotchCheckbox.state = Defaults.shouldDrawNotchOutline ? .on : .off
+        fillNotchCheckbox.state = Defaults.shouldDrawNotchFill ? .on : .off
     }
     
     private func createNotchWindows() {
