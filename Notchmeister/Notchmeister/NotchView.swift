@@ -15,6 +15,8 @@ class NotchView: NSView {
 	var sublayer: CALayer?
     var notchOutlineLayer: CAShapeLayer?
 	
+	let context = CIContext(options: nil)
+
     // MARK: - NSView
     
 	override var isFlipped: Bool {
@@ -65,6 +67,7 @@ class NotchView: NSView {
 					else {
 						sublayer.backgroundColor = NSColor.clear.cgColor
 					}
+					sublayer.contentsScale = layer.contentsScale
 					sublayer.position = .zero
 					sublayer.opacity = 0
 					
@@ -124,17 +127,25 @@ class NotchView: NSView {
 				if let cgImage = glowBaseImage.cgImage(forProposedRect: &proposedRect, context: nil, hints: nil) {
 					let ciImage = CIImage(cgImage: cgImage)
 					// NOTE: The image processing here will be more complicated, this is just a placeholder.
-					if let filter = CIFilter(name: "CIGaussianBlur") {
+					if let filter = CIFilter(name: "CIDiscBlur") {
 						let blurScale: CGFloat = 10
 						
+						// glowBaseImage = 20 x 20 pt
+						// ciImage.extent = 40 x 40 @ 0,0
+						// blurScale = 10, filteredCiImage = 100 x 100 @ -30, -30, sublayerSize = 50 x 50 pt
+						// blurScale = 5, filteredCiImage = 70 x 70 @ -15, -15, sublayerSize = 35 x 35 pt
+						// blurScale = 1, filteredCiImage = 46 x 46 @ -3, -3, sublayerSize = 23 x 23 pt
+
 						filter.setDefaults()
 						filter.setValue(ciImage, forKey: kCIInputImageKey)
 						filter.setValue(blurScale, forKey: kCIInputRadiusKey)
 						
-						let context = CIContext(options: nil)
 						if let filteredCiImage = filter.outputImage {
+							debugLog("filteredCiImage.extent = \(filteredCiImage.extent)")
 							if let sublayerCgImage = context.createCGImage(filteredCiImage, from: filteredCiImage.extent) {
-								let sublayerSize = CGSize(width: sublayerCgImage.width, height: sublayerCgImage.height)
+								let scale = sublayer.contentsScale
+								let sublayerSize = CGSize(width: CGFloat(sublayerCgImage.width) / scale, height: CGFloat(sublayerCgImage.height) / scale)
+								//debugLog("sublayerSize = \(sublayerSize)") //
 								sublayer.bounds = CGRect(origin: .zero, size: sublayerSize)
 								sublayer.anchorPoint = CGPoint(x: 0.5 + (normalizedHotSpotPoint.x / blurScale), y: 0.5 + (normalizedHotSpotPoint.y / blurScale))
 								sublayer.contents = sublayerCgImage
