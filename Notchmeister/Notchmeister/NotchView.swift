@@ -112,32 +112,37 @@ class NotchView: NSView {
 			let cursorSize = cursor.image.size
 			let hotSpot = cursor.hotSpot
 			
-			// record the hot spot in normalized coordinates relative to the center of the cursor since that's where we're scaling the image from
-			let normalizedHotSpotPoint = NSPoint(x: (hotSpot.x / cursorSize.width) - 0.5, y: (hotSpot.y / cursorSize.height) - 0.5)
-
-			var proposedRect = CGRect(origin: .zero, size: cursorSize)
-			if let cgImage = cursor.image.cgImage(forProposedRect: &proposedRect, context: nil, hints: nil) {
-				let ciImage = CIImage(cgImage: cgImage)
-				// NOTE: The image processing here will be more complicated, this is just a placeholder.
-				if let filter = CIFilter(name: "CIGaussianBlur") {
-					let blurScale: CGFloat = 6
-					
-					filter.setDefaults()
-					filter.setValue(ciImage, forKey: kCIInputImageKey)
-					filter.setValue(blurScale, forKey: kCIInputRadiusKey)
-					
-					let context = CIContext(options: nil)
-					if let filteredCiImage = filter.outputImage {
-						if let sublayerCgImage = context.createCGImage(filteredCiImage, from: filteredCiImage.extent) {
-							let sublayerSize = CGSize(width: sublayerCgImage.width, height: sublayerCgImage.height)
-							sublayer.bounds = CGRect(origin: .zero, size: sublayerSize)
-							sublayer.anchorPoint = CGPoint(x: 0.5 + (normalizedHotSpotPoint.x / blurScale), y: 0.5 + (normalizedHotSpotPoint.y / blurScale))
-							sublayer.contents = sublayerCgImage
+			if let glowBaseImage = NSImage(named: "glowBase") {
+				let glowBaseSize = glowBaseImage.size
+				
+				// record the hot spot in normalized coordinates relative to the center of the cursor since that's where we're scaling the image from
+				let normalizedHotSpotPoint = NSPoint(x: (hotSpot.x / cursorSize.width) - 0.5, y: (hotSpot.y / cursorSize.height) - 0.5)
+				
+				//var proposedRect = CGRect(origin: .zero, size: cursorSize)
+				var proposedRect = CGRect(origin: .zero, size: glowBaseSize)
+				//if let cgImage = cursor.image.cgImage(forProposedRect: &proposedRect, context: nil, hints: nil) {
+				if let cgImage = glowBaseImage.cgImage(forProposedRect: &proposedRect, context: nil, hints: nil) {
+					let ciImage = CIImage(cgImage: cgImage)
+					// NOTE: The image processing here will be more complicated, this is just a placeholder.
+					if let filter = CIFilter(name: "CIGaussianBlur") {
+						let blurScale: CGFloat = 10
+						
+						filter.setDefaults()
+						filter.setValue(ciImage, forKey: kCIInputImageKey)
+						filter.setValue(blurScale, forKey: kCIInputRadiusKey)
+						
+						let context = CIContext(options: nil)
+						if let filteredCiImage = filter.outputImage {
+							if let sublayerCgImage = context.createCGImage(filteredCiImage, from: filteredCiImage.extent) {
+								let sublayerSize = CGSize(width: sublayerCgImage.width, height: sublayerCgImage.height)
+								sublayer.bounds = CGRect(origin: .zero, size: sublayerSize)
+								sublayer.anchorPoint = CGPoint(x: 0.5 + (normalizedHotSpotPoint.x / blurScale), y: 0.5 + (normalizedHotSpotPoint.y / blurScale))
+								sublayer.contents = sublayerCgImage
+							}
 						}
 					}
 				}
 			}
-			
 			sublayer.opacity = 1
 		}
 	}

@@ -84,7 +84,7 @@ class NotchWindow: NSWindow {
 		// More info: https://jameshfisher.com/2020/08/03/what-is-the-order-of-nswindow-levels/
 		//self.level = NSWindow.Level.init(rawValue: Int(CGWindowLevelForKey(.maximumWindow)))
 		//self.level = .screenSaver
-		//self.level = .popUpMenu // NOTE: I think this is probably best - keeps the window under a screensaver.
+		self.level = .popUpMenu // NOTE: I think this is probably best - keeps the window under a screensaver.
         self.hidesOnDeactivate = false
         self.canHide = false
         self.isMovable = false
