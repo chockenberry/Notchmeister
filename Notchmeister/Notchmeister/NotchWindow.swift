@@ -4,6 +4,8 @@
 
 import Cocoa
 
+import CoreGraphics
+
 extension NSScreen {
 
 	static var notchedScreens: [NSScreen] {
@@ -78,13 +80,17 @@ class NotchWindow: NSWindow {
 		let contentRect = CGRect(x: notchRect.origin.x - padding, y: notchRect.origin.y - padding, width: notchRect.width + (padding * 2), height: notchRect.height + padding)
         super.init(contentRect: contentRect, styleMask: .borderless, backing: .buffered, defer: false)
         
-        //self.level = .screenSaver - 1
-		self.level = .popUpMenu // NOTE: I think this is a better guess. -ch
+		// NOTE: In theory, we should be able to create a window above the cursor. In practice, this doesn't work.
+		// More info: https://jameshfisher.com/2020/08/03/what-is-the-order-of-nswindow-levels/
+		//self.level = NSWindow.Level.init(rawValue: Int(CGWindowLevelForKey(.maximumWindow)))
+		//self.level = .screenSaver
+		//self.level = .popUpMenu // NOTE: I think this is probably best - keeps the window under a screensaver.
         self.hidesOnDeactivate = false
         self.canHide = false
         self.isMovable = false
         self.isOpaque = false
         self.hasShadow = false
+		// TODO: .transient works well for fake notch (so it goes away with Exposé), .stationary is better with a real notch (stays put with Exposé)
         self.collectionBehavior = [.transient, .canJoinAllSpaces]
 		self.acceptsMouseMovedEvents = true
 		
