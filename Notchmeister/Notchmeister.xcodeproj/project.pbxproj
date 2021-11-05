@@ -107,7 +107,7 @@
 				441C5AAA272C9FD10094507E /* Sources */,
 				441C5AAB272C9FD10094507E /* Frameworks */,
 				441C5AAC272C9FD10094507E /* Resources */,
-				51F8A860272CCB9B00D349F1 /* Run VerifyNoBuildSettings */,
+				51F8A860272CCB9B00D349F1 /* Run VerifyNoBS */,
 			);
 			buildRules = (
 			);
@@ -164,7 +164,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		51F8A860272CCB9B00D349F1 /* Run VerifyNoBuildSettings */ = {
+		51F8A860272CCB9B00D349F1 /* Run VerifyNoBS */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -173,14 +173,14 @@
 			);
 			inputPaths = (
 			);
-			name = "Run VerifyNoBuildSettings";
+			name = "Run VerifyNoBS";
 			outputFileListPaths = (
 			);
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "xcrun -sdk macosx swiftc -target x86_64-macosx10.11  ../tools/VerifyNoBuildSettings.swift -o $CONFIGURATION_TEMP_DIR/VerifyNoBS\n$CONFIGURATION_TEMP_DIR/VerifyNoBS ${PROJECT_NAME}.xcodeproj/project.pbxproj\n\n\nif [ $? -ne 0 ]\nthen\n   echo \"error: Build Setting were found in the project.pbxproj file.  Most likely you didn't intend to change this file and should revert it.\"\n   exit 1\nfi\n";
+			shellScript = "xcrun -sdk macosx swift ../tools/VerifyNoBS.swift  --xcode  ${PROJECT_DIR}/${PROJECT_NAME}.xcodeproj/project.pbxproj\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
