@@ -14,6 +14,7 @@ class NotchView: NSView {
 	
 	var sublayer: CALayer?
     var notchOutlineLayer: CAShapeLayer?
+    var cyclonEffect: CylonEffect?
 	
 	let context = CIContext(options: nil)
 
@@ -52,9 +53,15 @@ class NotchView: NSView {
 				else {
 					layer.backgroundColor = NSColor.clear.cgColor
 				}
-				
-                createOutlineLayer()
+
+                // effect under the outline so we can use the outline layer
+                // to cover the effect in screen captures
+                // or on notchless displays
+                cyclonEffect = createCylonEffect()
+                cyclonEffect?.startAnimation()
                 
+                createOutlineLayer()
+
 				// create a sublayer that will follow mouse movements
 				sublayer = CALayer()
 				if let sublayer = sublayer {
@@ -100,6 +107,11 @@ class NotchView: NSView {
         outlineLayer.isGeometryFlipped = isFlipped
 
         notchOutlineLayer = outlineLayer
+    }
+    
+    private func createCylonEffect() -> CylonEffect? {
+        guard let parentLayer = self.layer else { return nil }
+        return CylonEffect(with: parentLayer)
     }
     
     //MARK: - NSResponder
@@ -181,6 +193,7 @@ class NotchView: NSView {
 			sublayer.opacity = 0
 		}
 	}
-	
 }
+
+
 
