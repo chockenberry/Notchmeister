@@ -768,6 +768,23 @@
                                     <action selector="fillNotchValueChanged:" target="XfG-lQ-9wD" id="ZDg-eE-ytM"/>
                                 </connections>
                             </button>
+                            <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2TI-ZC-i2V">
+                                <rect key="frame" x="203" y="67" width="78" height="25"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <popUpButtonCell key="cell" type="push" title="Glow" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="UuA-aU-a9p" id="gw7-Ab-WA0">
+                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="menu"/>
+                                    <menu key="menu" id="3NN-jH-lPd">
+                                        <items>
+                                            <menuItem title="Glow" state="on" id="UuA-aU-a9p"/>
+                                            <menuItem title="Cylon" tag="1" id="IPc-kO-S4N"/>
+                                        </items>
+                                    </menu>
+                                </popUpButtonCell>
+                                <connections>
+                                    <action selector="selectedEffectValueChanged:" target="XfG-lQ-9wD" id="GuE-yn-Kjf"/>
+                                </connections>
+                            </popUpButton>
                         </subviews>
                         <constraints>
                             <constraint firstItem="Qh7-pz-oeU" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="EFD-t6-idF" secondAttribute="trailing" constant="8" symbolic="YES" id="BGl-5f-rW4"/>
@@ -785,6 +802,7 @@
                     </view>
                     <connections>
                         <outlet property="debugDrawingCheckbox" destination="Qh7-pz-oeU" id="ZIs-Cn-n5R"/>
+                        <outlet property="effectPopUpButton" destination="2TI-ZC-i2V" id="lZY-dw-l49"/>
                         <outlet property="fakeNotchCheckbox" destination="GpJ-jA-PUB" id="8HI-d4-d7b"/>
                         <outlet property="fillNotchCheckbox" destination="n8l-IV-LaP" id="bUl-15-XHo"/>
                         <outlet property="outlineNotchCheckbox" destination="rKO-N3-Lc5" id="HwJ-52-J7q"/>

@@ -7,19 +7,18 @@
 
 import AppKit
 
-class CylonEffect {
-    
-    private(set) weak var parentLayer: CALayer?
-    
+class CylonEffect: NotchEffect {
+        
     let redEyeLayer: CAGradientLayer
     let radius = 30.0
     let offset = 0
     
-    init (with parentLayer: CALayer) {
-        self.parentLayer = parentLayer
-        self.redEyeLayer = CAGradientLayer()
+    required init (with parentLayer: CALayer) {
+		self.redEyeLayer = CAGradientLayer()
         
-        configureSublayers()
+		super.init(with: parentLayer)
+
+		configureSublayers()
     }
     
     private func configureSublayers() {
@@ -40,7 +39,7 @@ class CylonEffect {
         redEyeLayer.endPoint = CGPoint(x: 1,y: 1)
     }
     
-    func startAnimation() {
+	override func start() {
         guard let parentLayer = parentLayer else { return }
                 
         let path = NSBezierPath.notchPath(rect: parentLayer.bounds)

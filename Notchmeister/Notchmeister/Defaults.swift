@@ -17,7 +17,8 @@ enum Defaults : String
     case fakeNotchEnabled
     case notchOutlineEnabled
     case notchFillEnabled
-    
+	case effectSelection
+
     static func register() {
         UserDefaults.standard.register(defaults: [
             Defaults.debugDrawingEnabled.rawValue: false,
@@ -46,4 +47,11 @@ enum Defaults : String
         get { UserDefaults.standard.bool(forKey: Defaults.notchFillEnabled.rawValue) }
         set { UserDefaults.standard.set(newValue, forKey: Defaults.notchFillEnabled.rawValue)}
     }
+	
+	// TODO: This should eventually be an enumeration
+	static var selectedEffect: Int {
+		get { UserDefaults.standard.integer(forKey: Defaults.effectSelection.rawValue) }
+		set { UserDefaults.standard.set(newValue, forKey: Defaults.effectSelection.rawValue)}
+	}
+
 }

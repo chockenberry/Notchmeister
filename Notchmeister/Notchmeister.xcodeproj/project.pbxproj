@@ -18,6 +18,8 @@
 		441C5AC3272CA5310094507E /* NotchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 441C5AC2272CA5310094507E /* NotchView.swift */; };
 		441C5AC5272CA72F0094507E /* Debug.swift in Sources */ = {isa = PBXBuildFile; fileRef = 441C5AC4272CA72F0094507E /* Debug.swift */; };
 		441C5AC7272CB2B00094507E /* CoreAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 441C5AC6272CB2B00094507E /* CoreAnimation.swift */; };
+		44961D7E27372F4D004E1A0B /* NotchEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44961D7D27372F4D004E1A0B /* NotchEffect.swift */; };
+		44961D80273732ED004E1A0B /* GlowEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44961D7F273732ED004E1A0B /* GlowEffect.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +36,8 @@
 		441C5AC2272CA5310094507E /* NotchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotchView.swift; sourceTree = "<group>"; };
 		441C5AC4272CA72F0094507E /* Debug.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Debug.swift; sourceTree = "<group>"; };
 		441C5AC6272CB2B00094507E /* CoreAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreAnimation.swift; sourceTree = "<group>"; };
+		44961D7D27372F4D004E1A0B /* NotchEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotchEffect.swift; sourceTree = "<group>"; };
+		44961D7F273732ED004E1A0B /* GlowEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlowEffect.swift; sourceTree = "<group>"; };
 		51F8A85A272CCB9100D349F1 /* Notchmeister_project_release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Notchmeister_project_release.xcconfig; sourceTree = "<group>"; };
 		51F8A85B272CCB9100D349F1 /* Notchmeister_project_debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Notchmeister_project_debug.xcconfig; sourceTree = "<group>"; };
 		51F8A85D272CCB9200D349F1 /* Notchmeister_macapp_target.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Notchmeister_macapp_target.xcconfig; sourceTree = "<group>"; };
@@ -76,7 +80,9 @@
 				441C5AB3272C9FD10094507E /* ViewController.swift */,
 				441C5AC0272CA0780094507E /* NotchWindow.swift */,
 				441C5AC2272CA5310094507E /* NotchView.swift */,
+				44961D7D27372F4D004E1A0B /* NotchEffect.swift */,
 				012BA33927363699008AF04E /* CylonEffect.swift */,
+				44961D7F273732ED004E1A0B /* GlowEffect.swift */,
 				441C5AC6272CB2B00094507E /* CoreAnimation.swift */,
 				011C15B7272F36D3003422E5 /* BezierPath.swift */,
 				011C15B5272E1635003422E5 /* Defaults.swift */,
@@ -199,7 +205,9 @@
 				441C5AC3272CA5310094507E /* NotchView.swift in Sources */,
 				011C15B8272F36D3003422E5 /* BezierPath.swift in Sources */,
 				441C5AC7272CB2B00094507E /* CoreAnimation.swift in Sources */,
+				44961D7E27372F4D004E1A0B /* NotchEffect.swift in Sources */,
 				441C5AB4272C9FD10094507E /* ViewController.swift in Sources */,
+				44961D80273732ED004E1A0B /* GlowEffect.swift in Sources */,
 				441C5AB2272C9FD10094507E /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

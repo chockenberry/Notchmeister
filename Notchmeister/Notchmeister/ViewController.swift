@@ -16,7 +16,8 @@ class ViewController: NSViewController {
     @IBOutlet weak var fakeNotchCheckbox: NSButton!
     @IBOutlet weak var outlineNotchCheckbox: NSButton!
     @IBOutlet weak var fillNotchCheckbox: NSButton!
-    
+	@IBOutlet weak var effectPopUpButton: NSPopUpButton!
+
     //MARK: - Life Cycle
     
     override func viewDidLoad() {
@@ -31,6 +32,8 @@ class ViewController: NSViewController {
         fakeNotchCheckbox.state = Defaults.shouldFakeNotch ? .on : .off
         outlineNotchCheckbox.state = Defaults.shouldDrawNotchOutline ? .on : .off
         fillNotchCheckbox.state = Defaults.shouldDrawNotchFill ? .on : .off
+		
+		effectPopUpButton.selectItem(withTag: Defaults.selectedEffect)
     }
     
     private func createNotchWindows() {
@@ -89,5 +92,10 @@ class ViewController: NSViewController {
             $0.needsDisplay = true
         }
     }
+
+	@IBAction func selectedEffectValueChanged(_ sender: Any) {
+		Defaults.selectedEffect = effectPopUpButton.selectedTag()
+		createNotchWindows()
+	}
 }
 
