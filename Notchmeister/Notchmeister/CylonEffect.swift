@@ -9,14 +9,19 @@ import AppKit
 
 class CylonEffect: NotchEffect {
         
-    let redEyeLayer: CAGradientLayer
-    let irisRadius = 10.0
-    let glowRadius = 30.0
-    let offset = 0
+    let redEyeLayer = CALayer()
+    let irisLayer = CALayer()
+    let glowLayer = CAGradientLayer()
+    
+    let eyeWidth = 20.0
+    let eyeHeight = 6.0
+    let glowHorizontalInset = -16.0
+    let glowVerticalInset = -20.0
+    
+    let irisColor = NSColor(srgbRed: 0.9979979396, green: 0.4895141721, blue: 0.491407156, alpha: 1.0)
+    let glowStartColor = NSColor(srgbRed: 0.82, green: 0.22, blue: 0.19, alpha: 1.0)
     
     required init (with parentLayer: CALayer) {
-		self.redEyeLayer = CAGradientLayer()
-        
 		super.init(with: parentLayer)
 
 		configureSublayers()
@@ -25,28 +30,37 @@ class CylonEffect: NotchEffect {
     private func configureSublayers() {
         guard let parentLayer = parentLayer else { return }
 
-        //center on the parent frame origin
-        let origin = CGPoint(x: -(glowRadius/2), y:-(glowRadius/2))
-        let size = CGSize(width: glowRadius, height: glowRadius)
-        let frame = CGRect(origin: origin, size: size)
-        redEyeLayer.frame = frame
-        
+        let irisBounds = CGRect(origin: .zero, size: CGSize(width: eyeWidth, height: eyeHeight))
+        var glowBounds = irisBounds.insetBy(dx: glowHorizontalInset, dy: glowVerticalInset)
+        glowBounds.origin = .zero
+                
+        redEyeLayer.frame = glowBounds
         parentLayer.addSublayer(redEyeLayer)
+                        
+        // iris
         
-        redEyeLayer.type = .radial
-        redEyeLayer.colors = [NSColor.red.withAlphaComponent(0.9).cgColor, NSColor.red.withAlphaComponent(0.0).cgColor]
-        redEyeLayer.locations = [0,1]
-        redEyeLayer.startPoint = CGPoint(x: 0.5,y: 0.5)
-        redEyeLayer.endPoint = CGPoint(x: 1,y: 1)
+        irisLayer.backgroundColor = irisColor.cgColor
 
-        let irisBounds = CGRect(origin: .zero, size: CGSize(width: irisRadius, height: irisRadius))
-        let irisLayer = CALayer()
-        irisLayer.backgroundColor = CGColor(srgbRed: 0.9979979396, green: 0.4895141721, blue: 0.491407156, alpha: 0.85)
-        irisLayer.position = CGPoint(x: redEyeLayer.bounds.midX, y: redEyeLayer.bounds.midY)
         irisLayer.bounds = irisBounds
-        irisLayer.cornerRadius = irisLayer.frame.width / 2
-        
+        irisLayer.position = CGPoint(x: redEyeLayer.bounds.midX, y: redEyeLayer.bounds.midY)
+
+        irisLayer.cornerRadius = eyeHeight / 2.0
         redEyeLayer.addSublayer(irisLayer)
+
+        // glow
+        
+        let glowEndColor = glowStartColor.withAlphaComponent(0.0)
+
+        glowLayer.type = .radial
+        glowLayer.colors = [glowStartColor.cgColor, glowEndColor.cgColor]
+        glowLayer.locations = [0,1]
+        glowLayer.startPoint = CGPoint(x: 0.5,y: 0.5)
+        glowLayer.endPoint = CGPoint(x: 1,y: 1)
+        
+        glowLayer.bounds = glowBounds
+        glowLayer.position = NSPoint(x: redEyeLayer.bounds.midX, y: redEyeLayer.bounds.midY )
+        
+        redEyeLayer.insertSublayer(glowLayer, below: irisLayer)
     }
     
 	override func start() {
@@ -68,12 +82,13 @@ class CylonEffect: NotchEffect {
         
         animation.path = path.cgPath
         animation.timingFunctions = [CAMediaTimingFunction(name: .easeInEaseOut)]
+        animation.duration = 2.0
         animation.calculationMode = .paced
         animation.repeatCount = .infinity
         animation.autoreverses = true
-        animation.duration = 2.0
+        animation.rotationMode = .rotateAuto
         
         redEyeLayer.add(animation, forKey: "Red Eye Animation")
     }
-    
+
 }
