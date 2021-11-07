@@ -28,6 +28,7 @@
 		011C15B7272F36D3003422E5 /* NSBezierPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSBezierPath.swift; sourceTree = "<group>"; };
 		012BA33927363699008AF04E /* CylonEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CylonEffect.swift; sourceTree = "<group>"; };
 		012BA33B273749A5008AF04E /* NotchExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotchExtensions.swift; sourceTree = "<group>"; };
+		012BA33E273865ED008AF04E /* Notch Playground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = "Notch Playground.playground"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		441C5AAE272C9FD10094507E /* Notchmeister.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Notchmeister.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		441C5AB1272C9FD10094507E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		441C5AB3272C9FD10094507E /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -61,6 +62,7 @@
 		441C5AA5272C9FD10094507E = {
 			isa = PBXGroup;
 			children = (
+				012BA33E273865ED008AF04E /* Notch Playground.playground */,
 				441C5AB0272C9FD10094507E /* Notchmeister */,
 				51F8A854272CC9C300D349F1 /* xcconfig */,
 				441C5AAF272C9FD10094507E /* Products */,
