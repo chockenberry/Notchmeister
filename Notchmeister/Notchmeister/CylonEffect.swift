@@ -48,9 +48,11 @@ class CylonEffect: NotchEffect {
         // we have to flip the path to match if we want to animate
         // along the outline of the notch view
 
-        var flipTransform = AffineTransform(scaleByX: 1, byY: -1)
-        flipTransform.translate(x: 0, y: -parentLayer.bounds.height)
-        path.transform(using: flipTransform)
+        if (parentLayer.isGeometryFlipped) {
+            var flipTransform = AffineTransform(scaleByX: 1, byY: -1)
+            flipTransform.translate(x: 0, y: -parentLayer.bounds.height)
+            path.transform(using: flipTransform)
+        }
         
         let animation = CAKeyframeAnimation(keyPath: "position")
         
@@ -60,7 +62,6 @@ class CylonEffect: NotchEffect {
         animation.repeatCount = .infinity
         animation.autoreverses = true
         animation.duration = 2.0
-        
         
         redEyeLayer.add(animation, forKey: "Red Eye Animation")
     }
