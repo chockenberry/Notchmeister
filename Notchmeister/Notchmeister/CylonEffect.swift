@@ -33,7 +33,7 @@ class CylonEffect: NotchEffect {
         parentLayer.addSublayer(redEyeLayer)
         
         redEyeLayer.type = .radial
-        redEyeLayer.colors = [NSColor.red.cgColor, NSColor.clear.cgColor]
+		redEyeLayer.colors = [NSColor.red.cgColor, NSColor.red.withAlphaComponent(0).cgColor]
         redEyeLayer.locations = [0,1]
         redEyeLayer.startPoint = CGPoint(x: 0.5,y: 0.5)
         redEyeLayer.endPoint = CGPoint(x: 1,y: 1)
