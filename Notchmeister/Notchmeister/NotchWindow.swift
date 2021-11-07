@@ -7,6 +7,8 @@ import Cocoa
 import CoreGraphics
 
 class NotchWindow: NSWindow {
+    
+    var notchView: NotchView?
 
 	required init?(screen: NSScreen, padding: CGFloat) {
 		guard let notchRect = screen.notchRect else { return nil }
@@ -34,6 +36,23 @@ class NotchWindow: NSWindow {
 		else {
 			self.backgroundColor = .clear
 		}
+        
+        let contentView = NSView(frame: frame)
+        contentView.wantsLayer = true;
+
+        self.contentView = contentView
+        createNotchView(size: notchRect.size)
     }
 
+    private func createNotchView(size: NSSize) {
+        guard let contentView = contentView else { return }
+
+        let contentBounds = contentView.bounds
+        let notchFrame = CGRect(origin: CGPoint(x: contentBounds.midX - size.width / 2, y: contentBounds.maxY - size.height), size: size)
+        let notchView = NotchView(frame: notchFrame)
+        contentView.addSubview(notchView)
+        
+        self.notchView = notchView
+    }
+    
 }

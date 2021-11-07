@@ -10,7 +10,6 @@ import Cocoa
 class ViewController: NSViewController {
 
 	var notchWindows: [NotchWindow] = []
-	var notchViews: [NotchView] = []
 	
     @IBOutlet weak var debugDrawingCheckbox: NSButton!
     @IBOutlet weak var fakeNotchCheckbox: NSButton!
@@ -44,24 +43,10 @@ class ViewController: NSViewController {
         }
 
         notchWindows.removeAll()
-        notchViews.removeAll()
         
 		for screen in NSScreen.notchedScreens {
 			if let notchWindow = NotchWindow(screen: screen, padding: padding) {
-				let contentView = NSView(frame: notchWindow.frame)
-				contentView.wantsLayer = true;
-
-				if let notchRect = screen.notchRect {
-					let contentBounds = contentView.bounds
-					let notchFrame = CGRect(origin: CGPoint(x: contentBounds.midX - notchRect.width / 2, y: contentBounds.maxY - notchRect.height), size: notchRect.size)
-					let notchView = NotchView(frame: notchFrame)
-					contentView.addSubview(notchView)
-                    notchViews.append(notchView)
-				}
-
-				notchWindow.contentView = contentView
 				notchWindow.orderFront(self)
-        
                 notchWindows.append(notchWindow)
 			}
 		}
@@ -81,15 +66,15 @@ class ViewController: NSViewController {
     
     @IBAction func outlineNotchValueChanaged(_ sender: Any) {
         Defaults.shouldDrawNotchOutline = (outlineNotchCheckbox.state == .on)
-        notchViews.forEach {
-            $0.needsDisplay = true
+        notchWindows.forEach {
+            $0.notchView?.needsDisplay = true
         }
     }
     
     @IBAction func fillNotchValueChanged(_ sender: Any) {
         Defaults.shouldDrawNotchFill = (fillNotchCheckbox.state == .on)
-        notchViews.forEach {
-            $0.needsDisplay = true
+        notchWindows.forEach {
+            $0.notchView?.needsDisplay = true
         }
     }
 
