@@ -42,7 +42,7 @@ class CylonEffect: NotchEffect {
 	override func start() {
         guard let parentLayer = parentLayer else { return }
                 
-        let path = NSBezierPath.notchPath(rect: parentLayer.bounds)
+        let path = NSBezierPath.notchPath(size: parentLayer.bounds.size)
         
         // becasue our parent layer is in a flipped coordinate space
         // we have to flip the path to match if we want to animate

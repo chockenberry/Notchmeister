@@ -9,22 +9,6 @@ import AppKit
 
 extension NSBezierPath {
 
-    class func notchPath(rect: NSRect) -> NSBezierPath {
-                
-        let radius = 8.0
-        let path = NSBezierPath()
-
-        path.move(to: NSPoint(x: rect.minX, y: rect.maxY))
-        path.line(to: NSPoint(x: rect.minX, y: rect.minY + radius))
-        path.appendArc(from: NSPoint(x: rect.minX, y: rect.minY), to: NSPoint(x: rect.minX + radius, y: rect.minY), radius: radius)
-        path.line(to: NSPoint(x: rect.maxX - radius, y: rect.minY))
-        path.appendArc(from: NSPoint(x: rect.maxX, y: rect.minY), to: NSPoint(x: rect.maxX, y: rect.minY + radius), radius: radius)
-        path.line(to: NSPoint(x: rect.maxX, y: rect.maxY))
-
-        
-        return path
-    }
-    
     var cgPath: CGPath {
         let path = CGMutablePath()
         var points = [CGPoint](repeating: .zero, count: 3)

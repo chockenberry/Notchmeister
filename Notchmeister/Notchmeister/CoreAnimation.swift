@@ -19,15 +19,3 @@ extension CATransaction {
 	
 }
 
-extension CAShapeLayer {
-    
-    class func notchOutlineLayer(for size: NSSize) -> CAShapeLayer {
-        let layer = CAShapeLayer()
-        let path = NSBezierPath.notchPath(rect: NSRect(origin: .zero, size: size))
-        layer.path = path.cgPath
-        layer.bounds.size = size
-        
-        return layer
-    }
-    
-}
