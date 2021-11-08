@@ -33,16 +33,19 @@ class NotchEffect: NotchEffectable {
 		// override to perform work at the point when the effect becomes inactive
 	}
 
-	func mouseEntered(at point: CGPoint) {
-		// override to perform work when the mouse enters the effect layer (point is upper-left origin)
+	// NOTE: The point parameter is relative to upper-left origin of notch. The second parameter indicates if
+	// the point is underneath the notch.
+	
+	func mouseEntered(at point: CGPoint, underNotch: Bool) {
+		// override to perform work when the mouse enters the effect layer
 	}
 
-	func mouseMoved(at point: CGPoint) {
-		// override to perform work when the mouse moves in the effect layer (point is upper-left origin)
+	func mouseMoved(at point: CGPoint, underNotch: Bool) {
+		// override to perform work when the mouse moves in the effect layer
 	}
 
-	func mouseExited(at point: CGPoint) {
-		// override to perform work when the mouse leaves the effect layer (point is upper-left origin)
+	func mouseExited(at point: CGPoint, underNotch: Bool) {
+		// override to perform work when the mouse leaves the effect layer
 	}
 }
 

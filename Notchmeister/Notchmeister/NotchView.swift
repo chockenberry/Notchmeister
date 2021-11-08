@@ -10,7 +10,7 @@ import AppKit
 class NotchView: NSView {
 
 	var trackingArea: NSTrackingArea?
-	var mouseInView: Bool = false
+	var trackingMouse: Bool = false
 	
     var notchOutlineLayer: CAShapeLayer?
 	var notchEffect: NotchEffect?
@@ -32,11 +32,19 @@ class NotchView: NSView {
         notchOutlineLayer.lineWidth = 2.0
     }
     
+	private let notchPadding: CGFloat = 50
+	
 	override func viewDidMoveToSuperview() {
 		if self.superview != nil {
 			// create a tracking area for mouse movements
 			let options: NSTrackingArea.Options = [.activeAlways, .mouseEnteredAndExited, .mouseMoved]
-			let trackingArea = NSTrackingArea(rect: bounds, options: options, owner: self, userInfo: nil)
+			
+			// TODO: Adding padding to track the mouse outside the view sometimes loses events.
+			// It's probably safer to add the trackingRect to the content view and pass the mouse
+			// events down to this view.
+			
+			let trackingRect = bounds.insetBy(dx: -notchPadding, dy: -notchPadding)
+			let trackingArea = NSTrackingArea(rect: trackingRect, options: options, owner: self, userInfo: nil)
 			self.trackingArea = trackingArea
 			addTrackingArea(trackingArea)
 			
@@ -113,27 +121,36 @@ class NotchView: NSView {
 	
 	override func mouseEntered(with event: NSEvent) {
 		debugLog()
-		mouseInView = true
+		trackingMouse = true
 		
 		//NSCursor.hide() // NOTE: This only works when the app is frontmost, which in this case is unlikely.
 
-		notchEffect?.mouseEntered(at: notchLocation(with: event))
+		let point = notchLocation(with: event)
+		let underNotch = bounds.contains(point)
+		notchEffect?.mouseEntered(at: point, underNotch: underNotch)
 	}
 	
 	override func mouseMoved(with event: NSEvent) {
-		if mouseInView {
-			//debugLog("point = \(notchLocation(with: event))")
-			notchEffect?.mouseMoved(at: notchLocation(with: event))
+		if trackingMouse {
+			let point = notchLocation(with: event)
+			let underNotch = bounds.contains(point)
+			debugLog("point = \(point), underNotch = \(underNotch)")
+			notchEffect?.mouseMoved(at: notchLocation(with: event), underNotch: underNotch)
+		}
+		else {
+			debugLog("not tracking mouse")
 		}
 	}
 	
 	override func mouseExited(with event: NSEvent) {
 		debugLog()
-		mouseInView = false
+		trackingMouse = false
 
 		//NSCursor.unhide() // NOTE: This only works when the app is frontmost, which in this case is unlikely.
 
-		notchEffect?.mouseExited(at: notchLocation(with: event))
+		let point = notchLocation(with: event)
+		let underNotch = bounds.contains(point)
+		notchEffect?.mouseExited(at: point, underNotch: underNotch)
 	}
 }
 

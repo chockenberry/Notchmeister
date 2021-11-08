@@ -82,12 +82,14 @@ class GlowEffect: NotchEffect {
 		
 	}
 	
-	override func mouseEntered(at point: CGPoint) {
+	override func mouseEntered(at point: CGPoint, underNotch: Bool) {
 		//glowLayer.opacity = 1
 		edgeLayer.opacity = 1
 	}
 	
-	override func mouseMoved(at point: CGPoint) {
+	override func mouseMoved(at point: CGPoint, underNotch: Bool) {
+		glowLayer.opacity = (underNotch ? 1 : 0)
+
 		CATransaction.withActionsDisabled {
 			glowLayer.position = point
 			// TODO: Should notchOutlineLayer work in notch coordinates (origin in upper-left)?
@@ -97,7 +99,7 @@ class GlowEffect: NotchEffect {
 		}
 	}
 	
-	override func mouseExited(at point: CGPoint) {
+	override func mouseExited(at point: CGPoint, underNotch: Bool) {
 		//glowLayer.opacity = 0
 		edgeLayer.opacity = 0
 	}
