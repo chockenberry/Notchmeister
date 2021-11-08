@@ -13,8 +13,8 @@ class CylonEffect: NotchEffect {
     let irisLayer = CALayer()
     let glowLayer = CAGradientLayer()
     
-    let eyeWidth = 20.0
-    let eyeHeight = 6.0
+    let eyeWidth = 10.0
+    let eyeHeight = 4.0
     let glowHorizontalInset = -16.0
     let glowVerticalInset = -20.0
     
@@ -82,7 +82,7 @@ class CylonEffect: NotchEffect {
         
         animation.path = path.cgPath
         animation.timingFunctions = [CAMediaTimingFunction(name: .easeInEaseOut)]
-        animation.duration = 2.0
+        animation.duration = 1.0
         animation.calculationMode = .paced
         animation.repeatCount = .infinity
         animation.autoreverses = true
