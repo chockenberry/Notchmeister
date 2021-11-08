@@ -16,7 +16,7 @@ class GlowEffect: NotchEffect {
 	var edgeLayer: CAShapeLayer
 	var maskLayer: CAGradientLayer
 
-	let glowRadius = 30.0
+	let glowRadius = 50.0
 	let offset = 0
 	
 	required init(with parentLayer: CALayer) {
@@ -88,13 +88,13 @@ class GlowEffect: NotchEffect {
 	}
 	
 	override func mouseMoved(at point: CGPoint, underNotch: Bool) {
-		glowLayer.opacity = (underNotch ? 1 : 0)
+		glowLayer.opacity = (underNotch ? 1 : 0.1)
 
 		CATransaction.withActionsDisabled {
 			glowLayer.position = point
 			// TODO: Should notchOutlineLayer work in notch coordinates (origin in upper-left)?
-			//let layerPoint = CGPoint(x: point.x, y: edgeLayer.bounds.height - point.y)
-			let layerPoint = CGPoint(x: point.x, y: 0)
+			let layerPoint = CGPoint(x: point.x, y: edgeLayer.bounds.height - point.y)
+			//let layerPoint = CGPoint(x: point.x, y: point.y)
 			maskLayer.position = layerPoint
 		}
 	}

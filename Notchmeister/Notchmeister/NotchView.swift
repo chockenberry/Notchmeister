@@ -43,7 +43,11 @@ class NotchView: NSView {
 			// It's probably safer to add the trackingRect to the content view and pass the mouse
 			// events down to this view.
 			
-			let trackingRect = bounds.insetBy(dx: -notchPadding, dy: -notchPadding)
+			// NOTE: The negative inset on the top of the view might be causing a problem here:
+			//let trackingRect = bounds.insetBy(dx: -notchPadding, dy: -notchPadding)
+			let origin = CGPoint(x: bounds.origin.x - notchPadding, y: 0)
+			let size = CGSize(width: bounds.width + notchPadding * 2, height: bounds.height + notchPadding)
+			let trackingRect = CGRect(origin: origin, size: size)
 			let trackingArea = NSTrackingArea(rect: trackingRect, options: options, owner: self, userInfo: nil)
 			self.trackingArea = trackingArea
 			addTrackingArea(trackingArea)
