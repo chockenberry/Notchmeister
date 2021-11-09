@@ -16,7 +16,7 @@ class GlowEffect: NotchEffect {
 	var edgeLayer: CAShapeLayer
 	var maskLayer: CAGradientLayer
 
-	let glowRadius = 50.0
+	let glowRadius = 40.0
 	let offset = 0
 	
 	required init(with parentLayer: CALayer) {

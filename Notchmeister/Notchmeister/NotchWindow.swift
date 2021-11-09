@@ -8,6 +8,8 @@ import CoreGraphics
 
 class NotchWindow: NSWindow {
     
+	var trackingArea: NSTrackingArea?
+
     var notchView: NotchView?
 
 	required init?(screen: NSScreen, padding: CGFloat) {
@@ -31,6 +33,8 @@ class NotchWindow: NSWindow {
         self.collectionBehavior = [.transient, .canJoinAllSpaces]
 		self.acceptsMouseMovedEvents = true
 		
+		self.delegate = self
+		
         if Defaults.shouldDebugDrawing {
 			self.backgroundColor = .systemPurple
 		}
@@ -43,7 +47,8 @@ class NotchWindow: NSWindow {
 
         self.contentView = contentView
         createNotchView(size: notchRect.size)
-    }
+
+	}
 
     private func createNotchView(size: NSSize) {
         guard let contentView = contentView else { return }
@@ -56,4 +61,61 @@ class NotchWindow: NSWindow {
         self.notchView = notchView
     }
     
+	override func orderFront(_ sender: Any?) {
+		super.orderFront(sender)
+		
+		activateTrackingArea()
+	}
+	
+	override func orderOut(_ sender: Any?) {
+		super.orderOut(sender)
+		
+		deactivateTrackingArea()
+	}
+	
+	//MARK: - NSTrackingArea
+	
+	private func activateTrackingArea() {
+		if let contentView = contentView {
+			if self.trackingArea == nil {
+				// create a tracking area for mouse movements
+				// NOTE: This was initially on the NotchView, but it was unreliable, probably due to the use of layer hosting views.
+				// To workaround this issue, the content view acts as a proxy and the NSResponder methods in this class forward the
+				// mouse events to the NotchView (which, in turn, forwards them onto the NotchEffect).
+				let options: NSTrackingArea.Options = [.activeAlways, .mouseEnteredAndExited, .mouseMoved]
+				let trackingRect = contentView.bounds
+				let trackingArea = NSTrackingArea(rect: trackingRect, options: options, owner: self, userInfo: nil)
+				self.trackingArea = trackingArea
+				contentView.addTrackingArea(trackingArea)
+			}
+		}
+	}
+	
+	private func deactivateTrackingArea() {
+		if let contentView = contentView {
+			if let trackingArea = self.trackingArea {
+				contentView.removeTrackingArea(trackingArea)
+				self.trackingArea = nil
+			}
+		}
+	}
+
+	//MARK: - NSResponder
+	
+	override func mouseEntered(with event: NSEvent) {
+		self.notchView?.mouseEntered(windowPoint: event.locationInWindow)
+	}
+	
+	override func mouseMoved(with event: NSEvent) {
+		self.notchView?.mouseMoved(windowPoint: event.locationInWindow)
+	}
+	
+	override func mouseExited(with event: NSEvent) {
+		self.notchView?.mouseExited(windowPoint: event.locationInWindow)
+	}
+	
+}
+
+extension NotchWindow: NSWindowDelegate {
+	
 }

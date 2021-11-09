@@ -36,7 +36,7 @@ class ViewController: NSViewController {
     }
     
     private func createNotchWindows() {
-        let padding: CGFloat = 50
+        let padding: CGFloat = 50 // amount of padding around the notch that can be used for effect drawing
         
         for oldWindow in notchWindows {
             oldWindow.orderOut(self)

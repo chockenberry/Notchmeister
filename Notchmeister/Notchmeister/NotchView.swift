@@ -9,7 +9,7 @@ import AppKit
 
 class NotchView: NSView {
 
-	var trackingArea: NSTrackingArea?
+//	var trackingArea: NSTrackingArea?
 	var trackingMouse: Bool = false
 	
     var notchOutlineLayer: CAShapeLayer?
@@ -45,12 +45,12 @@ class NotchView: NSView {
 			
 			// NOTE: The negative inset on the top of the view might be causing a problem here:
 			//let trackingRect = bounds.insetBy(dx: -notchPadding, dy: -notchPadding)
-			let origin = CGPoint(x: bounds.origin.x - notchPadding, y: 0)
-			let size = CGSize(width: bounds.width + notchPadding * 2, height: bounds.height + notchPadding)
-			let trackingRect = CGRect(origin: origin, size: size)
-			let trackingArea = NSTrackingArea(rect: trackingRect, options: options, owner: self, userInfo: nil)
-			self.trackingArea = trackingArea
-			addTrackingArea(trackingArea)
+//			let origin = CGPoint(x: bounds.origin.x - notchPadding, y: 0)
+//			let size = CGSize(width: bounds.width + notchPadding * 2, height: bounds.height + notchPadding)
+//			let trackingRect = CGRect(origin: origin, size: size)
+//			let trackingArea = NSTrackingArea(rect: trackingRect, options: options, owner: self, userInfo: nil)
+//			self.trackingArea = trackingArea
+//			addTrackingArea(trackingArea)
 			
 			// create a layer hosting view
 			wantsLayer = true
@@ -83,10 +83,10 @@ class NotchView: NSView {
 			notchEffect?.end()
 			notchEffect = nil
 			
-			if let trackingArea = trackingArea {
-				removeTrackingArea(trackingArea)
-				self.trackingArea = nil
-			}
+//			if let trackingArea = trackingArea {
+//				removeTrackingArea(trackingArea)
+//				self.trackingArea = nil
+//			}
 		}
 	}
 	
@@ -118,41 +118,40 @@ class NotchView: NSView {
 
     //MARK: - NSResponder
     
-	func notchLocation(with event: NSEvent) -> NSPoint {
-		let locationInWindow = event.locationInWindow
-		return self.convert(locationInWindow, from: nil)
+	func notchLocation(with windowPoint: CGPoint) -> NSPoint {
+		return self.convert(windowPoint, from: nil)
 	}
 	
-	override func mouseEntered(with event: NSEvent) {
+	func mouseEntered(windowPoint: CGPoint) {
 		debugLog()
 		trackingMouse = true
 		
 		//NSCursor.hide() // NOTE: This only works when the app is frontmost, which in this case is unlikely.
 
-		let point = notchLocation(with: event)
+		let point = notchLocation(with: windowPoint)
 		let underNotch = bounds.contains(point)
 		notchEffect?.mouseEntered(at: point, underNotch: underNotch)
 	}
 	
-	override func mouseMoved(with event: NSEvent) {
+	func mouseMoved(windowPoint: CGPoint) {
 		if trackingMouse {
-			let point = notchLocation(with: event)
+			let point = notchLocation(with: windowPoint)
 			let underNotch = bounds.contains(point)
 			debugLog("point = \(point), underNotch = \(underNotch)")
-			notchEffect?.mouseMoved(at: notchLocation(with: event), underNotch: underNotch)
+			notchEffect?.mouseMoved(at: point, underNotch: underNotch)
 		}
 		else {
 			debugLog("not tracking mouse")
 		}
 	}
 	
-	override func mouseExited(with event: NSEvent) {
+	func mouseExited(windowPoint: CGPoint) {
 		debugLog()
 		trackingMouse = false
 
 		//NSCursor.unhide() // NOTE: This only works when the app is frontmost, which in this case is unlikely.
 
-		let point = notchLocation(with: event)
+		let point = notchLocation(with: windowPoint)
 		let underNotch = bounds.contains(point)
 		notchEffect?.mouseExited(at: point, underNotch: underNotch)
 	}
