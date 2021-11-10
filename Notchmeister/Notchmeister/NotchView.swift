@@ -9,7 +9,6 @@ import AppKit
 
 class NotchView: NSView {
 
-//	var trackingArea: NSTrackingArea?
 	var trackingMouse: Bool = false
 	
     var notchOutlineLayer: CAShapeLayer?
@@ -36,22 +35,6 @@ class NotchView: NSView {
 	
 	override func viewDidMoveToSuperview() {
 		if self.superview != nil {
-			// create a tracking area for mouse movements
-			let options: NSTrackingArea.Options = [.activeAlways, .mouseEnteredAndExited, .mouseMoved]
-			
-			// TODO: Adding padding to track the mouse outside the view sometimes loses events.
-			// It's probably safer to add the trackingRect to the content view and pass the mouse
-			// events down to this view.
-			
-			// NOTE: The negative inset on the top of the view might be causing a problem here:
-			//let trackingRect = bounds.insetBy(dx: -notchPadding, dy: -notchPadding)
-//			let origin = CGPoint(x: bounds.origin.x - notchPadding, y: 0)
-//			let size = CGSize(width: bounds.width + notchPadding * 2, height: bounds.height + notchPadding)
-//			let trackingRect = CGRect(origin: origin, size: size)
-//			let trackingArea = NSTrackingArea(rect: trackingRect, options: options, owner: self, userInfo: nil)
-//			self.trackingArea = trackingArea
-//			addTrackingArea(trackingArea)
-			
 			// create a layer hosting view
 			wantsLayer = true
 			if let layer = layer {
@@ -82,11 +65,6 @@ class NotchView: NSView {
 		else {
 			notchEffect?.end()
 			notchEffect = nil
-			
-//			if let trackingArea = trackingArea {
-//				removeTrackingArea(trackingArea)
-//				self.trackingArea = nil
-//			}
 		}
 	}
 	
@@ -116,8 +94,17 @@ class NotchView: NSView {
 		return GlowEffect(with: parentLayer)
 	}
 
+	override func acceptsFirstMouse(for event: NSEvent?) -> Bool {
+		return true
+	}
+
+	override func hitTest(_ point: NSPoint) -> NSView? {
+		//return debugResult(self.layer?.hitTest(point) == nil ? nil : super.hitTest(point))
+		return debugResult(super.hitTest(point))
+	}
+
     //MARK: - NSResponder
-    
+
 	func notchLocation(with windowPoint: CGPoint) -> NSPoint {
 		return self.convert(windowPoint, from: nil)
 	}
@@ -134,15 +121,15 @@ class NotchView: NSView {
 	}
 	
 	func mouseMoved(windowPoint: CGPoint) {
-		if trackingMouse {
+		//if trackingMouse {
 			let point = notchLocation(with: windowPoint)
 			let underNotch = bounds.contains(point)
 			debugLog("point = \(point), underNotch = \(underNotch)")
 			notchEffect?.mouseMoved(at: point, underNotch: underNotch)
-		}
-		else {
-			debugLog("not tracking mouse")
-		}
+		//}
+		//else {
+		//	debugLog("not tracking mouse")
+		//}
 	}
 	
 	func mouseExited(windowPoint: CGPoint) {

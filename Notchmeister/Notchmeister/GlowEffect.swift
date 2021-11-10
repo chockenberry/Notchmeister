@@ -60,8 +60,8 @@ class GlowEffect: NotchEffect {
 		edgeLayer.isGeometryFlipped = parentLayer.isGeometryFlipped
 		edgeLayer.anchorPoint = .zero
 		edgeLayer.fillColor = NSColor.clear.cgColor
-		edgeLayer.strokeColor = NSColor.white.cgColor
-		edgeLayer.lineWidth = 2.0
+		edgeLayer.strokeColor = NSColor.cyan.cgColor
+		edgeLayer.lineWidth = 8.0
 		edgeLayer.opacity = 0
 
 		maskLayer.bounds = CGRect(origin: .zero, size: CGSize(width: dimension, height: dimension))
@@ -88,7 +88,7 @@ class GlowEffect: NotchEffect {
 	}
 	
 	override func mouseMoved(at point: CGPoint, underNotch: Bool) {
-		glowLayer.opacity = (underNotch ? 1 : 0.1)
+		glowLayer.opacity = (underNotch ? 1 : 0.0)
 
 		CATransaction.withActionsDisabled {
 			glowLayer.position = point
