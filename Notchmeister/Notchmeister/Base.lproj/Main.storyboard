@@ -778,6 +778,7 @@
                                         <items>
                                             <menuItem title="Glow" state="on" id="UuA-aU-a9p"/>
                                             <menuItem title="Cylon" tag="1" id="IPc-kO-S4N"/>
+                                            <menuItem title="Sparks" tag="2" id="kLF-aV-OO3"/>
                                         </items>
                                     </menu>
                                 </popUpButtonCell>

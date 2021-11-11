@@ -22,6 +22,7 @@
 		44961D7E27372F4D004E1A0B /* NotchEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44961D7D27372F4D004E1A0B /* NotchEffect.swift */; };
 		44961D80273732ED004E1A0B /* GlowEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44961D7F273732ED004E1A0B /* GlowEffect.swift */; };
 		44961D82273B3E42004E1A0B /* TrackingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44961D81273B3E42004E1A0B /* TrackingView.swift */; };
+		44A68CEB273DBD5500CCBCF4 /* SparksEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44A68CEA273DBD5500CCBCF4 /* SparksEffect.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,6 +44,7 @@
 		44961D7D27372F4D004E1A0B /* NotchEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotchEffect.swift; sourceTree = "<group>"; };
 		44961D7F273732ED004E1A0B /* GlowEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlowEffect.swift; sourceTree = "<group>"; };
 		44961D81273B3E42004E1A0B /* TrackingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingView.swift; sourceTree = "<group>"; };
+		44A68CEA273DBD5500CCBCF4 /* SparksEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SparksEffect.swift; sourceTree = "<group>"; };
 		51F8A85A272CCB9100D349F1 /* Notchmeister_project_release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Notchmeister_project_release.xcconfig; sourceTree = "<group>"; };
 		51F8A85B272CCB9100D349F1 /* Notchmeister_project_debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Notchmeister_project_debug.xcconfig; sourceTree = "<group>"; };
 		51F8A85D272CCB9200D349F1 /* Notchmeister_macapp_target.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Notchmeister_macapp_target.xcconfig; sourceTree = "<group>"; };
@@ -90,6 +92,7 @@
 				44961D7D27372F4D004E1A0B /* NotchEffect.swift */,
 				012BA33927363699008AF04E /* CylonEffect.swift */,
 				44961D7F273732ED004E1A0B /* GlowEffect.swift */,
+				44A68CEA273DBD5500CCBCF4 /* SparksEffect.swift */,
 				011C15B5272E1635003422E5 /* Defaults.swift */,
 				012BA33B273749A5008AF04E /* NotchExtensions.swift */,
 				441C5AC6272CB2B00094507E /* CoreAnimation.swift */,
@@ -214,6 +217,7 @@
 				011C15B8272F36D3003422E5 /* NSBezierPath.swift in Sources */,
 				012BA33C273749A5008AF04E /* NotchExtensions.swift in Sources */,
 				441C5AC7272CB2B00094507E /* CoreAnimation.swift in Sources */,
+				44A68CEB273DBD5500CCBCF4 /* SparksEffect.swift in Sources */,
 				44961D7E27372F4D004E1A0B /* NotchEffect.swift in Sources */,
 				441C5AB4272C9FD10094507E /* ViewController.swift in Sources */,
 				44961D82273B3E42004E1A0B /* TrackingView.swift in Sources */,
