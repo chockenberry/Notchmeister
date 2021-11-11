@@ -15,14 +15,14 @@
 	<key>CFBundlePackageType</key>
 	<string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
 	<key>CFBundleShortVersionString</key>
-	<string>$(MARKETING_VERSION)</string>
+	<string>1.0</string>
 	<key>CFBundleVersion</key>
-	<string>$(CURRENT_PROJECT_VERSION)</string>
-	<key>OrganizationIdentifier</key>
-	<string>$(ORGANIZATION_IDENTIFIER)</string>
+	<string>2</string>
 	<key>NSMainStoryboardFile</key>
 	<string>Main</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
+	<key>OrganizationIdentifier</key>
+	<string>$(ORGANIZATION_IDENTIFIER)</string>
 </dict>
 </plist>
