@@ -125,16 +125,22 @@ extension NSBezierPath {
         
         // default coordinate space is flipped so (0,0) is lower-left
         
-        let radius = 8.0
+		//let radius: CGFloat = .notchLowerRadius
         let path = NSBezierPath()
 
         path.move(to: NSPoint(x: 0, y: size.height))
-        path.line(to: NSPoint(x: 0, y: radius))
-        path.appendArc(from: .zero, to: NSPoint(x: radius, y: 0), radius: radius)
-        path.line(to: NSPoint(x: size.width - radius, y: 0))
-        path.appendArc(from: NSPoint(x: size.width, y: 0), to: NSPoint(x: size.width, y: radius), radius: radius)
+        path.line(to: NSPoint(x: 0, y: .notchLowerRadius))
+        path.appendArc(from: .zero, to: NSPoint(x: .notchLowerRadius, y: 0), radius: .notchLowerRadius)
+        path.line(to: NSPoint(x: size.width - .notchLowerRadius, y: 0))
+        path.appendArc(from: NSPoint(x: size.width, y: 0), to: NSPoint(x: size.width, y: .notchLowerRadius), radius: .notchLowerRadius)
         path.line(to: NSPoint(x: size.width, y: size.height))
 
         return path
     }
+}
+
+extension CGFloat {
+	
+	public static let notchLowerRadius = 8.0
+	
 }

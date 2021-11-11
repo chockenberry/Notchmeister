@@ -47,5 +47,45 @@ class NotchEffect: NotchEffectable {
 	func mouseExited(at point: CGPoint, underNotch: Bool) {
 		// override to perform work when the mouse leaves the effect layer
 	}
+
+	func maxEdgeDistance() -> CGFloat {
+		guard let parentLayer = parentLayer else {
+			return .leastNormalMagnitude
+		}
+		
+		return parentLayer.bounds.height
+	}
+	
+	func edgeDistance(at point: CGPoint) -> CGFloat {
+		// distance of point from edge of the notch: negative is outside, positive is inside
+		
+		guard let parentLayer = parentLayer else {
+			return .greatestFiniteMagnitude
+		}
+
+		let notchBounds = parentLayer.bounds
+		
+		// TODO: corners are special cases - that aren't handled yet...
+//		let leftCorner = CGRect(x: notchBounds.minX, y: notchBounds.maxY - .notchLowerRadius, width: .notchLowerRadius, height: .notchLowerRadius)
+//		let rightCorner = CGRect(x: notchBounds.maxX - .notchLowerRadius, y: notchBounds.maxY - .notchLowerRadius, width: .notchLowerRadius, height: .notchLowerRadius)
+//
+//		if leftCorner.contains(point) {
+//			return 0
+//		}
+//		else if rightCorner.contains(point) {
+//			return 0
+//		}
+//		else {
+			let xDelta: CGFloat
+			if point.x < notchBounds.midX {
+				xDelta = point.x - notchBounds.minX
+			}
+			else {
+				xDelta = notchBounds.maxX - point.x
+			}
+			let yDelta = notchBounds.maxY - point.y
+			return min(xDelta, yDelta)
+//		}
+	}
 }
 

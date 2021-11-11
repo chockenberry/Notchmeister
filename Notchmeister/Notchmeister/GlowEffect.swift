@@ -16,7 +16,9 @@ class GlowEffect: NotchEffect {
 	var edgeLayer: CAShapeLayer
 	var maskLayer: CAGradientLayer
 
-	let glowRadius = 40.0
+	let glowRadius = 30.0
+	let maskRadius = 10.0
+	let edgeWidth = 1.0
 	let offset = 0
 	
 	required init(with parentLayer: CALayer) {
@@ -32,8 +34,11 @@ class GlowEffect: NotchEffect {
 	private func configureSublayers() {
 		guard let parentLayer = parentLayer else { return }
 		
-		let dimension = glowRadius * 2
-		glowLayer.bounds = CGRect(origin: .zero, size: CGSize(width: dimension, height: dimension))
+		let glowColor = NSColor(named: "glowEffect-glow")!
+		let edgeColor = NSColor(named: "glowEffect-edge")!
+
+		let glowDimension = glowRadius * 2
+		glowLayer.bounds = CGRect(origin: .zero, size: CGSize(width: glowDimension, height: glowDimension))
 		glowLayer.masksToBounds = false
 		if Defaults.shouldDebugDrawing {
 			glowLayer.backgroundColor = NSColor.systemBlue.cgColor
@@ -45,8 +50,8 @@ class GlowEffect: NotchEffect {
 		glowLayer.position = .zero
 		glowLayer.opacity = 0
 		
-		let startColor = NSColor.white
-		let endColor = NSColor(calibratedWhite: 1.0, alpha: 0.0)
+		let startColor = glowColor
+		let endColor = glowColor.withAlphaComponent(0)
 		
 		glowLayer.type = .radial
 		glowLayer.colors = [startColor.cgColor, startColor.cgColor, endColor.cgColor]
@@ -60,11 +65,12 @@ class GlowEffect: NotchEffect {
 		edgeLayer.isGeometryFlipped = parentLayer.isGeometryFlipped
 		edgeLayer.anchorPoint = .zero
 		edgeLayer.fillColor = NSColor.clear.cgColor
-		edgeLayer.strokeColor = NSColor.cyan.cgColor
-		edgeLayer.lineWidth = 8.0
+		edgeLayer.strokeColor = edgeColor.cgColor
+		edgeLayer.lineWidth = edgeWidth * 2
 		edgeLayer.opacity = 0
 
-		maskLayer.bounds = CGRect(origin: .zero, size: CGSize(width: dimension, height: dimension))
+		let maskDimension = maskRadius * 2
+		maskLayer.bounds = CGRect(origin: .zero, size: CGSize(width: maskDimension, height: maskDimension))
 		//maskLayer.isGeometryFlipped = parentLayer.isGeometryFlipped
 		maskLayer.type = .radial
 		maskLayer.colors = [startColor.cgColor, startColor.cgColor, endColor.cgColor]
@@ -88,9 +94,23 @@ class GlowEffect: NotchEffect {
 	}
 	
 	override func mouseMoved(at point: CGPoint, underNotch: Bool) {
-		glowLayer.opacity = (underNotch ? 1 : 0.0)
-
 		CATransaction.withActionsDisabled {
+			if underNotch {
+				let edgeDistance = edgeDistance(at: point)
+				if edgeDistance > 0 {
+					glowLayer.opacity = Float(edgeDistance / maxEdgeDistance())
+				}
+				else {
+					glowLayer.opacity = 0
+				}
+			}
+			else {
+				glowLayer.opacity = 0
+			}
+			//glowLayer.opacity = (underNotch ? 1 : 0.0)
+
+			debugLog("edgeDistance = \(edgeDistance(at: point))")
+		
 			glowLayer.position = point
 			// TODO: Should notchOutlineLayer work in notch coordinates (origin in upper-left)?
 			let layerPoint = CGPoint(x: point.x, y: edgeLayer.bounds.height - point.y)
