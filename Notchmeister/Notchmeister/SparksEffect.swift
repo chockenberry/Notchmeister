@@ -44,7 +44,28 @@ class SparksEffect: NotchEffect {
 
 		cell.contents = cgImage
 		
-		cell.color = NSColor.systemOrange.cgColor
+		cell.color = NSColor.orange.cgColor
+		cell.redRange = 0.5
+		cell.greenRange = 0.5
+		cell.blueRange = 0
+		
+		/*
+		 Animate color:
+		 
+		 newEmitter.name = @"fire";
+
+
+		 //Set first before doing CABasicAnimation so it sticks
+		 newEmitter.redSpeed = 1.0;
+
+		 //Access the property with this key path format: @"emitterCells.<name>.<property>"
+		 CABasicAnimation *anim = [CABasicAnimation animationWithKeyPath:@"emitterCells.fire.redSpeed"];
+		 anim.fromValue = @(0.0);
+		 anim.toValue = @(1.0);
+		 anim.duration = 1.5;
+		 anim.fillMode = kCAFillModeForwards;
+		 [emitter addAnimation:anim forKey:@"emitterAnim"];
+		 */
 		
 		sparksLayer.emitterCells = [cell]
 		sparksLayer.opacity = 1
