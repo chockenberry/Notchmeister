@@ -73,7 +73,7 @@ class NotchView: NSView {
     private func createOutlineLayer() {
         guard let layer = layer else { return }
         
-        let outlineLayer = CAShapeLayer.notchOutlineLayer(for: bounds.size)
+        let outlineLayer = CAShapeLayer.notchOutlineLayer(for: bounds.size, flipped: isFlipped)
                 
         outlineLayer.masksToBounds = false
         
@@ -81,8 +81,6 @@ class NotchView: NSView {
         outlineLayer.autoresizingMask = [.layerHeightSizable, .layerWidthSizable]
         layer.addSublayer(outlineLayer)
         
-        outlineLayer.isGeometryFlipped = isFlipped
-
         notchOutlineLayer = outlineLayer
     }
     

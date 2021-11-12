@@ -101,11 +101,19 @@ extension CAShapeLayer {
     /// Creates a shape layer with a path that matches the shape of the
     /// display notch.
     /// - Parameter size: the dimensions of the notch area
+    /// - Parameter flipped: the path is flipped (to match a parent layer)
     /// - Returns: shape layer with a path that follows the contour of the
     /// display notch.
-    class func notchOutlineLayer(for size: NSSize) -> CAShapeLayer {
+	class func notchOutlineLayer(for size: NSSize, flipped: Bool = false) -> CAShapeLayer {
         let layer = CAShapeLayer()
         let path = NSBezierPath.notchPath(size: size)
+		
+		if (flipped) {
+			var flipTransform = AffineTransform(scaleByX: 1, byY: -1)
+			flipTransform.translate(x: 0, y: -size.height)
+			path.transform(using: flipTransform)
+		}
+
         layer.path = path.cgPath
         layer.bounds.size = size
         

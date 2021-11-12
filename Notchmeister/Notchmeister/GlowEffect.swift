@@ -15,17 +15,24 @@ class GlowEffect: NotchEffect {
 	
 	var edgeLayer: CAShapeLayer
 	var maskLayer: CAGradientLayer
+	var debugLayer: CALayer?
 
-	let glowRadius = 30.0
-	let maskRadius = 10.0
+	var hotSpotOffset: CGPoint = .zero
+	
+	let glowRadius = 40.0 // notch height is 38 pt
+	let maskRadius = 12.0 // cursor radius is 23 pt / 2 = 11.5
 	let edgeWidth = 1.0
 	let offset = 0
 	
 	required init(with parentLayer: CALayer) {
 		self.glowLayer = CAGradientLayer()
-		self.edgeLayer = CAShapeLayer.notchOutlineLayer(for: parentLayer.bounds.size)
+		self.edgeLayer = CAShapeLayer.notchOutlineLayer(for: parentLayer.bounds.size, flipped: true)
 		self.maskLayer = CAGradientLayer()
 
+		if Defaults.shouldDebugDrawing {
+			self.debugLayer = CALayer()
+		}
+		
 		super.init(with: parentLayer)
 
 		configureSublayers()
@@ -34,63 +41,76 @@ class GlowEffect: NotchEffect {
 	private func configureSublayers() {
 		guard let parentLayer = parentLayer else { return }
 		
-		let glowColor = NSColor(named: "glowEffect-glow")!
-		let edgeColor = NSColor(named: "glowEffect-edge")!
-
-		let glowDimension = glowRadius * 2
-		glowLayer.bounds = CGRect(origin: .zero, size: CGSize(width: glowDimension, height: glowDimension))
-		glowLayer.masksToBounds = false
-		if Defaults.shouldDebugDrawing {
-			glowLayer.backgroundColor = NSColor.systemBlue.cgColor
+		do { // the glow around the cursor, to light your way
+			let glowColor = NSColor(named: "glowEffect-glow")!
+			
+			let glowDimension = glowRadius * 2
+			glowLayer.bounds = CGRect(origin: .zero, size: CGSize(width: glowDimension, height: glowDimension))
+			glowLayer.masksToBounds = false
+			if Defaults.shouldDebugDrawing {
+				glowLayer.backgroundColor = NSColor.systemBlue.cgColor
+			}
+			else {
+				glowLayer.backgroundColor = NSColor.clear.cgColor
+			}
+			glowLayer.contentsScale = parentLayer.contentsScale
+			glowLayer.position = .zero
+			glowLayer.opacity = 0
+			
+			glowLayer.type = .radial
+			let startColor = glowColor
+			let endColor = glowColor.withAlphaComponent(0)
+			glowLayer.colors = [startColor.cgColor, startColor.cgColor, endColor.cgColor]
+			glowLayer.locations = [0, 0.25, 1]
+			glowLayer.startPoint = CGPoint(x: 0.5,y: 0.5)
+			glowLayer.endPoint = CGPoint(x: 1,y: 1)
+			
+			parentLayer.addSublayer(glowLayer)
 		}
-		else {
-			glowLayer.backgroundColor = NSColor.clear.cgColor
+		
+		do { // the edge highlight, for that high-tech sheen
+			let edgeColor = NSColor(named: "glowEffect-edge")!
+			
+			edgeLayer.anchorPoint = .zero
+			edgeLayer.fillColor = NSColor.clear.cgColor
+			edgeLayer.strokeColor = edgeColor.cgColor
+			edgeLayer.lineWidth = edgeWidth * 2
+			edgeLayer.opacity = 0
+
+			let maskDimension = maskRadius * 2
+			maskLayer.bounds = CGRect(origin: .zero, size: CGSize(width: maskDimension, height: maskDimension))
+			maskLayer.type = .radial
+			let startColor = NSColor.white
+			let endColor = startColor.withAlphaComponent(0)
+			maskLayer.colors = [startColor.cgColor, startColor.cgColor, endColor.cgColor]
+			maskLayer.locations = [0, 0.75, 1]
+			maskLayer.startPoint = CGPoint(x: 0.5,y: 0.5)
+			maskLayer.endPoint = CGPoint(x: 1,y: 1)
+			maskLayer.position = .zero
+			
+			edgeLayer.mask = maskLayer
+			
+			parentLayer.addSublayer(edgeLayer)
 		}
-		glowLayer.contentsScale = parentLayer.contentsScale
-		glowLayer.position = .zero
-		glowLayer.opacity = 0
 		
-		let startColor = glowColor
-		let endColor = glowColor.withAlphaComponent(0)
-		
-		glowLayer.type = .radial
-		glowLayer.colors = [startColor.cgColor, startColor.cgColor, endColor.cgColor]
-		glowLayer.locations = [0,0.25,1]
-		glowLayer.startPoint = CGPoint(x: 0.5,y: 0.5)
-		glowLayer.endPoint = CGPoint(x: 1,y: 1)
+		if let debugLayer = debugLayer {
+			debugLayer.bounds = CGRect(origin: .zero, size: CGSize(width: 38, height: 38))
+			debugLayer.backgroundColor = NSColor.systemGreen.withAlphaComponent(0.25).cgColor
 
-		parentLayer.addSublayer(glowLayer)
-		
-		// TODO: Should notchOutlineLayer work in notch coordinates (origin in upper-left)?
-		edgeLayer.isGeometryFlipped = parentLayer.isGeometryFlipped
-		edgeLayer.anchorPoint = .zero
-		edgeLayer.fillColor = NSColor.clear.cgColor
-		edgeLayer.strokeColor = edgeColor.cgColor
-		edgeLayer.lineWidth = edgeWidth * 2
-		edgeLayer.opacity = 0
-
-		let maskDimension = maskRadius * 2
-		maskLayer.bounds = CGRect(origin: .zero, size: CGSize(width: maskDimension, height: maskDimension))
-		//maskLayer.isGeometryFlipped = parentLayer.isGeometryFlipped
-		maskLayer.type = .radial
-		maskLayer.colors = [startColor.cgColor, startColor.cgColor, endColor.cgColor]
-		maskLayer.locations = [0,0.75,1]
-		maskLayer.startPoint = CGPoint(x: 0.5,y: 0.5)
-		maskLayer.endPoint = CGPoint(x: 1,y: 1)
-		maskLayer.position = .zero
-		
-		edgeLayer.mask = maskLayer
-		
-		parentLayer.addSublayer(edgeLayer)
-	}
-
-	override func start() {
-		
+			parentLayer.addSublayer(debugLayer)
+		}
 	}
 	
 	override func mouseEntered(at point: CGPoint, underNotch: Bool) {
-		//glowLayer.opacity = 1
-		edgeLayer.opacity = 1
+		glowLayer.opacity = 0
+		edgeLayer.opacity = 1 // .. and probably completely masked out
+
+		// NOTE: We record the hot spot relative to the center of the cursor since we're dealing with layers
+		// that want to be over the point of maximum luminence.
+		let cursor = NSCursor.current
+		let cursorBounds = CGRect(origin: .zero, size: cursor.image.size)
+		let hotSpot = cursor.hotSpot
+		hotSpotOffset = CGPoint(x: cursorBounds.midX - hotSpot.x, y: cursorBounds.midY - hotSpot.y)
 	}
 	
 	override func mouseMoved(at point: CGPoint, underNotch: Bool) {
@@ -98,6 +118,7 @@ class GlowEffect: NotchEffect {
 			if underNotch {
 				let edgeDistance = edgeDistance(at: point)
 				if edgeDistance > 0 {
+					// TODO: add some non-linear interpolation for the glow intensity
 					glowLayer.opacity = Float(edgeDistance / maxEdgeDistance())
 				}
 				else {
@@ -107,71 +128,20 @@ class GlowEffect: NotchEffect {
 			else {
 				glowLayer.opacity = 0
 			}
-			//glowLayer.opacity = (underNotch ? 1 : 0.0)
 
-			debugLog("edgeDistance = \(edgeDistance(at: point))")
+			//debugLog("edgeDistance = \(edgeDistance(at: point))")
 		
-			glowLayer.position = point
-			// TODO: Should notchOutlineLayer work in notch coordinates (origin in upper-left)?
-			let layerPoint = CGPoint(x: point.x, y: edgeLayer.bounds.height - point.y)
-			//let layerPoint = CGPoint(x: point.x, y: point.y)
-			maskLayer.position = layerPoint
+			glowLayer.position = point + hotSpotOffset
+			maskLayer.position = point + hotSpotOffset
+			
+			if let debugLayer = debugLayer {
+				debugLayer.position = point + hotSpotOffset
+			}
 		}
 	}
 	
 	override func mouseExited(at point: CGPoint, underNotch: Bool) {
-		//glowLayer.opacity = 0
+		glowLayer.opacity = 0
 		edgeLayer.opacity = 0
 	}
 }
-
-/*
- NOTE: Saving this for later.
- 
- if let sublayer = sublayer {
-	 let cursor = NSCursor.current
-	 let cursorSize = cursor.image.size
-	 let hotSpot = cursor.hotSpot
-	 
-	 if let glowBaseImage = NSImage(named: "glowBase") {
-		 let glowBaseSize = glowBaseImage.size
-		 
-		 // record the hot spot in normalized coordinates relative to the center of the cursor since that's where we're scaling the image from
-		 let normalizedHotSpotPoint = NSPoint(x: (hotSpot.x / cursorSize.width) - 0.5, y: (hotSpot.y / cursorSize.height) - 0.5)
-		 
-		 //var proposedRect = CGRect(origin: .zero, size: cursorSize)
-		 var proposedRect = CGRect(origin: .zero, size: glowBaseSize)
-		 //if let cgImage = cursor.image.cgImage(forProposedRect: &proposedRect, context: nil, hints: nil) {
-		 if let cgImage = glowBaseImage.cgImage(forProposedRect: &proposedRect, context: nil, hints: nil) {
-			 let ciImage = CIImage(cgImage: cgImage)
-			 // NOTE: The image processing here will be more complicated, this is just a placeholder.
-			 if let filter = CIFilter(name: "CIDiscBlur") {
-				 let blurScale: CGFloat = 10
-				 
-				 // glowBaseImage = 20 x 20 pt
-				 // ciImage.extent = 40 x 40 @ 0,0
-				 // blurScale = 10, filteredCiImage = 100 x 100 @ -30, -30, sublayerSize = 50 x 50 pt
-				 // blurScale = 5, filteredCiImage = 70 x 70 @ -15, -15, sublayerSize = 35 x 35 pt
-				 // blurScale = 1, filteredCiImage = 46 x 46 @ -3, -3, sublayerSize = 23 x 23 pt
-
-				 filter.setDefaults()
-				 filter.setValue(ciImage, forKey: kCIInputImageKey)
-				 filter.setValue(blurScale, forKey: kCIInputRadiusKey)
-				 
-				 if let filteredCiImage = filter.outputImage {
-					 debugLog("filteredCiImage.extent = \(filteredCiImage.extent)")
-					 if let sublayerCgImage = context.createCGImage(filteredCiImage, from: filteredCiImage.extent) {
-						 let scale = sublayer.contentsScale
-						 let sublayerSize = CGSize(width: CGFloat(sublayerCgImage.width) / scale, height: CGFloat(sublayerCgImage.height) / scale)
-						 //debugLog("sublayerSize = \(sublayerSize)") //
-						 sublayer.bounds = CGRect(origin: .zero, size: sublayerSize)
-						 sublayer.anchorPoint = CGPoint(x: 0.5 + (normalizedHotSpotPoint.x / blurScale), y: 0.5 + (normalizedHotSpotPoint.y / blurScale))
-						 sublayer.contents = sublayerCgImage
-					 }
-				 }
-			 }
-		 }
-	 }
- }
-
- */
