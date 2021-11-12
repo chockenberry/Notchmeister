@@ -29,13 +29,15 @@ class SparksEffect: NotchEffect {
 
 		let cell = CAEmitterCell()
 		cell.birthRate = 0
-		cell.lifetime = 0.5
-		cell.velocity = 150
+		// velocity * lifetime = distance travelled, which should be close to the padding (50 pts)
+		cell.lifetime = 0.39
+		cell.velocity = 200
 		cell.scale = 0.1
 		cell.scaleRange = 0.3
 		cell.scaleSpeed = 0.5
 		cell.contentsScale = parentLayer.contentsScale
-
+		cell.yAcceleration = 0.5
+		
 		cell.emissionRange = .pi * 2
 		
 		let image = NSImage(named: "sparksEffect-spark")!
@@ -82,7 +84,7 @@ class SparksEffect: NotchEffect {
 			if underNotch {
 				let edgeDistance = edgeDistance(at: point)
 				if edgeDistance > 0 {
-					sparksLayer.emitterCells?.first?.birthRate = Float(edgeDistance / maxEdgeDistance()) * 200
+					sparksLayer.emitterCells?.first?.birthRate = Float(edgeDistance / maxEdgeDistance()) * 1000
 				}
 				else {
 					sparksLayer.emitterCells?.first?.birthRate = 0
