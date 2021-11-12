@@ -47,6 +47,7 @@
 		44961D81273B3E42004E1A0B /* TrackingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingView.swift; sourceTree = "<group>"; };
 		44A68CEA273DBD5500CCBCF4 /* SparksEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SparksEffect.swift; sourceTree = "<group>"; };
 		44A68CEC273E18C900CCBCF4 /* CoreGraphics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreGraphics.swift; sourceTree = "<group>"; };
+		44A68CF0273F23ED00CCBCF4 /* SparkTest.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = SparkTest.sks; sourceTree = "<group>"; };
 		51F8A85A272CCB9100D349F1 /* Notchmeister_project_release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Notchmeister_project_release.xcconfig; sourceTree = "<group>"; };
 		51F8A85B272CCB9100D349F1 /* Notchmeister_project_debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Notchmeister_project_debug.xcconfig; sourceTree = "<group>"; };
 		51F8A85D272CCB9200D349F1 /* Notchmeister_macapp_target.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Notchmeister_macapp_target.xcconfig; sourceTree = "<group>"; };
@@ -95,6 +96,7 @@
 				012BA33927363699008AF04E /* CylonEffect.swift */,
 				44961D7F273732ED004E1A0B /* GlowEffect.swift */,
 				44A68CEA273DBD5500CCBCF4 /* SparksEffect.swift */,
+				44A68CF0273F23ED00CCBCF4 /* SparkTest.sks */,
 				011C15B5272E1635003422E5 /* Defaults.swift */,
 				012BA33B273749A5008AF04E /* NotchExtensions.swift */,
 				441C5AC6272CB2B00094507E /* CoreAnimation.swift */,

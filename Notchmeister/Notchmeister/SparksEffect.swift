@@ -23,6 +23,9 @@ class SparksEffect: NotchEffect {
 		guard let parentLayer = parentLayer else { return }
 		
 		sparksLayer.emitterPosition = .zero
+		sparksLayer.emitterSize = CGSize(width: 17, height: 23)
+		sparksLayer.emitterShape = .rectangle
+		sparksLayer.renderMode = .additive
 		sparksLayer.contentsScale = parentLayer.contentsScale
 
 		let sparkDimension = 10
@@ -37,11 +40,14 @@ class SparksEffect: NotchEffect {
 		cell.scaleSpeed = 0.5
 		cell.contentsScale = parentLayer.contentsScale
 		cell.yAcceleration = 0.5
+		cell.emissionLongitude = .pi / 2
+		cell.emissionRange = .pi / 4
+		cell.spin = .pi * 2
 		
-		cell.emissionRange = .pi * 2
+		//cell.emissionRange = .pi * 2
 		
 		let image = NSImage(named: "sparksEffect-spark")!
-		var proposedRect = CGRect(origin: .zero, size: CGSize(width: sparkDimension, height: sparkDimension))
+		var proposedRect = CGRect(origin: .zero, size: CGSize(width: 10, height: 40))
 		let cgImage = image.cgImage(forProposedRect: &proposedRect, context: nil, hints: nil)
 
 		cell.contents = cgImage
