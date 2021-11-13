@@ -48,6 +48,7 @@
 		44A68CEA273DBD5500CCBCF4 /* SparksEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SparksEffect.swift; sourceTree = "<group>"; };
 		44A68CEC273E18C900CCBCF4 /* CoreGraphics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreGraphics.swift; sourceTree = "<group>"; };
 		44A68CF0273F23ED00CCBCF4 /* SparkTest.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = SparkTest.sks; sourceTree = "<group>"; };
+		44F0CC482740516500F79D8D /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		51F8A85A272CCB9100D349F1 /* Notchmeister_project_release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Notchmeister_project_release.xcconfig; sourceTree = "<group>"; };
 		51F8A85B272CCB9100D349F1 /* Notchmeister_project_debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Notchmeister_project_debug.xcconfig; sourceTree = "<group>"; };
 		51F8A85D272CCB9200D349F1 /* Notchmeister_macapp_target.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Notchmeister_macapp_target.xcconfig; sourceTree = "<group>"; };
@@ -69,6 +70,7 @@
 		441C5AA5272C9FD10094507E = {
 			isa = PBXGroup;
 			children = (
+				44F0CC482740516500F79D8D /* README.md */,
 				012BA33E273865ED008AF04E /* Notch Playground.playground */,
 				441C5AB0272C9FD10094507E /* Notchmeister */,
 				51F8A854272CC9C300D349F1 /* xcconfig */,
