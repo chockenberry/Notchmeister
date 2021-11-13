@@ -115,7 +115,7 @@ class NotchView: NSView {
 	}
 	
 	func mouseEntered(windowPoint: CGPoint) {
-		debugLog()
+		//debugLog()
 		trackingMouse = true
 		
 		//NSCursor.hide() // NOTE: This only works when the app is frontmost, which in this case is unlikely.
@@ -129,7 +129,7 @@ class NotchView: NSView {
 		//if trackingMouse {
 			let point = notchLocation(with: windowPoint)
 			let underNotch = bounds.contains(point)
-			debugLog("point = \(point), underNotch = \(underNotch)")
+			//debugLog("point = \(point), underNotch = \(underNotch)")
 			notchEffect?.mouseMoved(at: point, underNotch: underNotch)
 		//}
 		//else {
@@ -138,7 +138,7 @@ class NotchView: NSView {
 	}
 	
 	func mouseExited(windowPoint: CGPoint) {
-		debugLog()
+		//debugLog()
 		trackingMouse = false
 
 		//NSCursor.unhide() // NOTE: This only works when the app is frontmost, which in this case is unlikely.

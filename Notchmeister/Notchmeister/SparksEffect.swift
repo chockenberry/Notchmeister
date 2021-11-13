@@ -107,7 +107,7 @@ class SparksEffect: NotchEffect {
 				sparksLayer.emitterCells?.first?.birthRate = 0
 			}
 
-			debugLog("edgeDistance = \(edgeDistance(at: point))")
+			//debugLog("edgeDistance = \(edgeDistance(at: point))")
 		
 			sparksLayer.emitterPosition = point
 		}

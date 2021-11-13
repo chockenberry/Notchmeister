@@ -67,17 +67,17 @@ class NotchWindow: NSWindow {
 	//MARK: - NSResponder
 	
 	override func mouseEntered(with event: NSEvent) {
-		debugLog()
+		//debugLog()
 		self.notchView?.mouseEntered(windowPoint: event.locationInWindow)
 	}
 	
 	override func mouseMoved(with event: NSEvent) {
-		debugLog()
+		//debugLog()
 		self.notchView?.mouseMoved(windowPoint: event.locationInWindow)
 	}
 	
 	override func mouseExited(with event: NSEvent) {
-		debugLog()
+		//debugLog()
 		self.notchView?.mouseExited(windowPoint: event.locationInWindow)
 	}
 	
