@@ -30,5 +30,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		return false
 	}
 
+	func applicationDidBecomeActive(_ notification: Notification) {
+		if let window = NSApplication.shared.windows.first {
+			window.makeKeyAndOrderFront(self)
+		}
+	}
 }
 
