@@ -99,14 +99,14 @@ class NotchView: NSView {
 		return SparksEffect(with: parentLayer)
 	}
 
-	override func acceptsFirstMouse(for event: NSEvent?) -> Bool {
-		return true
-	}
+//	override func acceptsFirstMouse(for event: NSEvent?) -> Bool {
+//		return true
+//	}
 
-	override func hitTest(_ point: NSPoint) -> NSView? {
-		//return debugResult(self.layer?.hitTest(point) == nil ? nil : super.hitTest(point))
-		return debugResult(super.hitTest(point))
-	}
+//	override func hitTest(_ point: NSPoint) -> NSView? {
+//		//return debugResult(self.layer?.hitTest(point) == nil ? nil : super.hitTest(point))
+//		return debugResult(super.hitTest(point))
+//	}
 
     //MARK: - NSResponder
 
