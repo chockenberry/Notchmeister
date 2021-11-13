@@ -57,8 +57,9 @@ class TrackingView: NSView {
 	
 	//MARK: - NSResponder
 	
-	// NOTE: Tracking mouse movement with NSTrackingArea is unreliable. Both local and global event monitors are
-	// give more predictable results, but at a cost of CPU usage (many events must be processed.)
+	// NOTE: Tracking mouse movement with NSTrackingArea is unreliable: window ordering complicates things.
+	// Both local and global event monitors provides more predictable results, but at a cost of CPU usage (many
+	// events must be processed.)
 	//
 	// To mitigate this, the event monitors are created when entering the tracking area and destroyed when leaving.
 	
@@ -67,8 +68,8 @@ class TrackingView: NSView {
 		globalMonitor = NSEvent.addGlobalMonitorForEvents(matching: [.mouseMoved]) { event in
 			//debugLog("global event")
 			if let window = self.window {
-				let location = window.convertPoint(fromScreen: event.locationInWindow)
-				if let windowEvent = NSEvent.mouseEvent(with: .mouseMoved, location: location, modifierFlags: event.modifierFlags, timestamp: event.timestamp, windowNumber: event.windowNumber, context: nil, eventNumber: event.eventNumber, clickCount: event.clickCount, pressure: event.pressure) {
+				let windowLocation = window.convertPoint(fromScreen: event.locationInWindow)
+				if let windowEvent = NSEvent.mouseEvent(with: .mouseMoved, location: windowLocation, modifierFlags: event.modifierFlags, timestamp: event.timestamp, windowNumber: event.windowNumber, context: nil, eventNumber: event.eventNumber, clickCount: event.clickCount, pressure: event.pressure) {
 					super.mouseMoved(with: windowEvent)
 				}
 			}
@@ -77,13 +78,24 @@ class TrackingView: NSView {
 		localMonitor = NSEvent.addLocalMonitorForEvents(matching: [.mouseMoved]) { event in
 			//debugLog("local event")
 			if let window = self.window {
-				let location = window.convertPoint(fromScreen: event.locationInWindow)
-				if let windowEvent = NSEvent.mouseEvent(with: .mouseMoved, location: location, modifierFlags: event.modifierFlags, timestamp: event.timestamp, windowNumber: event.windowNumber, context: nil, eventNumber: event.eventNumber, clickCount: event.clickCount, pressure: event.pressure) {
-					super.mouseMoved(with: windowEvent)
+				if let eventWindow = event.window {
+					// the event happened in another one of our windows
+					let screenLocation = eventWindow.convertPoint(toScreen: event.locationInWindow)
+					let windowLocation = window.convertPoint(fromScreen: screenLocation)
+					
+					if let windowEvent = NSEvent.mouseEvent(with: .mouseMoved, location: windowLocation, modifierFlags: event.modifierFlags, timestamp: event.timestamp, windowNumber: event.windowNumber, context: nil, eventNumber: event.eventNumber, clickCount: event.clickCount, pressure: event.pressure) {
+						super.mouseMoved(with: windowEvent)
+					}
+				}
+				else {
+					// the event happened in this view's parent
+					let windowLocation = window.convertPoint(fromScreen: event.locationInWindow)
+					if let windowEvent = NSEvent.mouseEvent(with: .mouseMoved, location: windowLocation, modifierFlags: event.modifierFlags, timestamp: event.timestamp, windowNumber: event.windowNumber, context: nil, eventNumber: event.eventNumber, clickCount: event.clickCount, pressure: event.pressure) {
+						super.mouseMoved(with: windowEvent)
+					}
 				}
 			}
-
-			return event
+			return nil
 		}
 	}
 	
