@@ -23,8 +23,8 @@ class SparksEffect: NotchEffect {
 		guard let parentLayer = parentLayer else { return }
 		
 		sparksLayer.emitterPosition = .zero
-		sparksLayer.emitterSize = CGSize(width: 17, height: 23)
-		sparksLayer.emitterShape = .rectangle
+		//sparksLayer.emitterSize = CGSize(width: 17, height: 23)
+		//sparksLayer.emitterShape = .rectangle
 		sparksLayer.renderMode = .additive
 		sparksLayer.contentsScale = parentLayer.contentsScale
 
@@ -33,29 +33,33 @@ class SparksEffect: NotchEffect {
 		let cell = CAEmitterCell()
 		cell.birthRate = 0
 		// velocity * lifetime = distance travelled, which should be close to the padding (50 pts)
-		cell.lifetime = 0.39
-		cell.velocity = 200
-		cell.scale = 0.1
-		cell.scaleRange = 0.3
-		cell.scaleSpeed = 0.5
+		cell.lifetime = 0.25
+		cell.velocity = 195
+		cell.scale = 0.25
+		cell.scaleRange = 1
+		cell.scaleSpeed = -0.55
 		cell.contentsScale = parentLayer.contentsScale
-		cell.yAcceleration = 0.5
-		cell.emissionLongitude = .pi / 2
-		cell.emissionRange = .pi / 4
-		cell.spin = .pi * 2
+		//cell.yAcceleration = 0.5
+		cell.emissionLongitude = CGFloat.pi / 2
+		cell.emissionRange = CGFloat.pi
+		cell.spin = 0
+		//cell.spin = .pi * 2
 		
 		//cell.emissionRange = .pi * 2
 		
-		let image = NSImage(named: "sparksEffect-spark")!
+		//let image = NSImage(named: "sparksEffect-spark")!
+		let image = NSImage(named: "spark")!
 		var proposedRect = CGRect(origin: .zero, size: CGSize(width: 10, height: 40))
 		let cgImage = image.cgImage(forProposedRect: &proposedRect, context: nil, hints: nil)
 
 		cell.contents = cgImage
 		
 		cell.color = NSColor.orange.cgColor
-		cell.redRange = 0.5
-		cell.greenRange = 0.5
-		cell.blueRange = 0
+		cell.alphaSpeed = -0.5
+		cell.alphaRange = 1
+//		cell.redRange = 0.5
+//		cell.greenRange = 0.5
+//		cell.blueRange = 0
 		
 		/*
 		 Animate color:
@@ -88,13 +92,16 @@ class SparksEffect: NotchEffect {
 	override func mouseMoved(at point: CGPoint, underNotch: Bool) {
 		CATransaction.withActionsDisabled {
 			if underNotch {
+				sparksLayer.emitterCells?.first?.birthRate = 300
+				/*
 				let edgeDistance = edgeDistance(at: point)
 				if edgeDistance > 0 {
-					sparksLayer.emitterCells?.first?.birthRate = Float(edgeDistance / maxEdgeDistance()) * 1000
+					sparksLayer.emitterCells?.first?.birthRate = Float(edgeDistance / maxEdgeDistance()) * 300
 				}
 				else {
 					sparksLayer.emitterCells?.first?.birthRate = 0
 				}
+				 */
 			}
 			else {
 				sparksLayer.emitterCells?.first?.birthRate = 0
@@ -107,6 +114,7 @@ class SparksEffect: NotchEffect {
 	}
 	
 	override func mouseExited(at point: CGPoint, underNotch: Bool) {
+		sparksLayer.emitterCells?.first?.birthRate = 0
 	}
 
 }
