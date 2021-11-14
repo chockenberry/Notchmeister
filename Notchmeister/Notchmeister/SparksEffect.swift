@@ -33,13 +33,13 @@ class SparksEffect: NotchEffect {
 		let cell = CAEmitterCell()
 		cell.birthRate = 0
 		// velocity * lifetime = distance travelled, which should be close to the padding (50 pts)
-		cell.lifetime = 0.25
-		cell.velocity = 195
+		cell.lifetime = 0.2
+		cell.velocity = 150
 		cell.scale = 0.25
 		cell.scaleRange = 1
 		cell.scaleSpeed = -0.55
 		cell.contentsScale = parentLayer.contentsScale
-		//cell.yAcceleration = 0.5
+		cell.yAcceleration = 500
 		cell.emissionLongitude = CGFloat.pi / 2
 		cell.emissionRange = CGFloat.pi
 		cell.spin = 0
@@ -55,11 +55,12 @@ class SparksEffect: NotchEffect {
 		cell.contents = cgImage
 		
 		cell.color = NSColor.orange.cgColor
+		//cell.color = NSColor(calibratedRed: 0.8, green: 0.6, blue: 1, alpha: 1).cgColor
 		cell.alphaSpeed = -0.5
 		cell.alphaRange = 1
-//		cell.redRange = 0.5
+		cell.redRange = 0.2
 //		cell.greenRange = 0.5
-//		cell.blueRange = 0
+		cell.blueRange = 0.1
 		
 		/*
 		 Animate color:

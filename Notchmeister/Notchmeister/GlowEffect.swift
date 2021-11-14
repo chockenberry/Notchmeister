@@ -59,8 +59,9 @@ class GlowEffect: NotchEffect {
 			
 			glowLayer.type = .radial
 			let startColor = glowColor
+			let middleColor = glowColor.withAlphaComponent(0.5)
 			let endColor = glowColor.withAlphaComponent(0)
-			glowLayer.colors = [startColor.cgColor, startColor.cgColor, endColor.cgColor]
+			glowLayer.colors = [startColor.cgColor, middleColor.cgColor, endColor.cgColor]
 			glowLayer.locations = [0, 0.25, 1]
 			glowLayer.startPoint = CGPoint(x: 0.5,y: 0.5)
 			glowLayer.endPoint = CGPoint(x: 1,y: 1)
