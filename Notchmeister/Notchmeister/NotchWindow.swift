@@ -9,6 +9,7 @@ import CoreGraphics
 class NotchWindow: NSWindow {
     
     var notchView: NotchView?
+	var fakeNotchView: FakeNotchView?
 
 	required init?(screen: NSScreen, padding: CGFloat) {
 		guard let notchRect = screen.notchRect else { return nil }
@@ -51,6 +52,40 @@ class NotchWindow: NSWindow {
 
         self.contentView = contentView
         createNotchView(size: notchRect.size)
+		
+		if Defaults.shouldFakeNotch {
+			createFakeNotchView(size: notchRect.size)
+		}
+		
+//		self.delegate = self
+	}
+
+	override func orderFront(_ sender: Any?) {
+		super.orderFront(sender)
+		
+		if let fakeNotchView = fakeNotchView {
+			let destinationFrame = fakeNotchView.frame
+			let sourceFrame = NSRect(origin: CGPoint(x: destinationFrame.origin.x, y: destinationFrame.origin.y + destinationFrame.height), size: destinationFrame.size)
+			fakeNotchView.frame = sourceFrame
+			NSAnimationContext.runAnimationGroup { context in
+				context.duration = 0.5
+				fakeNotchView.animator().frame = destinationFrame
+			}
+		}
+	}
+	
+	override func orderOut(_ sender: Any?) {
+		if let fakeNotchView = fakeNotchView {
+			debugLog("starting")
+			fakeNotchView.alphaValue = 1.0
+			NSAnimationContext.runAnimationGroup { context in
+				context.duration = 0.25
+				fakeNotchView.animator().alphaValue = 0.0
+			} completionHandler: {
+				debugLog("finished")
+				super.orderOut(sender)
+			}
+		}
 	}
 
     private func createNotchView(size: NSSize) {
@@ -63,6 +98,25 @@ class NotchWindow: NSWindow {
         
         self.notchView = notchView
     }
+	
+	private func createFakeNotchView(size: NSSize) {
+		guard let contentView = contentView else { return }
+
+		let contentBounds = contentView.bounds
+		let notchFrame = CGRect(origin: CGPoint(x: contentBounds.midX - size.width / 2, y: contentBounds.maxY - size.height), size: size)
+
+		let bundle = Bundle.main
+		var topLevelArray: NSArray? = nil
+		bundle.loadNibNamed(NSNib.Name("FakeNotchView"), owner: self, topLevelObjects: &topLevelArray)
+		if let topLevelArray = topLevelArray {
+			let views = Array<Any>(topLevelArray).filter { $0 is FakeNotchView }
+			if let fakeNotchView = views.last as? FakeNotchView {
+				fakeNotchView.frame = notchFrame
+				self.contentView?.addSubview(fakeNotchView)
+				self.fakeNotchView = fakeNotchView
+			}
+		}
+	}
 	
 	//MARK: - NSResponder
 	
@@ -82,3 +136,11 @@ class NotchWindow: NSWindow {
 	}
 	
 }
+
+//extension NotchWindow: NSWindowDelegate {
+//	
+//	func windowDidUpdate(_ notification: Notification) {
+//		debugLog()
+//	}
+//
+//}

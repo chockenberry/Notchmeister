@@ -11,7 +11,7 @@ class NotchView: NSView {
 
 	var trackingMouse: Bool = false
 	
-    var notchOutlineLayer: CAShapeLayer?
+//    var notchOutlineLayer: CAShapeLayer?
 	var notchEffect: NotchEffect?
 	
     // MARK: - NSView
@@ -23,13 +23,13 @@ class NotchView: NSView {
 		}
 	}
 
-    override func updateLayer() {
-        guard let notchOutlineLayer = notchOutlineLayer else { return }
-
-        notchOutlineLayer.fillColor = Defaults.shouldDrawNotchFill ? NSColor.black.cgColor : NSColor.clear.cgColor
-        notchOutlineLayer.strokeColor = Defaults.shouldDrawNotchOutline ? NSColor.white.cgColor : NSColor.clear.cgColor
-        notchOutlineLayer.lineWidth = 2.0
-    }
+//    override func updateLayer() {
+//        guard let notchOutlineLayer = notchOutlineLayer else { return }
+//
+//        notchOutlineLayer.fillColor = Defaults.shouldDrawNotchFill ? NSColor.black.cgColor : NSColor.clear.cgColor
+//        notchOutlineLayer.strokeColor = Defaults.shouldDrawNotchOutline ? NSColor.white.cgColor : NSColor.clear.cgColor
+//        notchOutlineLayer.lineWidth = 2.0
+//    }
     
 	private let notchPadding: CGFloat = 50
 	
@@ -61,7 +61,7 @@ class NotchView: NSView {
 				}
                 notchEffect?.start()
                 
-                createOutlineLayer()
+//                createOutlineLayer()
 			}
 		}
 		else {
@@ -70,19 +70,19 @@ class NotchView: NSView {
 		}
 	}
 	
-    private func createOutlineLayer() {
-        guard let layer = layer else { return }
-        
-        let outlineLayer = CAShapeLayer.notchOutlineLayer(for: bounds.size, flipped: isFlipped)
-                
-        outlineLayer.masksToBounds = false
-        
-        outlineLayer.anchorPoint = .zero
-        outlineLayer.autoresizingMask = [.layerHeightSizable, .layerWidthSizable]
-        layer.addSublayer(outlineLayer)
-        
-        notchOutlineLayer = outlineLayer
-    }
+//    private func createOutlineLayer() {
+//        guard let layer = layer else { return }
+//
+//        let outlineLayer = CAShapeLayer.notchOutlineLayer(for: bounds.size, flipped: isFlipped)
+//
+//        outlineLayer.masksToBounds = false
+//
+//        outlineLayer.anchorPoint = .zero
+//        outlineLayer.autoresizingMask = [.layerHeightSizable, .layerWidthSizable]
+//        layer.addSublayer(outlineLayer)
+//
+//        notchOutlineLayer = outlineLayer
+//    }
     
     private func createCylonEffect() -> CylonEffect? {
         guard let parentLayer = self.layer else { return nil }

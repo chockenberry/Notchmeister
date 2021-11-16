@@ -66,16 +66,12 @@ class ViewController: NSViewController {
     
     @IBAction func outlineNotchValueChanaged(_ sender: Any) {
         Defaults.shouldDrawNotchOutline = (outlineNotchCheckbox.state == .on)
-        notchWindows.forEach {
-            $0.notchView?.needsDisplay = true
-        }
+		createNotchWindows()
     }
     
     @IBAction func fillNotchValueChanged(_ sender: Any) {
         Defaults.shouldDrawNotchFill = (fillNotchCheckbox.state == .on)
-        notchWindows.forEach {
-            $0.notchView?.needsDisplay = true
-        }
+		createNotchWindows()
     }
 
 	@IBAction func selectedEffectValueChanged(_ sender: Any) {
