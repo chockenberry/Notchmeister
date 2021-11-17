@@ -769,7 +769,7 @@
                                 </connections>
                             </button>
                             <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2TI-ZC-i2V">
-                                <rect key="frame" x="203" y="67" width="78" height="25"/>
+                                <rect key="frame" x="203" y="67" width="127" height="25"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <popUpButtonCell key="cell" type="push" title="Glow" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="UuA-aU-a9p" id="gw7-Ab-WA0">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -779,6 +779,7 @@
                                             <menuItem title="Glow" state="on" id="UuA-aU-a9p"/>
                                             <menuItem title="Cylon" tag="1" id="IPc-kO-S4N"/>
                                             <menuItem title="Sparks" tag="2" id="kLF-aV-OO3"/>
+                                            <menuItem title="Festive" tag="3" id="kXd-lN-dfU"/>
                                         </items>
                                     </menu>
                                 </popUpButtonCell>

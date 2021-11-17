@@ -54,8 +54,10 @@ class SparksEffect: NotchEffect {
 
 		cell.contents = cgImage
 		
-		cell.color = NSColor.orange.cgColor
+		//cell.color = NSColor.orange.cgColor
+		//cell.color = NSColor.cyan.cgColor
 		//cell.color = NSColor(calibratedRed: 0.8, green: 0.6, blue: 1, alpha: 1).cgColor
+		cell.color = NSColor(named: "sparksEffect-spark")?.cgColor
 		cell.alphaSpeed = -0.5
 		cell.alphaRange = 1
 		cell.redRange = 0.2

@@ -56,6 +56,8 @@ class NotchView: NSView {
 					notchEffect = createCylonEffect()
 				case 2:
 					notchEffect = createSparksEffect()
+				case 3:
+					notchEffect = createFestiveEffect()
 				default:
 					notchEffect = nil
 				}
@@ -97,6 +99,11 @@ class NotchView: NSView {
 	private func createSparksEffect() -> SparksEffect? {
 		guard let parentLayer = self.layer else { return nil }
 		return SparksEffect(with: parentLayer)
+	}
+
+	private func createFestiveEffect() -> FestiveEffect? {
+		guard let parentLayer = self.layer else { return nil }
+		return FestiveEffect(with: parentLayer)
 	}
 
 //	override func acceptsFirstMouse(for event: NSEvent?) -> Bool {

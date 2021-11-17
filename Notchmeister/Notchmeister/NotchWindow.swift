@@ -107,7 +107,7 @@ class NotchWindow: NSWindow {
 
 		let bundle = Bundle.main
 		var topLevelArray: NSArray? = nil
-		bundle.loadNibNamed(NSNib.Name("FakeNotchView"), owner: self, topLevelObjects: &topLevelArray)
+		bundle.loadNibNamed("FakeNotchView", owner: self, topLevelObjects: &topLevelArray)
 		if let topLevelArray = topLevelArray {
 			let views = Array<Any>(topLevelArray).filter { $0 is FakeNotchView }
 			if let fakeNotchView = views.last as? FakeNotchView {
