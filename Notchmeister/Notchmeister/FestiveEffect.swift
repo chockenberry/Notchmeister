@@ -24,6 +24,10 @@ class FestiveEffect: NotchEffect {
 		configureSublayers()
 	}
 	
+	deinit {
+		self.bulbLayers.removeAll()
+	}
+	
 	private func configureSublayers() {
 		guard let parentLayer = parentLayer else { return }
 
@@ -66,7 +70,9 @@ class FestiveEffect: NotchEffect {
 
 	override func end() {
 	}
-	
+
+	var lastPoint: CGPoint = .zero
+
 	override func mouseEntered(at point: CGPoint, underNotch: Bool) {
 		guard let parentLayer = parentLayer else { return }
 
@@ -93,6 +99,8 @@ class FestiveEffect: NotchEffect {
 		}
 		
 		CATransaction.commit()
+		
+		lastPoint = point
 	}
 	
 	var currentBulbIndex = -1
@@ -129,8 +137,10 @@ class FestiveEffect: NotchEffect {
 //
 //CATransaction.setCompletionBlock { [weak self] in
 //	debugLog("finished bulbIndex = \(bulbIndex)")
+					let horizontalDirection = point.x - lastPoint.x // negative = moving left, positive - moving right
+					let pulse: CGFloat = horizontalDirection > 0 ? -1 : 1
 					let springSwayAnimation = CASpringAnimation(keyPath: "transform.rotation")
-					springSwayAnimation.fromValue = CGFloat.pi / 36
+					springSwayAnimation.fromValue = CGFloat.pi / 36 * pulse
 					springSwayAnimation.toValue = 0
 					springSwayAnimation.duration = 3
 					springSwayAnimation.damping = 5
@@ -148,6 +158,8 @@ class FestiveEffect: NotchEffect {
 		else {
 			currentBulbIndex = -1
 		}
+		
+		lastPoint = point
 	}
 	
 	override func mouseExited(at point: CGPoint, underNotch: Bool) {
@@ -165,7 +177,8 @@ class FestiveEffect: NotchEffect {
 			let animation = CABasicAnimation(keyPath: "position")
 			animation.fromValue = CGPoint(x: bulbLayer.position.x, y: parentLayer.bounds.midY)
 			animation.toValue = CGPoint(x: bulbLayer.position.x, y: -bulbBounds.height)
-			animation.duration = 2
+			animation.duration = 1.5
+			animation.timingFunction = CAMediaTimingFunction(name: .easeIn)
 			bulbLayer.add(animation, forKey: "presentation")
 		}
 		
