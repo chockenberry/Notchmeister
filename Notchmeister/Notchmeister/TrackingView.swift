@@ -24,6 +24,12 @@ class TrackingView: NSView {
 		dirtyRect.fill()
 	}
 
+	deinit {
+		destroyTrackingArea()
+		removeEventMonitors()
+	}
+	
+
 	//MARK: - NSTrackingArea
 
 	private func createTrackingArea() {
@@ -76,7 +82,7 @@ class TrackingView: NSView {
 		}
 	
 		localMonitor = NSEvent.addLocalMonitorForEvents(matching: [.mouseMoved]) { event in
-			//debugLog("local event")
+			debugLog("local event, event.window = \(String(describing: event.window)), window = \(String(describing: self.window))")
 			if let window = self.window {
 				if let eventWindow = event.window {
 					// the event happened in another one of our windows
@@ -94,6 +100,9 @@ class TrackingView: NSView {
 						super.mouseMoved(with: windowEvent)
 					}
 				}
+			}
+			else {
+				super.mouseMoved(with: event)
 			}
 			return nil
 		}
