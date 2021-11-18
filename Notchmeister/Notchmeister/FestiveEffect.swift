@@ -95,6 +95,8 @@ class FestiveEffect: NotchEffect {
 		CATransaction.commit()
 	}
 	
+	var currentBulbIndex = -1
+	
 	override func mouseMoved(at point: CGPoint, underNotch: Bool) {
 		guard let parentLayer = parentLayer else { return }
 		
@@ -106,37 +108,45 @@ class FestiveEffect: NotchEffect {
 		if underNotch {
 			if point.x > padding {
 				let bulbIndex = Int((point.x - padding) / bulbSpacing)
-				debugLog("starting bulbIndex = \(bulbIndex)")
-				let bulbLayer = bulbLayers[bulbIndex]
-				
-				CATransaction.begin()
-				
-				bulbLayer.removeAnimation(forKey: "springIn")
-				bulbLayer.removeAnimation(forKey: "springOut")
-				
-				let springOutAnimation = CASpringAnimation(keyPath: "transform.scale")
-				springOutAnimation.fromValue = 1.1
-				springOutAnimation.toValue = 1.0
-				springOutAnimation.duration = 3
-				springOutAnimation.damping = 5
-				springOutAnimation.fillMode = .forwards
-				//springAnimation.autoreverses = true
-				
-				CATransaction.setCompletionBlock { [weak self] in
-					debugLog("finished bulbIndex = \(bulbIndex)")
-//					let springInAnimation = CASpringAnimation(keyPath: "transform.scale")
-//					springInAnimation.fromValue = 1.1
-//					springInAnimation.toValue = 1.0
-//					springInAnimation.duration = 2
-//					springInAnimation.damping = 5
-//					springInAnimation.fillMode = .forwards
-//					//springInAnimation.isAdditive = true
-//					bulbLayer.add(springInAnimation, forKey: "springIn")
+				if bulbIndex != currentBulbIndex {
+					currentBulbIndex = bulbIndex
+					debugLog("starting bulbIndex = \(bulbIndex)")
+					let bulbLayer = bulbLayers[bulbIndex]
+					
+					//if bulbLayer.animation(forKey: "springSway") == nil {
+					CATransaction.begin()
+					
+					//bulbLayer.removeAnimation(forKey: "springSway")
+					//bulbLayer.removeAnimation(forKey: "springOut")
+					
+//let springOutAnimation = CASpringAnimation(keyPath: "transform.scale")
+//springOutAnimation.fromValue = 1.1
+//springOutAnimation.toValue = 1.0
+//springOutAnimation.duration = 3
+//springOutAnimation.damping = 5
+//springOutAnimation.fillMode = .forwards
+////springAnimation.autoreverses = true
+//
+//CATransaction.setCompletionBlock { [weak self] in
+//	debugLog("finished bulbIndex = \(bulbIndex)")
+					let springSwayAnimation = CASpringAnimation(keyPath: "transform.rotation")
+					springSwayAnimation.fromValue = CGFloat.pi / 36
+					springSwayAnimation.toValue = 0
+					springSwayAnimation.duration = 3
+					springSwayAnimation.damping = 5
+					springSwayAnimation.fillMode = .forwards
+					springSwayAnimation.isAdditive = true
+					bulbLayer.add(springSwayAnimation, forKey: "springSway")
+//}
+//
+//bulbLayer.add(springOutAnimation, forKey: "springOut")
+					CATransaction.commit()
+					//}
 				}
-				
-				bulbLayer.add(springOutAnimation, forKey: "springOut")
-				CATransaction.commit()
 			}
+		}
+		else {
+			currentBulbIndex = -1
 		}
 	}
 	
