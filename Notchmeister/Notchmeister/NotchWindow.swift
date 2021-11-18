@@ -24,7 +24,7 @@ class NotchWindow: NSWindow {
 		//self.level = .statusBar
 		self.level = .popUpMenu // NOTE: I think this is probably best - keeps the window under a screensaver.
         self.hidesOnDeactivate = false
-		//self.ignoresMouseEvents = true // clicking on the window does not make the app frontmost, but tracking area becomes unreliable
+		self.ignoresMouseEvents = true // clicking on the window does not make the app frontmost
         self.canHide = false
         self.isMovable = false
         self.isOpaque = false
