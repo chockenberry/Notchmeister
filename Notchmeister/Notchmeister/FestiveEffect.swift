@@ -72,9 +72,27 @@ class FestiveEffect: NotchEffect {
 
 		let yOffset = parentLayer.bounds.midY
 
+		let bulbSize = CGSize(width: 15, height: 55)
+		let bulbBounds = CGRect(origin: .zero, size: bulbSize)
+
+		CATransaction.begin()
+
 		bulbLayers.forEach { bulbLayer in
 			bulbLayer.position = CGPoint(x: bulbLayer.position.x, y: yOffset)
+			
+			let springDownAnimation = CASpringAnimation(keyPath: "position")
+			springDownAnimation.fromValue = CGPoint(x: bulbLayer.position.x, y: -bulbBounds.height)
+			springDownAnimation.toValue = CGPoint(x: bulbLayer.position.x, y: yOffset)
+			springDownAnimation.duration = 3
+			springDownAnimation.damping = 8
+			springDownAnimation.mass = 0.5
+			//springDownAnimation.fillMode = .forwards
+			//springDownAnimation.isRemovedOnCompletion = false
+			//bulbLayer.position = CGPoint(x: bulbLayer.position.x, y: yOffset)
+			bulbLayer.add(springDownAnimation, forKey: "presentation")
 		}
+		
+		CATransaction.commit()
 	}
 	
 	override func mouseMoved(at point: CGPoint, underNotch: Bool) {
@@ -88,17 +106,36 @@ class FestiveEffect: NotchEffect {
 		if underNotch {
 			if point.x > padding {
 				let bulbIndex = Int((point.x - padding) / bulbSpacing)
-				debugLog("bulbIndex = \(bulbIndex)")
+				debugLog("starting bulbIndex = \(bulbIndex)")
 				let bulbLayer = bulbLayers[bulbIndex]
 				
-				let springAnimation = CASpringAnimation(keyPath: "transform.scale")
-				springAnimation.fromValue = 1.0
-				springAnimation.toValue = 1.1
-				springAnimation.duration = 2.0
-				springAnimation.damping = 5
-				springAnimation.autoreverses = true
+				CATransaction.begin()
 				
-				bulbLayer.add(springAnimation, forKey: "transform.scale")
+				bulbLayer.removeAnimation(forKey: "springIn")
+				bulbLayer.removeAnimation(forKey: "springOut")
+				
+				let springOutAnimation = CASpringAnimation(keyPath: "transform.scale")
+				springOutAnimation.fromValue = 1.1
+				springOutAnimation.toValue = 1.0
+				springOutAnimation.duration = 3
+				springOutAnimation.damping = 5
+				springOutAnimation.fillMode = .forwards
+				//springAnimation.autoreverses = true
+				
+				CATransaction.setCompletionBlock { [weak self] in
+					debugLog("finished bulbIndex = \(bulbIndex)")
+//					let springInAnimation = CASpringAnimation(keyPath: "transform.scale")
+//					springInAnimation.fromValue = 1.1
+//					springInAnimation.toValue = 1.0
+//					springInAnimation.duration = 2
+//					springInAnimation.damping = 5
+//					springInAnimation.fillMode = .forwards
+//					//springInAnimation.isAdditive = true
+//					bulbLayer.add(springInAnimation, forKey: "springIn")
+				}
+				
+				bulbLayer.add(springOutAnimation, forKey: "springOut")
+				CATransaction.commit()
 			}
 		}
 	}
@@ -110,9 +147,24 @@ class FestiveEffect: NotchEffect {
 		let bulbBounds = CGRect(origin: .zero, size: bulbSize)
 		let yOffset = -bulbBounds.height
 
+		CATransaction.begin()
+
 		bulbLayers.forEach { bulbLayer in
 			bulbLayer.position = CGPoint(x: bulbLayer.position.x, y: yOffset)
+			
+			let animation = CABasicAnimation(keyPath: "position")
+			animation.fromValue = CGPoint(x: bulbLayer.position.x, y: parentLayer.bounds.midY)
+			animation.toValue = CGPoint(x: bulbLayer.position.x, y: -bulbBounds.height)
+			animation.duration = 2
+			bulbLayer.add(animation, forKey: "presentation")
 		}
+		
+		CATransaction.commit()
+
+//		bulbLayers.forEach { bulbLayer in
+//			bulbLayer.position = CGPoint(x: bulbLayer.position.x, y: yOffset)
+//
+//		}
 	}
 
 }
