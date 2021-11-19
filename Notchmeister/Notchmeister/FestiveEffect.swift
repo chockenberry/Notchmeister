@@ -8,8 +8,6 @@
 import AppKit
 
 class FestiveEffect: NotchEffect {
-	
-	//let context = CIContext(options: nil)
 
 	var bulbLayers: [CALayer]
 	var timer: Timer?
@@ -167,9 +165,6 @@ class FestiveEffect: NotchEffect {
 			
 			let xOffset = padding + (bulbSpacing * CGFloat(index))
 			bulbLayer.position = CGPoint(x: xOffset, y: yOffset)
-			
-			//bulbLayer.transform = CATransform3DMakeRotation(.pi/8, 0, 0, 1)
-			//bulbLayer.backgroundColor = NSColor.yellow.cgColor
 			
 			parentLayer.addSublayer(bulbLayer)
 			
