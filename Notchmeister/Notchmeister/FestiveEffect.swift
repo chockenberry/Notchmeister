@@ -13,8 +13,8 @@ class FestiveEffect: NotchEffect {
 
 	var bulbLayers: [CALayer]
 	
-	let bulbCount = 12
-	let padding: CGFloat = 10
+	let bulbCount = 8
+	let padding: CGFloat = 20
 	
 	required init(with parentLayer: CALayer) {
 		self.bulbLayers = []
@@ -27,6 +27,31 @@ class FestiveEffect: NotchEffect {
 	deinit {
 		self.bulbLayers.removeAll()
 	}
+	
+	static let patterns = [
+		0b0000_0001,
+		0b0000_0010,
+		0b0000_0100,
+		0b0000_1000,
+		0b0001_0000,
+		0b0010_0000,
+		0b0100_0000,
+		0b1000_0000,
+
+		0b1000_0000,
+		0b0100_0000,
+		0b0010_0000,
+		0b0001_0000,
+		0b0000_1000,
+		0b0000_0100,
+		0b0000_0010,
+		0b0000_0001,
+
+		0b1010_1010,
+		0b0101_0101,
+		0b1010_1010,
+		0b0101_0101,
+	]
 	
 	private func configureSublayers() {
 		guard let parentLayer = parentLayer else { return }
