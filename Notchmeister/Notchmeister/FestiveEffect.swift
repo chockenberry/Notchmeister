@@ -12,10 +12,35 @@ class FestiveEffect: NotchEffect {
 	//let context = CIContext(options: nil)
 
 	var bulbLayers: [CALayer]
+	var timer: Timer?
 	
 	let bulbCount = 8
 	let padding: CGFloat = 20
+
+	let bulbBounds = CGRect(origin: .zero, size: CGSize(width: 15, height: 55))
+
+	private func bulbImage(named name: String) -> CGImage? {
+		let image = NSImage(named: name)!
+		var proposedRect = bulbBounds
+		return image.cgImage(forProposedRect: &proposedRect, context: nil, hints: nil)
+	}
 	
+	lazy var purpleOffImage: CGImage? = {
+		return bulbImage(named: "bulb-purple-off")
+	}()
+
+	lazy var purpleOnImage: CGImage? = {
+		return bulbImage(named: "bulb-purple-on")
+	}()
+
+	lazy var blueOffImage: CGImage? = {
+		return bulbImage(named: "bulb-blue-off")
+	}()
+
+	lazy var blueOnImage: CGImage? = {
+		return bulbImage(named: "bulb-blue-on")
+	}()
+
 	required init(with parentLayer: CALayer) {
 		self.bulbLayers = []
 		
@@ -28,7 +53,10 @@ class FestiveEffect: NotchEffect {
 		self.bulbLayers.removeAll()
 	}
 	
+	static var patternIndex = 0
+	
 	static let patterns = [
+		// scan left
 		0b0000_0001,
 		0b0000_0010,
 		0b0000_0100,
@@ -36,8 +64,8 @@ class FestiveEffect: NotchEffect {
 		0b0001_0000,
 		0b0010_0000,
 		0b0100_0000,
-		0b1000_0000,
 
+		// scan right
 		0b1000_0000,
 		0b0100_0000,
 		0b0010_0000,
@@ -47,38 +75,82 @@ class FestiveEffect: NotchEffect {
 		0b0000_0010,
 		0b0000_0001,
 
+		// alternating every other
 		0b1010_1010,
 		0b0101_0101,
 		0b1010_1010,
 		0b0101_0101,
+		0b1010_1010,
+		0b0101_0101,
+		0b1010_1010,
+		0b0101_0101,
+		0b1010_1010,
+		0b0101_0101,
+		0b1010_1010,
+		0b0101_0101,
+		0b1010_1010,
+		0b0101_0101,
+		0b1010_1010,
+		0b0101_0101,
+
+		// intersecting
+		0b0000_0000,
+		0b1000_0001,
+		0b0100_0010,
+		0b0010_0100,
+		0b0001_1000,
+		0b0000_0000,
+		0b0001_1000,
+		0b0010_0100,
+		0b0100_0010,
+		0b1000_0001,
+		0b0100_0010,
+		0b0010_0100,
+		0b0001_1000,
+		0b0000_0000,
+		0b0001_1000,
+		0b0010_0100,
+		0b0100_0010,
+		0b1000_0001,
+		0b0000_0000,
+
+		// alternating every other pair
+		0b1100_1100,
+		0b1100_1100,
+		0b0011_0011,
+		0b0011_0011,
+		0b1100_1100,
+		0b1100_1100,
+		0b0011_0011,
+		0b0011_0011,
+		0b1100_1100,
+		0b1100_1100,
+		0b0011_0011,
+		0b0011_0011,
+		0b1100_1100,
+		0b1100_1100,
+		0b0011_0011,
+		0b0011_0011,
 	]
 	
 	private func configureSublayers() {
 		guard let parentLayer = parentLayer else { return }
 
-		let bulbSize = CGSize(width: 15, height: 55)
-		let bulbBounds = CGRect(origin: .zero, size: bulbSize)
-
 		let availableWidth = parentLayer.bounds.width - (padding * 2)
 		let bulbSpacing = availableWidth / CGFloat(bulbCount - 1)
 		let yOffset = -bulbBounds.height
 
-		
-		let image = NSImage(named: "bulb")!
-		var proposedRect = bulbBounds
-		let cgImage = image.cgImage(forProposedRect: &proposedRect, context: nil, hints: nil)
-
-		for i in 0..<bulbCount {
+		for index in 0..<bulbCount {
 			let bulbLayer = CALayer()
 			
 			bulbLayer.contentsScale = parentLayer.contentsScale
 
 			bulbLayer.bounds = bulbBounds
-			bulbLayer.contents = cgImage
+			bulbLayer.contents = (index % 2 == 0 ? purpleOffImage : blueOffImage)
 			
 			bulbLayer.anchorPoint = CGPoint(x: 0.5, y: 0)
 			
-			let xOffset = padding + (bulbSpacing * CGFloat(i))
+			let xOffset = padding + (bulbSpacing * CGFloat(index))
 			bulbLayer.position = CGPoint(x: xOffset, y: yOffset)
 			
 			//bulbLayer.transform = CATransform3DMakeRotation(.pi/8, 0, 0, 1)
@@ -96,6 +168,49 @@ class FestiveEffect: NotchEffect {
 	override func end() {
 	}
 
+	
+	private func startLights() {
+		for (index, bulbLayer) in bulbLayers.enumerated() {
+			bulbLayer.contents = (index % 2 == 0 ? purpleOnImage : blueOnImage)
+		}
+		
+		timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true, block: { timer in
+			let pattern = Self.patterns[Self.patternIndex]
+			
+			var shift = pattern
+			for index in 0..<self.bulbCount {
+				let bulbLayer = self.bulbLayers[index]
+
+				let state = shift & 0b1
+				if index % 2 == 0 {
+					// purple
+					if state == 0b0 {
+						bulbLayer.contents = self.purpleOffImage
+					}
+					else {
+						bulbLayer.contents = self.purpleOnImage
+					}
+				}
+				else {
+					// blue
+					if state == 0b0 {
+						bulbLayer.contents = self.blueOffImage
+					}
+					else {
+						bulbLayer.contents = self.blueOnImage
+					}
+				}
+				
+				shift = shift >> 1
+			}
+			
+			Self.patternIndex += 1
+			if Self.patternIndex >= Self.patterns.count {
+				Self.patternIndex = 0
+			}
+		})
+	}
+
 	var lastPoint: CGPoint = .zero
 
 	override func mouseEntered(at point: CGPoint, underNotch: Bool) {
@@ -103,24 +218,32 @@ class FestiveEffect: NotchEffect {
 
 		let yOffset = parentLayer.bounds.midY
 
-		let bulbSize = CGSize(width: 15, height: 55)
-		let bulbBounds = CGRect(origin: .zero, size: bulbSize)
-
 		CATransaction.begin()
+		CATransaction.setCompletionBlock { [weak self] in
+			self?.startLights()
+		}
 
 		bulbLayers.forEach { bulbLayer in
 			bulbLayer.position = CGPoint(x: bulbLayer.position.x, y: yOffset)
 			
+			let fromPosition: CGPoint
+			if let position = bulbLayer.presentation()?.position {
+				fromPosition = position
+			}
+			else {
+				fromPosition = CGPoint(x: bulbLayer.position.x, y: -bulbBounds.height)
+			}
+			
 			let springDownAnimation = CASpringAnimation(keyPath: "position")
-			springDownAnimation.fromValue = CGPoint(x: bulbLayer.position.x, y: -bulbBounds.height)
+			springDownAnimation.fromValue = fromPosition
 			springDownAnimation.toValue = CGPoint(x: bulbLayer.position.x, y: yOffset)
-			springDownAnimation.duration = 3
+			springDownAnimation.duration = 2
 			springDownAnimation.damping = 8
 			springDownAnimation.mass = 0.5
 			//springDownAnimation.fillMode = .forwards
 			//springDownAnimation.isRemovedOnCompletion = false
 			//bulbLayer.position = CGPoint(x: bulbLayer.position.x, y: yOffset)
-			bulbLayer.add(springDownAnimation, forKey: "presentation")
+			bulbLayer.add(springDownAnimation, forKey: "position")
 		}
 		
 		CATransaction.commit()
@@ -129,7 +252,7 @@ class FestiveEffect: NotchEffect {
 	}
 	
 	var currentBulbIndex = -1
-	
+
 	override func mouseMoved(at point: CGPoint, underNotch: Bool) {
 		guard let parentLayer = parentLayer else { return }
 		
@@ -160,15 +283,15 @@ class FestiveEffect: NotchEffect {
 //springOutAnimation.fillMode = .forwards
 ////springAnimation.autoreverses = true
 //
-//CATransaction.setCompletionBlock { [weak self] in
 //	debugLog("finished bulbIndex = \(bulbIndex)")
+					
 					let horizontalDirection = point.x - lastPoint.x // negative = moving left, positive - moving right
 					let pulse: CGFloat = horizontalDirection > 0 ? -1 : 1
 					let springSwayAnimation = CASpringAnimation(keyPath: "transform.rotation")
-					springSwayAnimation.fromValue = CGFloat.pi / 36 * pulse
+					springSwayAnimation.fromValue = CGFloat.pi / 16 * pulse
 					springSwayAnimation.toValue = 0
 					springSwayAnimation.duration = 3
-					springSwayAnimation.damping = 5
+					springSwayAnimation.damping = 2
 					springSwayAnimation.fillMode = .forwards
 					springSwayAnimation.isAdditive = true
 					bulbLayer.add(springSwayAnimation, forKey: "springSway")
@@ -187,24 +310,42 @@ class FestiveEffect: NotchEffect {
 		lastPoint = point
 	}
 	
+	private func stopLights() {
+		timer?.invalidate()
+		timer = nil
+		
+		for (index, bulbLayer) in bulbLayers.enumerated() {
+			bulbLayer.contents = (index % 2 == 0 ? purpleOffImage : blueOffImage)
+		}
+	}
+
 	override func mouseExited(at point: CGPoint, underNotch: Bool) {
 		guard let parentLayer = parentLayer else { return }
 
-		let bulbSize = CGSize(width: 15, height: 55)
-		let bulbBounds = CGRect(origin: .zero, size: bulbSize)
 		let yOffset = -bulbBounds.height
 
 		CATransaction.begin()
-
+		CATransaction.setCompletionBlock { [weak self] in
+			self?.stopLights()
+		}
+		
 		bulbLayers.forEach { bulbLayer in
 			bulbLayer.position = CGPoint(x: bulbLayer.position.x, y: yOffset)
-			
+
+			let fromPosition: CGPoint
+			if let position = bulbLayer.presentation()?.position {
+				fromPosition = position
+			}
+			else {
+				fromPosition = CGPoint(x: bulbLayer.position.x, y: parentLayer.bounds.midY)
+			}
+
 			let animation = CABasicAnimation(keyPath: "position")
-			animation.fromValue = CGPoint(x: bulbLayer.position.x, y: parentLayer.bounds.midY)
+			animation.fromValue = fromPosition
 			animation.toValue = CGPoint(x: bulbLayer.position.x, y: -bulbBounds.height)
 			animation.duration = 1
 			animation.timingFunction = CAMediaTimingFunction(name: .easeIn)
-			bulbLayer.add(animation, forKey: "presentation")
+			bulbLayer.add(animation, forKey: "position")
 		}
 		
 		CATransaction.commit()
