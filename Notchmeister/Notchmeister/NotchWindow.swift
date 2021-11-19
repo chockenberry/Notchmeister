@@ -75,6 +75,10 @@ class NotchWindow: NSWindow {
 	}
 	
 	override func orderOut(_ sender: Any?) {
+		if let trackingView = contentView as? TrackingView {
+			trackingView.disable()
+		}
+		
 		if let fakeNotchView = fakeNotchView {
 			debugLog("starting")
 			fakeNotchView.alphaValue = 1.0

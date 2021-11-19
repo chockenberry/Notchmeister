@@ -25,10 +25,13 @@ class TrackingView: NSView {
 	}
 
 	deinit {
+		disable()
+	}
+	
+	func disable() {
 		destroyTrackingArea()
 		removeEventMonitors()
 	}
-	
 
 	//MARK: - NSTrackingArea
 
