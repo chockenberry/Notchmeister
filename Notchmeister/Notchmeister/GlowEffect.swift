@@ -19,7 +19,7 @@ class GlowEffect: NotchEffect {
 
 	var hotSpotOffset: CGPoint = .zero
 	
-	let glowRadius = 40.0 // notch height is 38 pt
+	let glowRadius = 100.0 // notch height is 38 pt
 	let maskRadius = 12.0 // cursor radius is 23 pt / 2 = 11.5
 	let edgeWidth = 1.0
 	let offset = 0
@@ -57,12 +57,35 @@ class GlowEffect: NotchEffect {
 			glowLayer.position = .zero
 			glowLayer.opacity = 0
 			
+			// NOTE: The glow gradient is drawn with exponential falloff at eight equidistant points along the radius
+			// (to simulate a single point of light). There is also an exponential falloff on the layer opacity
+			// as the mouse gets closer to the edge. See Glow.gcx for how this is modeled.
+			//
+			// Also, this explanation of light attenuation on StackOverflow was super helpful:
+			// https://gamedev.stackexchange.com/a/131383
+			
+			let points = [0, 1.0/8.0, 2.0/8.0, 3.0/8.0, 4.0/8.0, 5.0/8.0, 6.0/8.0, 7.0/8.0]
+			let a = 0.0
+			let b = 100.0
+			var colors: [CGColor] = points.map { point in
+				let attenuation = 1.0 / (1.0 - a * point + b * point * point)
+				//let attenuation = 1.0 / 1.0 - point * point
+				return glowColor.withAlphaComponent(attenuation).cgColor
+			}
+			colors.append(glowColor.withAlphaComponent(0).cgColor)
+			var locations: [NSNumber] = points.map { point in
+				return NSNumber(value: point)
+			}
+			locations.append(NSNumber(value: 1))
+
 			glowLayer.type = .radial
-			let startColor = glowColor
-			let middleColor = glowColor.withAlphaComponent(0.5)
-			let endColor = glowColor.withAlphaComponent(0)
-			glowLayer.colors = [startColor.cgColor, middleColor.cgColor, endColor.cgColor]
-			glowLayer.locations = [0, 0.25, 1]
+//			let startColor = glowColor
+//			let middleColor = glowColor.withAlphaComponent(0.5)
+//			let endColor = glowColor.withAlphaComponent(0)
+//			glowLayer.colors = [startColor.cgColor, middleColor.cgColor, endColor.cgColor]
+//			glowLayer.locations = [0, 0.25, 1]
+			glowLayer.colors = colors
+			glowLayer.locations = locations
 			glowLayer.startPoint = CGPoint(x: 0.5,y: 0.5)
 			glowLayer.endPoint = CGPoint(x: 1,y: 1)
 			
@@ -119,8 +142,9 @@ class GlowEffect: NotchEffect {
 			if underNotch {
 				let edgeDistance = edgeDistance(at: point)
 				if edgeDistance > 0 {
-					// TODO: add some non-linear interpolation for the glow intensity
-					glowLayer.opacity = Float(edgeDistance / maxEdgeDistance())
+					// NOTE: See note above about how the light is attenuated with exponential falloff.
+					let normalizedEdgeDistance = Float(edgeDistance / maxEdgeDistance())
+					glowLayer.opacity = 1.0 - (1.0 / 1.0 - normalizedEdgeDistance * normalizedEdgeDistance)
 				}
 				else {
 					glowLayer.opacity = 0
