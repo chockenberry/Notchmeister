@@ -177,7 +177,7 @@ class FestiveEffect: NotchEffect {
 			let animation = CABasicAnimation(keyPath: "position")
 			animation.fromValue = CGPoint(x: bulbLayer.position.x, y: parentLayer.bounds.midY)
 			animation.toValue = CGPoint(x: bulbLayer.position.x, y: -bulbBounds.height)
-			animation.duration = 1.5
+			animation.duration = 1
 			animation.timingFunction = CAMediaTimingFunction(name: .easeIn)
 			bulbLayer.add(animation, forKey: "presentation")
 		}
