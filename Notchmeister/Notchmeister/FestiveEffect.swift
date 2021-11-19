@@ -56,7 +56,7 @@ class FestiveEffect: NotchEffect {
 	static var patternIndex = 0
 	
 	static let patterns = [
-		// scan left
+		// scan left then right
 		0b0000_0001,
 		0b0000_0010,
 		0b0000_0100,
@@ -64,8 +64,6 @@ class FestiveEffect: NotchEffect {
 		0b0001_0000,
 		0b0010_0000,
 		0b0100_0000,
-
-		// scan right
 		0b1000_0000,
 		0b0100_0000,
 		0b0010_0000,
@@ -131,6 +129,23 @@ class FestiveEffect: NotchEffect {
 		0b1100_1100,
 		0b0011_0011,
 		0b0011_0011,
+		
+		// scan left then right (inverted)
+		0b1111_1110,
+		0b1111_1101,
+		0b1111_1011,
+		0b1111_0111,
+		0b1110_1111,
+		0b1101_1111,
+		0b1011_1111,
+		0b0111_1111,
+		0b1011_1111,
+		0b1101_1111,
+		0b1110_1111,
+		0b1111_0111,
+		0b1111_1011,
+		0b1111_1101,
+		0b1111_1110,
 	]
 	
 	private func configureSublayers() {
@@ -170,10 +185,6 @@ class FestiveEffect: NotchEffect {
 
 	
 	private func startLights() {
-		for (index, bulbLayer) in bulbLayers.enumerated() {
-			bulbLayer.contents = (index % 2 == 0 ? purpleOnImage : blueOnImage)
-		}
-		
 		timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true, block: { timer in
 			let pattern = Self.patterns[Self.patternIndex]
 			
@@ -223,7 +234,9 @@ class FestiveEffect: NotchEffect {
 			self?.startLights()
 		}
 
-		bulbLayers.forEach { bulbLayer in
+		for (index, bulbLayer) in bulbLayers.enumerated() {
+			bulbLayer.contents = (index % 2 == 0 ? purpleOnImage : blueOnImage)
+
 			bulbLayer.position = CGPoint(x: bulbLayer.position.x, y: yOffset)
 			
 			let fromPosition: CGPoint
@@ -240,9 +253,6 @@ class FestiveEffect: NotchEffect {
 			springDownAnimation.duration = 2
 			springDownAnimation.damping = 8
 			springDownAnimation.mass = 0.5
-			//springDownAnimation.fillMode = .forwards
-			//springDownAnimation.isRemovedOnCompletion = false
-			//bulbLayer.position = CGPoint(x: bulbLayer.position.x, y: yOffset)
 			bulbLayer.add(springDownAnimation, forKey: "position")
 		}
 		
@@ -255,51 +265,35 @@ class FestiveEffect: NotchEffect {
 
 	override func mouseMoved(at point: CGPoint, underNotch: Bool) {
 		guard let parentLayer = parentLayer else { return }
-		
-		//let parentLayer.bounds.width / CGFloat(bulbCount)
-	
+			
 		let availableWidth = parentLayer.bounds.width - (padding * 2)
 		let bulbSpacing = availableWidth / CGFloat(bulbCount - 1)
 
 		if underNotch {
-			if point.x > padding {
-				let bulbIndex = Int((point.x - padding) / bulbSpacing)
-				if bulbIndex != currentBulbIndex {
-					currentBulbIndex = bulbIndex
-					debugLog("starting bulbIndex = \(bulbIndex)")
-					let bulbLayer = bulbLayers[bulbIndex]
-					
-					//if bulbLayer.animation(forKey: "springSway") == nil {
-					CATransaction.begin()
-					
-					//bulbLayer.removeAnimation(forKey: "springSway")
-					//bulbLayer.removeAnimation(forKey: "springOut")
-					
-//let springOutAnimation = CASpringAnimation(keyPath: "transform.scale")
-//springOutAnimation.fromValue = 1.1
-//springOutAnimation.toValue = 1.0
-//springOutAnimation.duration = 3
-//springOutAnimation.damping = 5
-//springOutAnimation.fillMode = .forwards
-////springAnimation.autoreverses = true
-//
-//	debugLog("finished bulbIndex = \(bulbIndex)")
-					
-					let horizontalDirection = point.x - lastPoint.x // negative = moving left, positive - moving right
-					let pulse: CGFloat = horizontalDirection > 0 ? -1 : 1
-					let springSwayAnimation = CASpringAnimation(keyPath: "transform.rotation")
-					springSwayAnimation.fromValue = CGFloat.pi / 16 * pulse
-					springSwayAnimation.toValue = 0
-					springSwayAnimation.duration = 3
-					springSwayAnimation.damping = 2
-					springSwayAnimation.fillMode = .forwards
-					springSwayAnimation.isAdditive = true
-					bulbLayer.add(springSwayAnimation, forKey: "springSway")
-//}
-//
-//bulbLayer.add(springOutAnimation, forKey: "springOut")
-					CATransaction.commit()
-					//}
+			let bulbInset = padding - (bulbSpacing / 2)
+			if point.x > bulbInset {
+				let bulbIndex = Int((point.x - bulbInset) / bulbSpacing)
+				if bulbIndex >= 0 && bulbIndex < bulbCount {
+					if bulbIndex != currentBulbIndex {
+						currentBulbIndex = bulbIndex
+						debugLog("starting bulbIndex = \(bulbIndex), point.x = \(point.x)")
+						let bulbLayer = bulbLayers[bulbIndex]
+						
+						CATransaction.begin()
+						
+						let horizontalDirection = point.x - lastPoint.x // negative = moving left, positive - moving right
+						let pulse: CGFloat = horizontalDirection > 0 ? -1 : 1
+						let springSwayAnimation = CASpringAnimation(keyPath: "transform.rotation")
+						springSwayAnimation.fromValue = CGFloat.pi / 16 * pulse
+						springSwayAnimation.toValue = 0
+						springSwayAnimation.duration = 3
+						springSwayAnimation.damping = 2
+						springSwayAnimation.fillMode = .forwards
+						springSwayAnimation.isAdditive = true
+						bulbLayer.add(springSwayAnimation, forKey: "springSway")
+						
+						CATransaction.commit()
+					}
 				}
 			}
 		}
@@ -313,10 +307,6 @@ class FestiveEffect: NotchEffect {
 	private func stopLights() {
 		timer?.invalidate()
 		timer = nil
-		
-		for (index, bulbLayer) in bulbLayers.enumerated() {
-			bulbLayer.contents = (index % 2 == 0 ? purpleOffImage : blueOffImage)
-		}
 	}
 
 	override func mouseExited(at point: CGPoint, underNotch: Bool) {
@@ -349,11 +339,6 @@ class FestiveEffect: NotchEffect {
 		}
 		
 		CATransaction.commit()
-
-//		bulbLayers.forEach { bulbLayer in
-//			bulbLayer.position = CGPoint(x: bulbLayer.position.x, y: yOffset)
-//
-//		}
 	}
 
 }
