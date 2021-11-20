@@ -145,6 +145,9 @@ class FestiveEffect: NotchEffect {
 		0b1111_1101,
 		0b1111_1110,
 	]
+	+ Array(repeating: 0b0000_0000, count: 4)
+	+ Array(0b0000_0000...0b1111_1111)
+	+ Array(repeating: 0b0000_0000, count: 8)
 	
 	private func configureSublayers() {
 		guard let parentLayer = parentLayer else { return }
@@ -187,7 +190,7 @@ class FestiveEffect: NotchEffect {
 			for index in 0..<self.bulbCount {
 				let bulbLayer = self.bulbLayers[index]
 
-				let state = shift & 0b1
+				let state = shift & 0b1000_0000
 				if index % 2 == 0 {
 					// purple
 					if state == 0b0 {
@@ -207,7 +210,7 @@ class FestiveEffect: NotchEffect {
 					}
 				}
 				
-				shift = shift >> 1
+				shift = shift << 1
 			}
 			
 			Self.patternIndex += 1
