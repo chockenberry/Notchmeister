@@ -55,7 +55,7 @@ class NotchView: NSView {
 				case 1:
 					notchEffect = createCylonEffect()
 				case 2:
-					notchEffect = createSparksEffect()
+					notchEffect = createPlasmaEffect()
 				case 3:
 					notchEffect = createFestiveEffect()
 				default:
@@ -96,9 +96,9 @@ class NotchView: NSView {
 		return GlowEffect(with: parentLayer)
 	}
 
-	private func createSparksEffect() -> SparksEffect? {
+	private func createPlasmaEffect() -> PlasmaEffect? {
 		guard let parentLayer = self.layer else { return nil }
-		return SparksEffect(with: parentLayer)
+		return PlasmaEffect(with: parentLayer)
 	}
 
 	private func createFestiveEffect() -> FestiveEffect? {

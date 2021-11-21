@@ -1,5 +1,5 @@
 //
-//  SparksEffect.swift
+//  PlasmaEffect.swift
 //  Notchmeister
 //
 //  Created by Craig Hockenberry on 11/11/21.
@@ -7,12 +7,12 @@
 
 import AppKit
 
-class SparksEffect: NotchEffect {
+class PlasmaEffect: NotchEffect {
 	
-	var sparksLayer: CAEmitterLayer
+	var plasmaLayer: CAEmitterLayer
 
 	required init(with parentLayer: CALayer) {
-		self.sparksLayer = CAEmitterLayer()
+		self.plasmaLayer = CAEmitterLayer()
 
 		super.init(with: parentLayer)
 
@@ -22,11 +22,11 @@ class SparksEffect: NotchEffect {
 	private func configureSublayers() {
 		guard let parentLayer = parentLayer else { return }
 		
-		sparksLayer.emitterPosition = .zero
+		plasmaLayer.emitterPosition = .zero
 		//sparksLayer.emitterSize = CGSize(width: 17, height: 23)
 		//sparksLayer.emitterShape = .rectangle
-		sparksLayer.renderMode = .additive
-		sparksLayer.contentsScale = parentLayer.contentsScale
+		plasmaLayer.renderMode = .additive
+		plasmaLayer.contentsScale = parentLayer.contentsScale
 
 		let sparkDimension = 10
 
@@ -57,7 +57,7 @@ class SparksEffect: NotchEffect {
 		//cell.color = NSColor.orange.cgColor
 		//cell.color = NSColor.cyan.cgColor
 		//cell.color = NSColor(calibratedRed: 0.8, green: 0.6, blue: 1, alpha: 1).cgColor
-		cell.color = NSColor(named: "sparksEffect-spark")?.cgColor
+		cell.color = NSColor(named: "plasmaEffect-base")?.cgColor
 		cell.alphaSpeed = -0.5
 		cell.alphaRange = 1
 		cell.redRange = 0.2
@@ -82,20 +82,20 @@ class SparksEffect: NotchEffect {
 		 [emitter addAnimation:anim forKey:@"emitterAnim"];
 		 */
 		
-		sparksLayer.emitterCells = [cell]
-		sparksLayer.opacity = 1
+		plasmaLayer.emitterCells = [cell]
+		plasmaLayer.opacity = 1
 
-		parentLayer.addSublayer(sparksLayer)
+		parentLayer.addSublayer(plasmaLayer)
 	}
 
 	override func mouseEntered(at point: CGPoint, underNotch: Bool) {
-		sparksLayer.emitterCells?.first?.birthRate = 0
+		plasmaLayer.emitterCells?.first?.birthRate = 0
 	}
 	
 	override func mouseMoved(at point: CGPoint, underNotch: Bool) {
 		CATransaction.withActionsDisabled {
 			if underNotch {
-				sparksLayer.emitterCells?.first?.birthRate = 300
+				plasmaLayer.emitterCells?.first?.birthRate = 300
 				/*
 				let edgeDistance = edgeDistance(at: point)
 				if edgeDistance > 0 {
@@ -107,17 +107,17 @@ class SparksEffect: NotchEffect {
 				 */
 			}
 			else {
-				sparksLayer.emitterCells?.first?.birthRate = 0
+				plasmaLayer.emitterCells?.first?.birthRate = 0
 			}
 
 			//debugLog("edgeDistance = \(edgeDistance(at: point))")
 		
-			sparksLayer.emitterPosition = point
+			plasmaLayer.emitterPosition = point
 		}
 	}
 	
 	override func mouseExited(at point: CGPoint, underNotch: Bool) {
-		sparksLayer.emitterCells?.first?.birthRate = 0
+		plasmaLayer.emitterCells?.first?.birthRate = 0
 	}
 
 }
