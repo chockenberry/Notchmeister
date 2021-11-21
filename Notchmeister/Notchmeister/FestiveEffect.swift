@@ -51,7 +51,7 @@ class FestiveEffect: NotchEffect {
 		self.bulbLayers.removeAll()
 	}
 	
-	static var patternIndex = 0
+	var patternIndex = 0
 	
 	static let patterns = [
 		// scan left then right
@@ -183,8 +183,9 @@ class FestiveEffect: NotchEffect {
 
 	
 	private func startLights() {
+		patternIndex = 0
 		timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true, block: { timer in
-			let pattern = Self.patterns[Self.patternIndex]
+			let pattern = Self.patterns[self.patternIndex]
 			
 			var shift = pattern
 			for index in 0..<self.bulbCount {
@@ -213,9 +214,9 @@ class FestiveEffect: NotchEffect {
 				shift = shift << 1
 			}
 			
-			Self.patternIndex += 1
-			if Self.patternIndex >= Self.patterns.count {
-				Self.patternIndex = 0
+			self.patternIndex += 1
+			if self.patternIndex >= Self.patterns.count {
+				self.patternIndex = 0
 			}
 		})
 	}
