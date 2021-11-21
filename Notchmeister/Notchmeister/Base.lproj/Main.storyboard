@@ -687,6 +687,7 @@
                 <windowController id="B8D-0N-5wS" sceneMemberID="viewController">
                     <window key="window" title="Notchmeister™" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="_Notchmeister" animationBehavior="default" id="IQv-IB-iLA">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES"/>
+                        <windowCollectionBehavior key="collectionBehavior" canJoinAllSpaces="YES"/>
                         <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
                         <rect key="contentRect" x="196" y="240" width="480" height="270"/>
                         <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1027"/>
@@ -778,7 +779,7 @@
                                         <items>
                                             <menuItem title="Glow" state="on" id="UuA-aU-a9p"/>
                                             <menuItem title="Cylon" tag="1" id="IPc-kO-S4N"/>
-                                            <menuItem title="Sparks" tag="2" id="kLF-aV-OO3"/>
+                                            <menuItem title="Plasma" tag="2" id="kLF-aV-OO3"/>
                                             <menuItem title="Festive" tag="3" id="kXd-lN-dfU"/>
                                         </items>
                                     </menu>
