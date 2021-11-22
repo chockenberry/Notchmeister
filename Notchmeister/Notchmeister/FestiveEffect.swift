@@ -228,6 +228,8 @@ class FestiveEffect: NotchEffect {
 
 		let yOffset = parentLayer.bounds.midY
 
+		stopLights()
+		
 		CATransaction.begin()
 		CATransaction.setCompletionBlock { [weak self] in
 			self?.startLights()
