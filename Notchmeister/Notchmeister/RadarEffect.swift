@@ -46,13 +46,62 @@ class RadarEffect: NotchEffect {
 	override func mouseEntered(at point: CGPoint, underNotch: Bool) {
 	}
 
+	var wasUnderNotch = false
+	
 	override func mouseMoved(at point: CGPoint, underNotch: Bool) {
-		if underNotch {
-			radarLayer.transform = CATransform3DMakeRotation(0, 1, 0, 0)
+		if underNotch != wasUnderNotch {
+			CATransaction.begin()
+			CATransaction.setCompletionBlock { [weak self] in
+				//self?.startLights()
+			}
+			
+			let fromTransform: CATransform3D
+			if let transform = radarLayer.presentation()?.transform {
+				fromTransform = transform
+			}
+			else {
+				fromTransform = CATransform3DMakeRotation(.pi, 1, 0, 0)
+			}
+			
+			let toTransform: CATransform3D
+			if underNotch {
+				toTransform = CATransform3DMakeRotation(0, 1, 0, 0)
+			}
+			else {
+				toTransform = CATransform3DMakeRotation(.pi, 1, 0, 0)
+			}
+			
+			radarLayer.transform = toTransform
+			
+			if underNotch {
+				let springDownAnimation = CASpringAnimation(keyPath: "transform")
+				springDownAnimation.fromValue = fromTransform
+				springDownAnimation.toValue = toTransform
+				springDownAnimation.duration = 2
+				springDownAnimation.damping = 5
+				springDownAnimation.mass = 1.5
+				radarLayer.add(springDownAnimation, forKey: "transform")
+			}
+			else {
+				let upAnimation = CABasicAnimation(keyPath: "transform")
+				upAnimation.fromValue = fromTransform
+				upAnimation.toValue = toTransform
+				upAnimation.duration = 0.5
+				upAnimation.timingFunction = CAMediaTimingFunction(name: .easeIn)
+				radarLayer.add(upAnimation, forKey: "transform")
+
+			}
+			CATransaction.commit()
+			
+			wasUnderNotch = underNotch
 		}
-		else {
-			radarLayer.transform = CATransform3DMakeRotation(.pi, 1, 0, 0)
-		}
+		
+//		if underNotch {
+//			radarLayer.transform = CATransform3DMakeRotation(0, 1, 0, 0)
+//		}
+//		else {
+//			radarLayer.transform = CATransform3DMakeRotation(.pi, 1, 0, 0)
+//		}
 	}
 
 	override func mouseExited(at point: CGPoint, underNotch: Bool) {
