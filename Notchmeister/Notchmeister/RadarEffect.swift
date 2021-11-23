@@ -13,10 +13,12 @@ class RadarEffect: NotchEffect {
 
 	var radarLayer: CATransformLayer
 	var screenLayer: CALayer
+	var frameLayer: CALayer
 
 	required init(with parentLayer: CALayer) {
 		self.radarLayer = CATransformLayer()
 		self.screenLayer = CALayer()
+		self.frameLayer = CALayer()
 
 		super.init(with: parentLayer)
 
@@ -26,33 +28,51 @@ class RadarEffect: NotchEffect {
 	private func configureSublayers() {
 		guard let parentLayer = parentLayer else { return }
 		
-		radarLayer.bounds = parentLayer.bounds
-//		radarLayer.masksToBounds = true
-		radarLayer.contentsScale = parentLayer.contentsScale
-		radarLayer.position = CGPoint(x: parentLayer.bounds.midX, y: parentLayer.bounds.maxY)
+		var bounds = parentLayer.bounds
+		if Defaults.shouldFakeNotch {
+			bounds.size.height = 38
+		}
+		
+		do { // the layer that will present sublayers with a perspective transform
+			radarLayer.bounds = bounds
+			radarLayer.contentsScale = parentLayer.contentsScale
+			radarLayer.position = CGPoint(x: parentLayer.bounds.midX, y: parentLayer.bounds.maxY)
+			radarLayer.anchorPoint = CGPoint(x: 0.5, y: 0)
+			
+			radarLayer.transform = CATransform3DMakeRotation(-.pi/2, 1, 0, 0)
+		}
 
-		radarLayer.anchorPoint = CGPoint(x: 0.5, y: 0)
-//		radarLayer.backgroundColor = NSColor.black.cgColor
-//		radarLayer.cornerRadius = CGFloat.notchLowerRadius
-		
-		radarLayer.transform = CATransform3DMakeRotation(-.pi/2, 1, 0, 0)
-//		radarLayer.opacity = 1
-		
-		screenLayer.bounds = radarLayer.bounds
-		screenLayer.masksToBounds = true
-		screenLayer.contentsScale = radarLayer.contentsScale
-		screenLayer.position = .zero
-		screenLayer.anchorPoint = CGPoint(x: 0, y: 0)
-		screenLayer.backgroundColor = NSColor.black.cgColor
-		screenLayer.cornerRadius = CGFloat.notchLowerRadius
-		screenLayer.opacity = 1
-		
-		let image = NSImage(named: "xray")!
-		var proposedRect = radarLayer.bounds
-		screenLayer.contents = image.cgImage(forProposedRect: &proposedRect, context: nil, hints: nil)
+		do { // the layer that shows the radar screen
+			let image = NSImage(named: "xray")!
 
+			screenLayer.bounds = radarLayer.bounds
+			screenLayer.masksToBounds = true
+			screenLayer.contentsScale = radarLayer.contentsScale
+			screenLayer.contentsGravity = .bottom // which is really the top
+			screenLayer.position = CGPoint(x: screenLayer.bounds.midX, y: screenLayer.bounds.midY)
+	//		screenLayer.anchorPoint = .zero //CGPoint(x: 0.5, y: 0.5)
+			screenLayer.backgroundColor = NSColor.black.cgColor
+			screenLayer.cornerRadius = CGFloat.notchLowerRadius
+			screenLayer.opacity = 0.5
+			
+			//var proposedRect: CGRect? = nil
+			screenLayer.contents = image.cgImage(forProposedRect: nil, context: nil, hints: nil)
+		}
+		
+		do { // the layer that is a frame holding the screen
+			frameLayer.bounds = radarLayer.bounds
+			frameLayer.borderWidth = 2
+			frameLayer.borderColor = NSColor(named: "radarEffect-frame")?.cgColor
+			frameLayer.cornerRadius = CGFloat.notchLowerRadius
+			frameLayer.masksToBounds = true
+			frameLayer.contentsScale = radarLayer.contentsScale
+			frameLayer.position = .zero
+			frameLayer.anchorPoint = .zero
+		}
+		
 		radarLayer.addSublayer(screenLayer)
-		
+		radarLayer.addSublayer(frameLayer)
+
 		parentLayer.addSublayer(radarLayer)
 	}
 	
@@ -65,7 +85,12 @@ class RadarEffect: NotchEffect {
 		if underNotch != wasUnderNotch {
 			CATransaction.begin()
 			CATransaction.setCompletionBlock { [weak self] in
-				//self?.startLights()
+				if underNotch {
+					//self?.startRadar()
+				}
+				else {
+					//self?.stopRadar()
+				}
 			}
 			
 			let fromTransform: CATransform3D
@@ -107,26 +132,12 @@ class RadarEffect: NotchEffect {
 				upAnimation.duration = 0.5
 				upAnimation.timingFunction = CAMediaTimingFunction(name: .easeIn)
 				radarLayer.add(upAnimation, forKey: "transform")
-
 			}
-			CATransaction.commit()
 			
-//			if underNotch {
-//				radarLayer.zPosition = 1
-//			}
-//			else {
-//				radarLayer.zPosition = 0
-//			}
+			CATransaction.commit()
 			
 			wasUnderNotch = underNotch
 		}
-		
-//		if underNotch {
-//			radarLayer.transform = CATransform3DMakeRotation(0, 1, 0, 0)
-//		}
-//		else {
-//			radarLayer.transform = CATransform3DMakeRotation(.pi, 1, 0, 0)
-//		}
 	}
 
 	override func mouseExited(at point: CGPoint, underNotch: Bool) {
