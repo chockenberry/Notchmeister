@@ -11,11 +11,13 @@ class RadarEffect: NotchEffect {
 	
 	//let context = CIContext(options: nil)
 
-	var radarLayer: CALayer
+	var radarLayer: CATransformLayer
+	var screenLayer: CALayer
 
 	required init(with parentLayer: CALayer) {
-		self.radarLayer = CALayer()
-		
+		self.radarLayer = CATransformLayer()
+		self.screenLayer = CALayer()
+
 		super.init(with: parentLayer)
 
 		configureSublayers()
@@ -25,21 +27,32 @@ class RadarEffect: NotchEffect {
 		guard let parentLayer = parentLayer else { return }
 		
 		radarLayer.bounds = parentLayer.bounds
-		radarLayer.masksToBounds = true
+//		radarLayer.masksToBounds = true
 		radarLayer.contentsScale = parentLayer.contentsScale
 		radarLayer.position = CGPoint(x: parentLayer.bounds.midX, y: parentLayer.bounds.maxY)
 
 		radarLayer.anchorPoint = CGPoint(x: 0.5, y: 0)
-		radarLayer.backgroundColor = NSColor.black.cgColor
-		radarLayer.cornerRadius = CGFloat.notchLowerRadius
+//		radarLayer.backgroundColor = NSColor.black.cgColor
+//		radarLayer.cornerRadius = CGFloat.notchLowerRadius
 		
-		radarLayer.transform = CATransform3DMakeRotation(.pi, 1, 0, 0)
-		radarLayer.opacity = 1
+		radarLayer.transform = CATransform3DMakeRotation(-.pi/2, 1, 0, 0)
+//		radarLayer.opacity = 1
+		
+		screenLayer.bounds = radarLayer.bounds
+		screenLayer.masksToBounds = true
+		screenLayer.contentsScale = radarLayer.contentsScale
+		screenLayer.position = .zero
+		screenLayer.anchorPoint = CGPoint(x: 0, y: 0)
+		screenLayer.backgroundColor = NSColor.black.cgColor
+		screenLayer.cornerRadius = CGFloat.notchLowerRadius
+		screenLayer.opacity = 1
 		
 		let image = NSImage(named: "xray")!
 		var proposedRect = radarLayer.bounds
-		radarLayer.contents = image.cgImage(forProposedRect: &proposedRect, context: nil, hints: nil)
+		screenLayer.contents = image.cgImage(forProposedRect: &proposedRect, context: nil, hints: nil)
 
+		radarLayer.addSublayer(screenLayer)
+		
 		parentLayer.addSublayer(radarLayer)
 	}
 	
@@ -60,15 +73,20 @@ class RadarEffect: NotchEffect {
 				fromTransform = transform
 			}
 			else {
-				fromTransform = CATransform3DMakeRotation(.pi, 1, 0, 0)
+				fromTransform = CATransform3DMakeRotation(-.pi/2, 1, 0, 0)
 			}
 			
+			var perspective = CATransform3DIdentity
+			perspective.m34 = -1 / 100
+
 			let toTransform: CATransform3D
 			if underNotch {
-				toTransform = CATransform3DMakeRotation(0, 1, 0, 0)
+				//toTransform = CATransform3DMakeRotation(0, 1, 0, 0)
+				toTransform = CATransform3DRotate(perspective, 0, 1, 0, 0)
 			}
 			else {
-				toTransform = CATransform3DMakeRotation(.pi, 1, 0, 0)
+				//toTransform = CATransform3DMakeRotation(.pi, 1, 0, 0)
+				toTransform = CATransform3DRotate(perspective, -.pi/2, 1, 0, 0)
 			}
 			
 			radarLayer.transform = toTransform
@@ -79,7 +97,7 @@ class RadarEffect: NotchEffect {
 				springDownAnimation.toValue = toTransform
 				springDownAnimation.duration = 2
 				springDownAnimation.damping = 5
-				springDownAnimation.mass = 1.5
+				springDownAnimation.mass = 0.25
 				radarLayer.add(springDownAnimation, forKey: "transform")
 			}
 			else {
@@ -92,6 +110,13 @@ class RadarEffect: NotchEffect {
 
 			}
 			CATransaction.commit()
+			
+//			if underNotch {
+//				radarLayer.zPosition = 1
+//			}
+//			else {
+//				radarLayer.zPosition = 0
+//			}
 			
 			wasUnderNotch = underNotch
 		}
