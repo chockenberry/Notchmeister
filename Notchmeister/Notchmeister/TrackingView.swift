@@ -85,7 +85,7 @@ class TrackingView: NSView {
 		}
 	
 		localMonitor = NSEvent.addLocalMonitorForEvents(matching: [.mouseMoved]) { event in
-			debugLog("local event, event.window = \(String(describing: event.window)), window = \(String(describing: self.window))")
+			//debugLog("local event, event.window = \(String(describing: event.window)), window = \(String(describing: self.window))")
 			if let window = self.window {
 				if let eventWindow = event.window {
 					// the event happened in another one of our windows
