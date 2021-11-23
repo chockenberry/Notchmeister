@@ -781,6 +781,7 @@
                                             <menuItem title="Cylon" tag="1" id="IPc-kO-S4N"/>
                                             <menuItem title="Plasma" tag="2" id="kLF-aV-OO3"/>
                                             <menuItem title="Festive" tag="3" id="kXd-lN-dfU"/>
+                                            <menuItem title="Radar" tag="4" id="jjJ-vz-Urr"/>
                                         </items>
                                     </menu>
                                 </popUpButtonCell>

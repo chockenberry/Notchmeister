@@ -58,6 +58,8 @@ class NotchView: NSView {
 					notchEffect = createPlasmaEffect()
 				case 3:
 					notchEffect = createFestiveEffect()
+				case 4:
+					notchEffect = createRadarEffect()
 				default:
 					notchEffect = nil
 				}
@@ -104,6 +106,11 @@ class NotchView: NSView {
 	private func createFestiveEffect() -> FestiveEffect? {
 		guard let parentLayer = self.layer else { return nil }
 		return FestiveEffect(with: parentLayer)
+	}
+
+	private func createRadarEffect() -> RadarEffect? {
+		guard let parentLayer = self.layer else { return nil }
+		return RadarEffect(with: parentLayer)
 	}
 
 //	override func acceptsFirstMouse(for event: NSEvent?) -> Bool {
