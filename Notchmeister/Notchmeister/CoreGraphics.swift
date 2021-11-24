@@ -9,12 +9,20 @@ import AppKit
 
 extension CGPoint {
 
-	static func +(pt1: CGPoint, pt2: CGPoint) -> CGPoint {
-		return CGPoint(x: pt1.x + pt2.x, y: pt1.y + pt2.y)
+	static func +(point1: CGPoint, point2: CGPoint) -> CGPoint {
+		return CGPoint(x: point1.x + point2.x, y: point1.y + point2.y)
 	}
 
-	static func -(pt1: CGPoint, pt2: CGPoint) -> CGPoint {
-		return CGPoint(x: pt1.x - pt2.x, y: pt1.y - pt2.y)
+	static func -(point1: CGPoint, point2: CGPoint) -> CGPoint {
+		return CGPoint(x: point1.x - point2.x, y: point1.y - point2.y)
+	}
+
+}
+
+extension CGSize {
+	
+	static func *(size: CGSize, scale: CGFloat) -> CGSize {
+		return CGSize(width: size.width * scale, height: size.height * scale)
 	}
 
 }
