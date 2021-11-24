@@ -25,12 +25,18 @@ class RadarEffect: NotchEffect {
 		configureSublayers()
 	}
 	
+#if DEBUG
+	private let DEBUG_HEIGHT = false // use true to simulate height of real notch
+#else
+	private let DEBUG_HEIGHT = false
+#endif
+	
 	private func configureSublayers() {
 		guard let parentLayer = parentLayer else { return }
 		
 		var bounds = parentLayer.bounds
-		if Defaults.shouldFakeNotch {
-			bounds.size.height = 38
+		if DEBUG_HEIGHT {
+			bounds.size.height = 38 // DEBUG
 		}
 		
 		do { // the layer that will present sublayers with a perspective transform
@@ -47,16 +53,15 @@ class RadarEffect: NotchEffect {
 
 			screenLayer.bounds = radarLayer.bounds
 			screenLayer.masksToBounds = true
-			screenLayer.masksToBounds = false // DEBUG
+			//screenLayer.masksToBounds = false // DEBUG
 			screenLayer.contentsScale = radarLayer.contentsScale
 			screenLayer.contentsGravity = .bottom // which is really the top
 			//screenLayer.contentsGravity = .resizeAspect // DEBUG
 			screenLayer.position = CGPoint(x: screenLayer.bounds.midX, y: screenLayer.bounds.midY)
-	//		screenLayer.anchorPoint = .zero //CGPoint(x: 0.5, y: 0.5)
 			screenLayer.backgroundColor = NSColor.black.cgColor
 			screenLayer.cornerRadius = CGFloat.notchLowerRadius
 			screenLayer.opacity = 0.5
-			screenLayer.opacity = 1 // DEBUG
+			//screenLayer.opacity = 1 // DEBUG
 			
 			//var proposedRect: CGRect? = nil
 			screenLayer.contents = image.cgImage(forProposedRect: nil, context: nil, hints: nil)
@@ -65,7 +70,7 @@ class RadarEffect: NotchEffect {
 		do { // the layer that is a frame holding the screen
 			frameLayer.bounds = radarLayer.bounds
 			frameLayer.borderWidth = 2
-			frameLayer.borderWidth = 1 // DEBUG
+			//frameLayer.borderWidth = 0 // DEBUG
 			frameLayer.borderColor = NSColor(named: "radarEffect-frame")?.cgColor
 			frameLayer.cornerRadius = CGFloat.notchLowerRadius
 			frameLayer.masksToBounds = true
@@ -90,8 +95,8 @@ class RadarEffect: NotchEffect {
 			updateImage(at: point)
 		}
 		else {
-			updateImage(at: point) // DEBUG
-			return // DEBUG
+			//updateImage(at: point) // DEBUG
+			//return // DEBUG
 		}
 		
 		if underNotch != wasUnderNotch {
@@ -183,13 +188,20 @@ class RadarEffect: NotchEffect {
 		//let hotSpotOffset = CGPoint(x: cursorBounds.midX + hotSpot.x, y: cursorBounds.maxY + hotSpot.y)
 		let hotSpotOffset = CGPoint(x: cursorBounds.midX - hotSpot.x, y: cursorBounds.midY - hotSpot.y)
 
+		let heightOffset: CGFloat
+		if DEBUG_HEIGHT {
+			heightOffset = screenBounds.height - parentBounds.height
+		}
+		else {
+			heightOffset = 0
+		}
 		//let cursorOriginPoint = CGPoint(x: (point.x), y: (point.y + hotSpot.y))
 
 		//let scaledPoint = CGPoint(x: (point.x * scale - hotSpotOffset.x * scale), y: (point.y * scale - hotSpotOffset.y * scale))
 		//let scaledPoint = CGPoint(x: (point.x + hotSpotOffset.x) * scale - boundsDelta.width / 2, y: (point.y + hotSpotOffset.y) * scale - boundsDelta.height)
-		let scaledPoint = CGPoint(x: (point.x - hotSpotOffset.x) * scale, y: (point.y - hotSpotOffset.y) * scale)
+		let scaledPoint = CGPoint(x: (point.x - hotSpotOffset.x) * scale, y: (point.y - hotSpotOffset.y) * scale - heightOffset)
 
-		debugLog("point = \(point), scaledPoint = \(scaledPoint)")
+		//debugLog("point = \(point), scaledPoint = \(scaledPoint)")
 
 		//let cursorSize = cursor.image.size // in points
 		//let scaledHotSpot = CGPoint(x: hotSpot.x * scale, y: hotSpot.y * scale)
