@@ -206,12 +206,13 @@ class RadarEffect: NotchEffect {
 		//let cursorSize = cursor.image.size // in points
 		//let scaledHotSpot = CGPoint(x: hotSpot.x * scale, y: hotSpot.y * scale)
 		
-
-		let baseImage = CIImage(cgImage: baseBitmap).cropped(to: screenBounds)
+		// crop the top middle of the base image to the screen size
+		let cropBounds = CGRect(origin: CGPoint(x: baseBounds.midX - screenBounds.midX, y: baseBounds.maxY - screenBounds.maxY), size: screenBounds.size)
+		let baseImage = CIImage(cgImage: baseBitmap).cropped(to: cropBounds)
 		let baseExtent = baseImage.extent // in pixels
 		
-		let cursorImage = CIImage(cgImage: cursorBitmap)
-		let colorImage = CIImage(color: CIColor.red).cropped(to: cursorImage.extent)
+		let cursorImage = CIImage(cgImage: cursorBitmap).applyingFilter("CIColorInvert")
+		//let colorImage = CIImage(color: CIColor.red).cropped(to: cursorImage.extent)
 		let xOffset = baseExtent.minX + scaledPoint.x
 		let yOffset = baseExtent.minY - scaledPoint.y
 		//let xOffset: CGFloat = 0 // + boundsDelta.width / 2
