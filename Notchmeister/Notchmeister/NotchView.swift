@@ -31,7 +31,7 @@ class NotchView: NSView {
 //        notchOutlineLayer.lineWidth = 2.0
 //    }
     
-	private let notchPadding: CGFloat = 50
+	//private let notchPadding: CGFloat = 50
 	
 	override func viewDidMoveToSuperview() {
 		if self.superview != nil {
