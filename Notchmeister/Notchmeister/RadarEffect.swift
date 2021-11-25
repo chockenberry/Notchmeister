@@ -40,15 +40,34 @@ class RadarEffect: NotchEffect {
 		let scaledScreenBounds = CGRect(origin: .zero, size: screenLayer.bounds.size * scale)
 
 		guard let gradientImage: CIImage = {
-			guard let filter = CIFilter(name: "CISmoothLinearGradient") else { return nil }
-			filter.setValue(CIVector(x: 0, y: 0), forKey: "inputPoint0")
-			filter.setValue(CIColor(red: 0, green: 0, blue: 0, alpha: 0), forKey: "inputColor0")
-			filter.setValue(CIVector(x: scaledScreenBounds.width, y: 0), forKey: "inputPoint1")
-			filter.setValue(CIColor(red: 1, green: 1, blue: 1, alpha: 1), forKey: "inputColor1")
+			guard let leftGradientImage: CIImage = {
+				guard let filter = CIFilter(name: "CISmoothLinearGradient") else { return nil }
+				filter.setValue(CIVector(x: 0, y: 0), forKey: "inputPoint0")
+				filter.setValue(CIColor(red: 0, green: 0, blue: 0, alpha: 0), forKey: "inputColor0")
+				filter.setValue(CIVector(x: scaledScreenBounds.width, y: 0), forKey: "inputPoint1")
+				filter.setValue(CIColor(red: 1, green: 1, blue: 1, alpha: 1), forKey: "inputColor1")
+				return filter.outputImage
+			}() else { return nil }
+
+			guard let rightGradientImage: CIImage = {
+				guard let filter = CIFilter(name: "CISmoothLinearGradient") else { return nil }
+				filter.setValue(CIVector(x: scaledScreenBounds.width, y: 0), forKey: "inputPoint0")
+				filter.setValue(CIColor(red: 0, green: 0, blue: 0, alpha: 0), forKey: "inputColor0")
+				filter.setValue(CIVector(x: scaledScreenBounds.width * 2, y: 0), forKey: "inputPoint1")
+				filter.setValue(CIColor(red: 1, green: 1, blue: 1, alpha: 1), forKey: "inputColor1")
+				let transform = CGAffineTransform(translationX: scaledScreenBounds.width, y: 0)
+				return filter.outputImage?.transformed(by: transform)
+			}() else { return nil }
+			
+			guard let filter = CIFilter(name: "CIOverlayBlendMode") else { return nil }
+			filter.setDefaults()
+			filter.setValue(leftGradientImage, forKey: kCIInputImageKey)
+			filter.setValue(rightGradientImage, forKey: kCIInputBackgroundImageKey)
 			return filter.outputImage
 		}() else { return nil }
 		
-		return gradientImage.cropped(to: scaledScreenBounds)
+		let scaledCropBounds = CGRect(origin: .zero, size: CGSize(width: scaledScreenBounds.width * 2, height: scaledScreenBounds.height))
+		return gradientImage.cropped(to: scaledCropBounds)
 	}()
 	
 	var radarLayer: CATransformLayer
@@ -96,7 +115,7 @@ class RadarEffect: NotchEffect {
 			//screenLayer.masksToBounds = false // DEBUG
 			screenLayer.contentsScale = radarLayer.contentsScale
 			screenLayer.contentsGravity = .bottom // which is really the top
-			//screenLayer.contentsGravity = .resizeAspect // DEBUG
+			screenLayer.contentsGravity = .resizeAspect // DEBUG
 			screenLayer.position = CGPoint(x: screenLayer.bounds.midX, y: screenLayer.bounds.midY)
 			screenLayer.backgroundColor = NSColor.black.cgColor
 			screenLayer.cornerRadius = CGFloat.notchLowerRadius
@@ -207,6 +226,7 @@ class RadarEffect: NotchEffect {
 
 		guard let cursorImage = cursorImage else { return }
 		guard let baseImage = baseImage else { return }
+//		guard let baseImage = scannerImage else { return }
 
 		let scale = parentLayer.contentsScale
 
