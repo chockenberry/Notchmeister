@@ -56,13 +56,26 @@ extension NSScreen {
         return NSRect(x: x, y: y, width: width, height: height)
     }
     
-    /// An area similar to what the notch would cover even if this screen
+
+	/// An area similar to what the notch would cover even if this screen
     /// does not have a notch.
     var fakeNotchArea: NSRect {
         let screenFrame = self.frame
         let visibleFrame = self.visibleFrame
         
-        let fakeNotchSize = NSSize(width:220, height:screenFrame.maxY - visibleFrame.maxY)
+#if DEBUG
+		let DEBUG_HEIGHT = true // use true to simulate height of real notch instead of menubar height
+#else
+		let DEBUG_HEIGHT = false
+#endif
+
+		let fakeNotchSize: CGSize
+		if DEBUG_HEIGHT {
+			fakeNotchSize = NSSize(width:220, height:38)
+		}
+		else {
+			fakeNotchSize = NSSize(width:220, height:screenFrame.maxY - visibleFrame.maxY)
+		}
 
         let x = self.frame.midX - (fakeNotchSize.width / 2)
         let y = self.frame.maxY - fakeNotchSize.height

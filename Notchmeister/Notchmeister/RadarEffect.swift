@@ -83,25 +83,16 @@ class RadarEffect: NotchEffect {
 
 		configureSublayers()
 	}
-	
-#if DEBUG
-	private let DEBUG_HEIGHT = true // use true to simulate height of real notch
-#else
-	private let DEBUG_HEIGHT = false
-#endif
-	
+		
 	private func configureSublayers() {
 		guard let parentLayer = parentLayer else { return }
 		
-		var bounds = parentLayer.bounds
-		if DEBUG_HEIGHT {
-			bounds.size.height = 38 // DEBUG
-		}
+		let bounds = parentLayer.bounds
 		
 		do { // the layer that will present sublayers with a perspective transform
 			radarLayer.bounds = bounds
 			radarLayer.contentsScale = parentLayer.contentsScale
-			radarLayer.position = CGPoint(x: parentLayer.bounds.midX, y: parentLayer.bounds.maxY)
+			radarLayer.position = CGPoint(x: bounds.midX, y: bounds.maxY)
 			radarLayer.anchorPoint = CGPoint(x: 0.5, y: 0)
 			
 			radarLayer.transform = CATransform3DMakeRotation(-.pi/2, 1, 0, 0)
@@ -240,22 +231,19 @@ class RadarEffect: NotchEffect {
 		let hotSpot = cursor.hotSpot
 		let hotSpotOffset = CGPoint(x: cursorBounds.midX - hotSpot.x, y: cursorBounds.midY - hotSpot.y)
 
-		let heightOffset: CGFloat
-		if DEBUG_HEIGHT {
-			let scaledParentBounds = CGRect(origin: .zero, size: parentLayer.bounds.size * scale)
-			let scaledScreenBounds = CGRect(origin: .zero, size: screenLayer.bounds.size * scale)
-			heightOffset = scaledScreenBounds.height - scaledParentBounds.height
-		}
-		else {
-			heightOffset = 0
-		}
+//		let scaledParentBounds = CGRect(origin: .zero, size: parentLayer.bounds.size * scale)
+//		let scaledScreenBounds = CGRect(origin: .zero, size: screenLayer.bounds.size * scale)
+//		let heightOffset = scaledScreenBounds.height - scaledParentBounds.height
+//		let heightOffset:CGFloat = 76
+		let heightOffset:CGFloat = 0
 
 		let scaledPoint = CGPoint(x: (point.x - hotSpotOffset.x) * scale, y: (point.y - hotSpotOffset.y) * scale - heightOffset)
-		//debugLog("point = \(point), scaledPoint = \(scaledPoint)")
+		debugLog("point = \(point), scaledPoint = \(scaledPoint)")
 
 		let baseExtent = baseImage.extent // in pixels
 		let xOffset = baseExtent.minX + scaledPoint.x
 		let yOffset = baseExtent.minY - scaledPoint.y
+//		let yOffset = baseExtent.minY + scaledPoint.y
 		let transform = CGAffineTransform(translationX: xOffset, y: yOffset)
 		let transformImage = cursorImage.transformed(by: transform)
 
