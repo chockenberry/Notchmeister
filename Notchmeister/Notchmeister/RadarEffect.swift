@@ -11,6 +11,46 @@ class RadarEffect: NotchEffect {
 	
 	let context = CIContext(options: nil)
 
+	lazy var cursorImage: CIImage? = {
+		let cursor = NSCursor.current
+
+		guard let cursorBitmap = cursor.image.cgImage(forProposedRect: nil, context: nil, hints: nil) else { return nil }
+
+		return CIImage(cgImage: cursorBitmap).applyingFilter("CIColorInvert")
+	}()
+	
+	lazy var baseImage: CIImage? = {
+		guard let parentLayer = parentLayer else { return nil }
+		guard let baseBitmap = NSImage(named: "xray")?.cgImage(forProposedRect: nil, context: nil, hints: nil) else { return nil }
+
+		let scale = parentLayer.contentsScale
+		let scaledScreenBounds = CGRect(origin: .zero, size: screenLayer.bounds.size * scale)
+		let baseBounds = CGRect(origin: .zero, size: CGSize(width: baseBitmap.width, height: baseBitmap.height))
+
+		// crop the top middle of the base image to the screen size
+		let cropBounds = CGRect(origin: CGPoint(x: baseBounds.midX - scaledScreenBounds.midX, y: baseBounds.maxY - scaledScreenBounds.maxY), size: scaledScreenBounds.size)
+
+		return CIImage(cgImage: baseBitmap).cropped(to: cropBounds)
+	}()
+	
+	lazy var scannerImage: CIImage? = {
+		guard let parentLayer = parentLayer else { return nil }
+
+		let scale = parentLayer.contentsScale
+		let scaledScreenBounds = CGRect(origin: .zero, size: screenLayer.bounds.size * scale)
+
+		guard let gradientImage: CIImage = {
+			guard let filter = CIFilter(name: "CISmoothLinearGradient") else { return nil }
+			filter.setValue(CIVector(x: 0, y: 0), forKey: "inputPoint0")
+			filter.setValue(CIColor(red: 0, green: 0, blue: 0, alpha: 0), forKey: "inputColor0")
+			filter.setValue(CIVector(x: scaledScreenBounds.width, y: 0), forKey: "inputPoint1")
+			filter.setValue(CIColor(red: 1, green: 1, blue: 1, alpha: 1), forKey: "inputColor1")
+			return filter.outputImage
+		}() else { return nil }
+		
+		return gradientImage.cropped(to: scaledScreenBounds)
+	}()
+	
 	var radarLayer: CATransformLayer
 	var screenLayer: CALayer
 	var frameLayer: CALayer
@@ -26,7 +66,7 @@ class RadarEffect: NotchEffect {
 	}
 	
 #if DEBUG
-	private let DEBUG_HEIGHT = false // use true to simulate height of real notch
+	private let DEBUG_HEIGHT = true // use true to simulate height of real notch
 #else
 	private let DEBUG_HEIGHT = false
 #endif
@@ -92,7 +132,7 @@ class RadarEffect: NotchEffect {
 	
 	override func mouseMoved(at point: CGPoint, underNotch: Bool) {
 		if underNotch {
-			updateImage(at: point)
+			updateScreenLayer(at: point)
 		}
 		else {
 			//updateImage(at: point) // DEBUG
@@ -160,22 +200,16 @@ class RadarEffect: NotchEffect {
 	override func mouseExited(at point: CGPoint, underNotch: Bool) {
 	}
 
-	private func updateImage(at point: CGPoint) {
+	private func updateScreenLayer(at point: CGPoint) {
 		guard let parentLayer = parentLayer else { return }
 
 		let cursor = NSCursor.current
 
-		guard let cursorBitmap = cursor.image.cgImage(forProposedRect: nil, context: nil, hints: nil) else { return }
-		guard let baseBitmap = NSImage(named: "xray")?.cgImage(forProposedRect: nil, context: nil, hints: nil) else { return }
+		guard let cursorImage = cursorImage else { return }
+		guard let baseImage = baseImage else { return }
 
 		let scale = parentLayer.contentsScale
 
-		let parentBounds = CGRect(origin: .zero, size: parentLayer.bounds.size * scale)
-		let screenBounds = CGRect(origin: .zero, size: screenLayer.bounds.size * scale)
-		let baseBounds = CGRect(origin: .zero, size: CGSize(width: baseBitmap.width, height: baseBitmap.height))
-
-		//let boundsDelta = CGSize(width: baseBounds.width - screenBounds.width, height: baseBounds.height - screenBounds.height)
-		
 		// NOTE: The cursor has an origin in the upper-left and is measured in points, the image has an origin in the lower-left
 		// and is measured in pixels, and the point in layer has an origin in the upper-left that is measured in points.
 		// The image also has a different size than the layer (which anchors it to the top center). This complicates the compositing
@@ -184,42 +218,26 @@ class RadarEffect: NotchEffect {
 		
 		let cursorBounds = CGRect(origin: .zero, size: cursor.image.size) // in points
 		let hotSpot = cursor.hotSpot
-		//let hotSpot = CGPoint.zero
-		//let hotSpotOffset = CGPoint(x: cursorBounds.midX + hotSpot.x, y: cursorBounds.maxY + hotSpot.y)
 		let hotSpotOffset = CGPoint(x: cursorBounds.midX - hotSpot.x, y: cursorBounds.midY - hotSpot.y)
 
 		let heightOffset: CGFloat
 		if DEBUG_HEIGHT {
-			heightOffset = screenBounds.height - parentBounds.height
+			let scaledParentBounds = CGRect(origin: .zero, size: parentLayer.bounds.size * scale)
+			let scaledScreenBounds = CGRect(origin: .zero, size: screenLayer.bounds.size * scale)
+			heightOffset = scaledScreenBounds.height - scaledParentBounds.height
 		}
 		else {
 			heightOffset = 0
 		}
-		//let cursorOriginPoint = CGPoint(x: (point.x), y: (point.y + hotSpot.y))
 
-		//let scaledPoint = CGPoint(x: (point.x * scale - hotSpotOffset.x * scale), y: (point.y * scale - hotSpotOffset.y * scale))
-		//let scaledPoint = CGPoint(x: (point.x + hotSpotOffset.x) * scale - boundsDelta.width / 2, y: (point.y + hotSpotOffset.y) * scale - boundsDelta.height)
 		let scaledPoint = CGPoint(x: (point.x - hotSpotOffset.x) * scale, y: (point.y - hotSpotOffset.y) * scale - heightOffset)
-
 		//debugLog("point = \(point), scaledPoint = \(scaledPoint)")
 
-		//let cursorSize = cursor.image.size // in points
-		//let scaledHotSpot = CGPoint(x: hotSpot.x * scale, y: hotSpot.y * scale)
-		
-		// crop the top middle of the base image to the screen size
-		let cropBounds = CGRect(origin: CGPoint(x: baseBounds.midX - screenBounds.midX, y: baseBounds.maxY - screenBounds.maxY), size: screenBounds.size)
-		let baseImage = CIImage(cgImage: baseBitmap).cropped(to: cropBounds)
 		let baseExtent = baseImage.extent // in pixels
-		
-		let cursorImage = CIImage(cgImage: cursorBitmap).applyingFilter("CIColorInvert")
-		//let colorImage = CIImage(color: CIColor.red).cropped(to: cursorImage.extent)
 		let xOffset = baseExtent.minX + scaledPoint.x
 		let yOffset = baseExtent.minY - scaledPoint.y
-		//let xOffset: CGFloat = 0 // + boundsDelta.width / 2
-		//let yOffset: CGFloat = 0 // + boundsDelta.height
 		let transform = CGAffineTransform(translationX: xOffset, y: yOffset)
 		let transformImage = cursorImage.transformed(by: transform)
-		//let transformImage = colorImage.transformed(by: transform)
 
 		if let compositingFilter = CIFilter(name: "CISourceAtopCompositing") {
 			compositingFilter.setDefaults()
@@ -234,48 +252,6 @@ class RadarEffect: NotchEffect {
 				}
 			}
 		}
-
-		/*
-			 if let glowBaseImage = NSImage(named: "glowBase") {
-				 let glowBaseSize = glowBaseImage.size
-				 
-				 // record the hot spot in normalized coordinates relative to the center of the cursor since that's where we're scaling the image from
-				 let normalizedHotSpotPoint = NSPoint(x: (hotSpot.x / cursorSize.width) - 0.5, y: (hotSpot.y / cursorSize.height) - 0.5)
-				 
-				 //var proposedRect = CGRect(origin: .zero, size: cursorSize)
-				 var proposedRect = CGRect(origin: .zero, size: glowBaseSize)
-				 //if let cgImage = cursor.image.cgImage(forProposedRect: &proposedRect, context: nil, hints: nil) {
-				 if let cgImage = glowBaseImage.cgImage(forProposedRect: &proposedRect, context: nil, hints: nil) {
-					 let ciImage = CIImage(cgImage: cgImage)
-					 // NOTE: The image processing here will be more complicated, this is just a placeholder.
-					 if let filter = CIFilter(name: "CIDiscBlur") {
-						 let blurScale: CGFloat = 10
-						 
-						 // glowBaseImage = 20 x 20 pt
-						 // ciImage.extent = 40 x 40 @ 0,0
-						 // blurScale = 10, filteredCiImage = 100 x 100 @ -30, -30, sublayerSize = 50 x 50 pt
-						 // blurScale = 5, filteredCiImage = 70 x 70 @ -15, -15, sublayerSize = 35 x 35 pt
-						 // blurScale = 1, filteredCiImage = 46 x 46 @ -3, -3, sublayerSize = 23 x 23 pt
-
-						 filter.setDefaults()
-						 filter.setValue(ciImage, forKey: kCIInputImageKey)
-						 filter.setValue(blurScale, forKey: kCIInputRadiusKey)
-						 
-						 if let filteredCiImage = filter.outputImage {
-							 debugLog("filteredCiImage.extent = \(filteredCiImage.extent)")
-							 if let sublayerCgImage = context.createCGImage(filteredCiImage, from: filteredCiImage.extent) {
-								 let scale = sublayer.contentsScale
-								 let sublayerSize = CGSize(width: CGFloat(sublayerCgImage.width) / scale, height: CGFloat(sublayerCgImage.height) / scale)
-								 //debugLog("sublayerSize = \(sublayerSize)") //
-								 sublayer.bounds = CGRect(origin: .zero, size: sublayerSize)
-								 sublayer.anchorPoint = CGPoint(x: 0.5 + (normalizedHotSpotPoint.x / blurScale), y: 0.5 + (normalizedHotSpotPoint.y / blurScale))
-								 sublayer.contents = sublayerCgImage
-							 }
-						 }
-					 }
-				 }
-			 }
-		 */
 	}
 	
 }
