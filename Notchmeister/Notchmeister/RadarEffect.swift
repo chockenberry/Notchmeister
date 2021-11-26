@@ -42,21 +42,26 @@ class RadarEffect: NotchEffect {
 		guard let gradientImage: CIImage = {
 			guard let leftGradientImage: CIImage = {
 				guard let filter = CIFilter(name: "CISmoothLinearGradient") else { return nil }
-				filter.setValue(CIVector(x: 0, y: 0), forKey: "inputPoint0")
+				let start = scaledScreenBounds.minX
+				let end = start + scaledScreenBounds.maxX
+				filter.setValue(CIVector(x: start, y: 0), forKey: "inputPoint0")
 				filter.setValue(CIColor(red: 0, green: 0, blue: 0, alpha: 0), forKey: "inputColor0")
-				filter.setValue(CIVector(x: scaledScreenBounds.width, y: 0), forKey: "inputPoint1")
+				filter.setValue(CIVector(x: end, y: 0), forKey: "inputPoint1")
 				filter.setValue(CIColor(red: 1, green: 1, blue: 1, alpha: 1), forKey: "inputColor1")
-				return filter.outputImage
+				let crop = CGRect(origin: CGPoint(x: start, y: 0), size: scaledScreenBounds.size)
+				return filter.outputImage?.cropped(to: crop)
 			}() else { return nil }
 
 			guard let rightGradientImage: CIImage = {
 				guard let filter = CIFilter(name: "CISmoothLinearGradient") else { return nil }
-				filter.setValue(CIVector(x: scaledScreenBounds.width, y: 0), forKey: "inputPoint0")
+				let start = scaledScreenBounds.maxX
+				let end = start + scaledScreenBounds.maxX
+				filter.setValue(CIVector(x: start, y: 0), forKey: "inputPoint0")
 				filter.setValue(CIColor(red: 0, green: 0, blue: 0, alpha: 0), forKey: "inputColor0")
-				filter.setValue(CIVector(x: scaledScreenBounds.width * 2, y: 0), forKey: "inputPoint1")
+				filter.setValue(CIVector(x: end, y: 0), forKey: "inputPoint1")
 				filter.setValue(CIColor(red: 1, green: 1, blue: 1, alpha: 1), forKey: "inputColor1")
-				let transform = CGAffineTransform(translationX: scaledScreenBounds.width, y: 0)
-				return filter.outputImage?.transformed(by: transform)
+				let crop = CGRect(origin: CGPoint(x: start, y: 0), size: scaledScreenBounds.size)
+				return filter.outputImage?.cropped(to: crop)
 			}() else { return nil }
 			
 			guard let filter = CIFilter(name: "CIOverlayBlendMode") else { return nil }
@@ -217,14 +222,14 @@ class RadarEffect: NotchEffect {
 
 		guard let cursorImage = cursorImage else { return }
 		guard let baseImage = baseImage else { return }
-//		guard let baseImage = scannerImage else { return }
+		guard let scannerImage = scannerImage else { return }
 
 		let scale = parentLayer.contentsScale
 
 		// NOTE: The cursor has an origin in the upper-left and is measured in points, the image has an origin in the lower-left
 		// and is measured in pixels, and the point in layer has an origin in the upper-left that is measured in points.
 		// The image also has a different size than the layer (which anchors it to the top center). This complicates the compositing
-		// operation.
+		// operation for the base and cursor images.
 		
 		// get all the coordinates we're working with into (scaled) pixel values
 		let scaledCursorBounds = CGRect(origin: .zero, size: cursor.image.size * scale)
@@ -237,17 +242,26 @@ class RadarEffect: NotchEffect {
 		let transform = CGAffineTransform(translationX: xOffset, y: yOffset)
 		let transformImage = cursorImage.transformed(by: transform)
 
-		if let compositingFilter = CIFilter(name: "CISourceAtopCompositing") {
-			compositingFilter.setDefaults()
-			compositingFilter.setValue(transformImage, forKey: kCIInputImageKey)
-			compositingFilter.setValue(baseImage, forKey: kCIInputBackgroundImageKey)
-			
-			if let filteredImage = compositingFilter.outputImage?.cropped(to: baseImage.extent) {
-				if let filteredBitmap = context.createCGImage(filteredImage, from: baseImage.extent) {
-					CATransaction.withActionsDisabled {
-						screenLayer.contents = filteredBitmap
-					}
-				}
+		guard let screenBaseImage: CIImage = {
+			guard let filter = CIFilter(name: "CISourceAtopCompositing") else { return nil }
+			filter.setDefaults()
+			filter.setValue(transformImage, forKey: kCIInputImageKey)
+			filter.setValue(baseImage, forKey: kCIInputBackgroundImageKey)
+			return filter.outputImage?.cropped(to: baseImage.extent) // clip any extent changes caused by the cursor image
+		}() else { return }
+
+		guard let compositeImage: CIImage = {
+			guard let filter = CIFilter(name: "CISourceAtopCompositing") else { return nil }
+			filter.setDefaults()
+			filter.setValue(screenBaseImage, forKey: kCIInputImageKey)
+			filter.setValue(scannerImage, forKey: kCIInputBackgroundImageKey)
+			return filter.outputImage?.cropped(to: screenBaseImage.extent)
+		}() else { return }
+
+		if let filteredBitmap = context.createCGImage(screenBaseImage, from: screenBaseImage.extent) {
+//		if let filteredBitmap = context.createCGImage(scannerImage.cropped(to: screenBaseImage.extent), from: screenBaseImage.extent) {
+			CATransaction.withActionsDisabled {
+				screenLayer.contents = filteredBitmap
 			}
 		}
 	}
