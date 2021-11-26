@@ -226,24 +226,14 @@ class RadarEffect: NotchEffect {
 		// The image also has a different size than the layer (which anchors it to the top center). This complicates the compositing
 		// operation.
 		
-		
-		let cursorBounds = CGRect(origin: .zero, size: cursor.image.size) // in points
-		let hotSpot = cursor.hotSpot
-		let hotSpotOffset = CGPoint(x: cursorBounds.midX - hotSpot.x, y: cursorBounds.midY - hotSpot.y)
-
-//		let scaledParentBounds = CGRect(origin: .zero, size: parentLayer.bounds.size * scale)
-//		let scaledScreenBounds = CGRect(origin: .zero, size: screenLayer.bounds.size * scale)
-//		let heightOffset = scaledScreenBounds.height - scaledParentBounds.height
-//		let heightOffset:CGFloat = 76
-		let heightOffset:CGFloat = 0
-
-		let scaledPoint = CGPoint(x: (point.x - hotSpotOffset.x) * scale, y: (point.y - hotSpotOffset.y) * scale - heightOffset)
-		debugLog("point = \(point), scaledPoint = \(scaledPoint)")
+		// get all the coordinates we're working with into (scaled) pixel values
+		let scaledCursorBounds = CGRect(origin: .zero, size: cursor.image.size * scale)
+		let scaledHotSpotPoint = CGPoint(x: cursor.hotSpot.x * scale, y: cursor.hotSpot.y * scale)
+		let scaledPoint = CGPoint(x: point.x * scale, y: point.y * scale)
 
 		let baseExtent = baseImage.extent // in pixels
-		let xOffset = baseExtent.minX + scaledPoint.x
-		let yOffset = baseExtent.minY - scaledPoint.y
-//		let yOffset = baseExtent.minY + scaledPoint.y
+		let xOffset = baseExtent.minX + (scaledPoint.x - scaledHotSpotPoint.x)
+		let yOffset = baseExtent.maxY - ((scaledPoint.y - scaledHotSpotPoint.y) + scaledCursorBounds.height) // flipped origin
 		let transform = CGAffineTransform(translationX: xOffset, y: yOffset)
 		let transformImage = cursorImage.transformed(by: transform)
 
