@@ -16,7 +16,7 @@ class TrackingView: NSView {
 
 	override func draw(_ dirtyRect: NSRect) {
 		if Defaults.shouldDebugDrawing {
-			NSColor.systemOrange.set()
+			NSColor.systemGray.set()
 		}
 		else {
 			NSColor.clear.set()
