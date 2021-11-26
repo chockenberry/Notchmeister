@@ -39,7 +39,7 @@ class PlasmaEffect: NotchEffect {
 		cell.scaleRange = 1
 		cell.scaleSpeed = -0.55
 		cell.contentsScale = parentLayer.contentsScale
-		cell.yAcceleration = 500
+		cell.yAcceleration = 800
 		cell.emissionLongitude = CGFloat.pi / 2
 		cell.emissionRange = CGFloat.pi
 		cell.spin = 0
