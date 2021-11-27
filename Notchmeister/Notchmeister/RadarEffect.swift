@@ -9,14 +9,16 @@ import AppKit
 
 class RadarEffect: NotchEffect {
 	
-	let context = CIContext(options: nil)
+	let context = CIContext(options: [.outputColorSpace: NSNull(), .workingColorSpace: NSNull()])
+
+	var timer: Timer?
 
 	lazy var cursorImage: CIImage? = {
 		let cursor = NSCursor.current
 
 		guard let cursorBitmap = cursor.image.cgImage(forProposedRect: nil, context: nil, hints: nil) else { return nil }
 
-		return CIImage(cgImage: cursorBitmap).applyingFilter("CIColorInvert")
+		return CIImage(cgImage: cursorBitmap, options: [.colorSpace: NSNull()]).applyingFilter("CIColorInvert")
 	}()
 	
 	lazy var baseImage: CIImage? = {
@@ -28,9 +30,10 @@ class RadarEffect: NotchEffect {
 		let baseBounds = CGRect(origin: .zero, size: CGSize(width: baseBitmap.width, height: baseBitmap.height))
 
 		// crop the top middle of the base image to the screen size
-		let cropBounds = CGRect(origin: CGPoint(x: baseBounds.midX - scaledScreenBounds.midX, y: baseBounds.maxY - scaledScreenBounds.maxY), size: scaledScreenBounds.size)
+		let cropBounds = CGRect(origin: CGPoint(x: baseBounds.midX - scaledScreenBounds.midX, y: 0), size: scaledScreenBounds.size)
 
-		return CIImage(cgImage: baseBitmap).cropped(to: cropBounds)
+		guard let croppedBitmap = baseBitmap.cropping(to: cropBounds) else { return nil }
+		return CIImage(cgImage: croppedBitmap, options: [.colorSpace: NSNull()])
 	}()
 	
 	lazy var scannerImage: CIImage? = {
@@ -145,9 +148,30 @@ class RadarEffect: NotchEffect {
 
 	var wasUnderNotch = false
 	
+	var lastPoint = CGPoint.zero
+	var scannerTimeInterval: TimeInterval = 0
+	
+	private func startScanner() {
+		let sampleTimeInterval = 0.01
+		timer = Timer.scheduledTimer(withTimeInterval: sampleTimeInterval, repeats: true, block: { timer in
+			self.updateScreenLayer(at: self.lastPoint, timeInterval: self.scannerTimeInterval)
+			self.scannerTimeInterval += sampleTimeInterval
+			if self.scannerTimeInterval > 1 {
+				self.scannerTimeInterval = 0
+			}
+		})
+
+	}
+	
+	private func stopScanner() {
+		timer?.invalidate()
+		timer = nil
+	}
+	
 	override func mouseMoved(at point: CGPoint, underNotch: Bool) {
 		if underNotch {
-			updateScreenLayer(at: point)
+			lastPoint = point
+			//updateScreenLayer(at: point, timeInterval: 0.0)
 		}
 		else {
 			//updateImage(at: point) // DEBUG
@@ -155,13 +179,15 @@ class RadarEffect: NotchEffect {
 		}
 		
 		if underNotch != wasUnderNotch {
+			if underNotch {
+				stopScanner()
+				startScanner()
+			}
+
 			CATransaction.begin()
 			CATransaction.setCompletionBlock { [weak self] in
-				if underNotch {
-					//self?.startRadar()
-				}
-				else {
-					//self?.stopRadar()
+				if (!underNotch) {
+					self?.stopScanner()
 				}
 			}
 			
@@ -215,7 +241,7 @@ class RadarEffect: NotchEffect {
 	override func mouseExited(at point: CGPoint, underNotch: Bool) {
 	}
 
-	private func updateScreenLayer(at point: CGPoint) {
+	private func updateScreenLayer(at point: CGPoint, timeInterval: TimeInterval) {
 		guard let parentLayer = parentLayer else { return }
 
 		let cursor = NSCursor.current
@@ -239,8 +265,7 @@ class RadarEffect: NotchEffect {
 		let baseExtent = baseImage.extent // in pixels
 		let xOffset = baseExtent.minX + (scaledPoint.x - scaledHotSpotPoint.x)
 		let yOffset = baseExtent.maxY - ((scaledPoint.y - scaledHotSpotPoint.y) + scaledCursorBounds.height) // flipped origin
-		let transform = CGAffineTransform(translationX: xOffset, y: yOffset)
-		let transformImage = cursorImage.transformed(by: transform)
+		let transformImage = cursorImage.transformed(by: CGAffineTransform(translationX: xOffset, y: yOffset))
 
 		guard let screenBaseImage: CIImage = {
 			guard let filter = CIFilter(name: "CISourceAtopCompositing") else { return nil }
@@ -254,12 +279,13 @@ class RadarEffect: NotchEffect {
 			guard let filter = CIFilter(name: "CISourceAtopCompositing") else { return nil }
 			filter.setDefaults()
 			filter.setValue(screenBaseImage, forKey: kCIInputImageKey)
-			filter.setValue(scannerImage, forKey: kCIInputBackgroundImageKey)
+			let xOffset = timeInterval * screenBaseImage.extent.width - screenBaseImage.extent.width
+			filter.setValue(scannerImage.transformed(by:CGAffineTransform(translationX: xOffset, y: 0)), forKey: kCIInputBackgroundImageKey)
 			return filter.outputImage?.cropped(to: screenBaseImage.extent)
 		}() else { return }
 
-		if let filteredBitmap = context.createCGImage(screenBaseImage, from: screenBaseImage.extent) {
-//		if let filteredBitmap = context.createCGImage(scannerImage.cropped(to: screenBaseImage.extent), from: screenBaseImage.extent) {
+//		if let filteredBitmap = context.createCGImage(screenBaseImage, from: screenBaseImage.extent) {
+		if let filteredBitmap = context.createCGImage(compositeImage, from: screenBaseImage.extent) {
 			CATransaction.withActionsDisabled {
 				screenLayer.contents = filteredBitmap
 			}
