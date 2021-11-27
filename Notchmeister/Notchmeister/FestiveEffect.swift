@@ -274,42 +274,44 @@ class FestiveEffect: NotchEffect {
 
 	
 	private func startLights() {
-		patternIndex = 0
-		timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true, block: { timer in
-			let pattern = Self.patterns[self.patternIndex]
-			
-			var shift = pattern
-			for index in 0..<self.bulbCount {
-				let bulbLayer = self.bulbLayers[index]
-
-				let state = shift & 0b1000_0000
-				if index % 2 == 0 {
-					// purple
-					if state == 0b0 {
-						bulbLayer.contents = self.purpleOffImage
+		if timer == nil {
+			patternIndex = 0
+			timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true, block: { timer in
+				let pattern = Self.patterns[self.patternIndex]
+				
+				var shift = pattern
+				for index in 0..<self.bulbCount {
+					let bulbLayer = self.bulbLayers[index]
+					
+					let state = shift & 0b1000_0000
+					if index % 2 == 0 {
+						// purple
+						if state == 0b0 {
+							bulbLayer.contents = self.purpleOffImage
+						}
+						else {
+							bulbLayer.contents = self.purpleOnImage
+						}
 					}
 					else {
-						bulbLayer.contents = self.purpleOnImage
+						// blue
+						if state == 0b0 {
+							bulbLayer.contents = self.blueOffImage
+						}
+						else {
+							bulbLayer.contents = self.blueOnImage
+						}
 					}
-				}
-				else {
-					// blue
-					if state == 0b0 {
-						bulbLayer.contents = self.blueOffImage
-					}
-					else {
-						bulbLayer.contents = self.blueOnImage
-					}
+					
+					shift = shift << 1
 				}
 				
-				shift = shift << 1
-			}
-			
-			self.patternIndex += 1
-			if self.patternIndex >= Self.patterns.count {
-				self.patternIndex = 0
-			}
-		})
+				self.patternIndex += 1
+				if self.patternIndex >= Self.patterns.count {
+					self.patternIndex = 0
+				}
+			})
+		}
 	}
 
 	var lastPoint: CGPoint = .zero
