@@ -14,6 +14,7 @@ class RadarEffect: NotchEffect {
 	var timer: Timer?
 
 	lazy var cursorImage: CIImage? = {
+		debugLog("creating cursorImage...")
 		let cursor = NSCursor.current
 
 		guard let cursorBitmap = cursor.image.cgImage(forProposedRect: nil, context: nil, hints: nil) else { return nil }
@@ -22,6 +23,7 @@ class RadarEffect: NotchEffect {
 	}()
 	
 	lazy var baseImage: CIImage? = {
+		debugLog("creating baseImage...")
 		guard let parentLayer = parentLayer else { return nil }
 		guard let baseBitmap = NSImage(named: "xray")?.cgImage(forProposedRect: nil, context: nil, hints: nil) else { return nil }
 
@@ -37,6 +39,7 @@ class RadarEffect: NotchEffect {
 	}()
 	
 	lazy var scannerImage: CIImage? = {
+		debugLog("creating scannerImage...")
 		guard let parentLayer = parentLayer else { return nil }
 
 		let scale = parentLayer.contentsScale
@@ -144,6 +147,7 @@ class RadarEffect: NotchEffect {
 	}
 	
 	override func mouseEntered(at point: CGPoint, underNotch: Bool) {
+		scannerTimeInterval = 0
 	}
 
 	var wasUnderNotch = false
@@ -152,20 +156,27 @@ class RadarEffect: NotchEffect {
 	var scannerTimeInterval: TimeInterval = 0
 	
 	private func startScanner() {
-		let sampleTimeInterval = 0.01
-		timer = Timer.scheduledTimer(withTimeInterval: sampleTimeInterval, repeats: true, block: { timer in
-			self.updateScreenLayer(at: self.lastPoint, timeInterval: self.scannerTimeInterval)
-			self.scannerTimeInterval += sampleTimeInterval
-			if self.scannerTimeInterval > 1 {
-				self.scannerTimeInterval = 0
-			}
-		})
-
+		if timer == nil {
+			debugLog("starting scanner timer...")
+			let sampleTimeDuration = 0.5
+			let sampleTimeInterval = 0.01
+			let sampleTimeStep = sampleTimeInterval / sampleTimeDuration
+			timer = Timer.scheduledTimer(withTimeInterval: sampleTimeInterval, repeats: true, block: { timer in
+				self.updateScreenLayer(at: self.lastPoint, timeInterval: self.scannerTimeInterval)
+				self.scannerTimeInterval += sampleTimeStep
+				if self.scannerTimeInterval > 1 {
+					self.scannerTimeInterval = 0
+				}
+			})
+		}
 	}
 	
 	private func stopScanner() {
-		timer?.invalidate()
-		timer = nil
+		if !wasUnderNotch {
+			debugLog("stopping scanner timer...")
+			timer?.invalidate()
+			timer = nil
+		}
 	}
 	
 	override func mouseMoved(at point: CGPoint, underNotch: Bool) {
@@ -179,6 +190,7 @@ class RadarEffect: NotchEffect {
 		}
 		
 		if underNotch != wasUnderNotch {
+			debugLog("underNotch = \(underNotch), wasUnderNotch() = \(wasUnderNotch)")
 			if underNotch {
 				stopScanner()
 				startScanner()
@@ -239,6 +251,8 @@ class RadarEffect: NotchEffect {
 	}
 
 	override func mouseExited(at point: CGPoint, underNotch: Bool) {
+		wasUnderNotch = false
+		//stopScanner()
 	}
 
 	private func updateScreenLayer(at point: CGPoint, timeInterval: TimeInterval) {
