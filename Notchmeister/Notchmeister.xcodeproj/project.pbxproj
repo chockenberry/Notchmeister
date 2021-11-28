@@ -6,6 +6,20 @@
 	objectVersion = 55;
 	objects = {
 
+/* Begin PBXAggregateTarget section */
+		44E42D6227531BE400BDD3DC /* Prepare Release */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 44E42D6527531BE400BDD3DC /* Build configuration list for PBXAggregateTarget "Prepare Release" */;
+			buildPhases = (
+				44E42D6627531BED00BDD3DC /* Increment Build Number */,
+			);
+			dependencies = (
+			);
+			name = "Prepare Release";
+			productName = "Prepare Release";
+		};
+/* End PBXAggregateTarget section */
+
 /* Begin PBXBuildFile section */
 		011C15B6272E1635003422E5 /* Defaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011C15B5272E1635003422E5 /* Defaults.swift */; };
 		011C15B8272F36D3003422E5 /* NSBezierPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011C15B7272F36D3003422E5 /* NSBezierPath.swift */; };
@@ -29,6 +43,16 @@
 		44A817B627446C5200731822 /* FestiveEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44A817B527446C5200731822 /* FestiveEffect.swift */; };
 		44E32191274C528200358040 /* RadarEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44E32190274C528200358040 /* RadarEffect.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		44E42D6727531CCC00BDD3DC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 441C5AA6272C9FD10094507E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 44E42D6227531BE400BDD3DC;
+			remoteInfo = "Prepare Release";
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		011C15B5272E1635003422E5 /* Defaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Defaults.swift; sourceTree = "<group>"; };
@@ -151,6 +175,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				44E42D6827531CCC00BDD3DC /* PBXTargetDependency */,
 			);
 			name = Notchmeister;
 			productName = Notchmeister;
@@ -170,6 +195,9 @@
 					441C5AAD272C9FD10094507E = {
 						CreatedOnToolsVersion = 13.1;
 					};
+					44E42D6227531BE400BDD3DC = {
+						CreatedOnToolsVersion = 13.1;
+					};
 				};
 			};
 			buildConfigurationList = 441C5AA9272C9FD10094507E /* Build configuration list for PBXProject "Notchmeister" */;
@@ -186,6 +214,7 @@
 			projectRoot = "";
 			targets = (
 				441C5AAD272C9FD10094507E /* Notchmeister */,
+				44E42D6227531BE400BDD3DC /* Prepare Release */,
 			);
 		};
 /* End PBXProject section */
@@ -204,6 +233,25 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		44E42D6627531BED00BDD3DC /* Increment Build Number */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Increment Build Number";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "INFO_PLIST=\"$PROJECT_DIR/Notchmeister/Info.plist\"\n\nCURRENT_VERSION=$(/usr/libexec/PlistBuddy -c \"Print :CFBundleShortVersionString\" \"$INFO_PLIST\")\nCURRENT_BUILD=$(/usr/libexec/PlistBuddy -c \"Print :CFBundleVersion\" \"$INFO_PLIST\")\n\nif [ \"$CONFIGURATION\" == \"Release\" ]; then\n    NEW_BUILD=$(($CURRENT_BUILD + 1))\n\n    echo \"Changing build number from $CURRENT_BUILD to $NEW_BUILD...\"\n    /usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $NEW_BUILD\" \"$INFO_PLIST\"\nelse\n    echo \"Development build number is $CURRENT_BUILD...\"\nfi\n\n";
+			showEnvVarsInLog = 0;
+		};
 		51F8A860272CCB9B00D349F1 /* Run VerifyNoBS */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -252,6 +300,14 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		44E42D6827531CCC00BDD3DC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 44E42D6227531BE400BDD3DC /* Prepare Release */;
+			targetProxy = 44E42D6727531CCC00BDD3DC /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin PBXVariantGroup section */
 		441C5AB7272C9FD30094507E /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
@@ -292,6 +348,18 @@
 			};
 			name = Release;
 		};
+		44E42D6327531BE400BDD3DC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		44E42D6427531BE400BDD3DC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -309,6 +377,15 @@
 			buildConfigurations = (
 				441C5ABE272C9FD30094507E /* Debug */,
 				441C5ABF272C9FD30094507E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		44E42D6527531BE400BDD3DC /* Build configuration list for PBXAggregateTarget "Prepare Release" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				44E42D6327531BE400BDD3DC /* Debug */,
+				44E42D6427531BE400BDD3DC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
