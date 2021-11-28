@@ -45,28 +45,30 @@ class RadarEffect: NotchEffect {
 		let scale = parentLayer.contentsScale
 		let scaledScreenBounds = CGRect(origin: .zero, size: screenLayer.bounds.size * scale)
 
-		guard let gradientImage: CIImage = {
+		guard let wideGradientImage: CIImage = {
 			guard let leftGradientImage: CIImage = {
 				guard let filter = CIFilter(name: "CISmoothLinearGradient") else { return nil }
-				let start = scaledScreenBounds.minX
+				let origin = scaledScreenBounds.minX
+				let start = origin
 				let end = start + scaledScreenBounds.maxX
 				filter.setValue(CIVector(x: start, y: 0), forKey: "inputPoint0")
 				filter.setValue(CIColor(red: 0, green: 0, blue: 0, alpha: 0), forKey: "inputColor0")
 				filter.setValue(CIVector(x: end, y: 0), forKey: "inputPoint1")
-				filter.setValue(CIColor(red: 1, green: 1, blue: 1, alpha: 1), forKey: "inputColor1")
-				let crop = CGRect(origin: CGPoint(x: start, y: 0), size: scaledScreenBounds.size)
+				filter.setValue(CIColor(red: 1, green: 1, blue: 1, alpha: 0.5), forKey: "inputColor1")
+				let crop = CGRect(origin: CGPoint(x: origin, y: 0), size: scaledScreenBounds.size)
 				return filter.outputImage?.cropped(to: crop)
 			}() else { return nil }
 
 			guard let rightGradientImage: CIImage = {
 				guard let filter = CIFilter(name: "CISmoothLinearGradient") else { return nil }
-				let start = scaledScreenBounds.maxX
+				let origin = scaledScreenBounds.maxX
+				let start = origin
 				let end = start + scaledScreenBounds.maxX
 				filter.setValue(CIVector(x: start, y: 0), forKey: "inputPoint0")
 				filter.setValue(CIColor(red: 0, green: 0, blue: 0, alpha: 0), forKey: "inputColor0")
 				filter.setValue(CIVector(x: end, y: 0), forKey: "inputPoint1")
-				filter.setValue(CIColor(red: 1, green: 1, blue: 1, alpha: 1), forKey: "inputColor1")
-				let crop = CGRect(origin: CGPoint(x: start, y: 0), size: scaledScreenBounds.size)
+				filter.setValue(CIColor(red: 1, green: 1, blue: 1, alpha: 0.5), forKey: "inputColor1")
+				let crop = CGRect(origin: CGPoint(x: origin, y: 0), size: scaledScreenBounds.size)
 				return filter.outputImage?.cropped(to: crop)
 			}() else { return nil }
 			
@@ -76,9 +78,50 @@ class RadarEffect: NotchEffect {
 			filter.setValue(rightGradientImage, forKey: kCIInputBackgroundImageKey)
 			return filter.outputImage
 		}() else { return nil }
-		
+
+		guard let narrowGradientImage: CIImage = {
+			let narrowWidth: CGFloat = 20 * scale
+			guard let leftGradientImage: CIImage = {
+				guard let filter = CIFilter(name: "CISmoothLinearGradient") else { return nil }
+				let origin = scaledScreenBounds.minX
+				let start = origin + (scaledScreenBounds.width - narrowWidth)
+				let end = start + narrowWidth
+				filter.setValue(CIVector(x: start, y: 0), forKey: "inputPoint0")
+				filter.setValue(CIColor(red: 0, green: 0, blue: 0, alpha: 0), forKey: "inputColor0")
+				filter.setValue(CIVector(x: end, y: 0), forKey: "inputPoint1")
+				filter.setValue(CIColor(red: 1, green: 1, blue: 1, alpha: 0.5), forKey: "inputColor1")
+				let crop = CGRect(origin: CGPoint(x: origin, y: 0), size: scaledScreenBounds.size)
+				return filter.outputImage?.cropped(to: crop)
+			}() else { return nil }
+
+			guard let rightGradientImage: CIImage = {
+				guard let filter = CIFilter(name: "CISmoothLinearGradient") else { return nil }
+				let origin = scaledScreenBounds.maxX
+				let start = origin + (scaledScreenBounds.width - narrowWidth)
+				let end = start + narrowWidth
+				filter.setValue(CIVector(x: start, y: 0), forKey: "inputPoint0")
+				filter.setValue(CIColor(red: 0, green: 0, blue: 0, alpha: 0), forKey: "inputColor0")
+				filter.setValue(CIVector(x: end, y: 0), forKey: "inputPoint1")
+				filter.setValue(CIColor(red: 1, green: 1, blue: 1, alpha: 0.5), forKey: "inputColor1")
+				let crop = CGRect(origin: CGPoint(x: origin, y: 0), size: scaledScreenBounds.size)
+				return filter.outputImage?.cropped(to: crop)
+			}() else { return nil }
+			
+			guard let filter = CIFilter(name: "CIOverlayBlendMode") else { return nil }
+			filter.setDefaults()
+			filter.setValue(leftGradientImage, forKey: kCIInputImageKey)
+			filter.setValue(rightGradientImage, forKey: kCIInputBackgroundImageKey)
+			return filter.outputImage
+		}() else { return nil }
+
+		guard let filter = CIFilter(name: "CILinearDodgeBlendMode") else { return nil }
+		filter.setDefaults()
+		filter.setValue(wideGradientImage, forKey: kCIInputImageKey)
+		filter.setValue(narrowGradientImage, forKey: kCIInputBackgroundImageKey)
+
+		guard let filteredImage = filter.outputImage else { return nil }
 		let scaledCropBounds = CGRect(origin: .zero, size: CGSize(width: scaledScreenBounds.width * 2, height: scaledScreenBounds.height))
-		return gradientImage.cropped(to: scaledCropBounds)
+		return filteredImage.cropped(to: scaledCropBounds)
 	}()
 	
 	var radarLayer: CATransformLayer
@@ -121,8 +164,8 @@ class RadarEffect: NotchEffect {
 			screenLayer.position = CGPoint(x: screenLayer.bounds.midX, y: screenLayer.bounds.midY)
 			screenLayer.backgroundColor = NSColor.black.cgColor
 			screenLayer.cornerRadius = CGFloat.notchLowerRadius
-			screenLayer.opacity = 0.5
-			//screenLayer.opacity = 1 // DEBUG
+			//screenLayer.opacity = 0.75
+			screenLayer.opacity = 1 // DEBUG
 			
 			//var proposedRect: CGRect? = nil
 			screenLayer.contents = image.cgImage(forProposedRect: nil, context: nil, hints: nil)
@@ -158,8 +201,8 @@ class RadarEffect: NotchEffect {
 	private func startScanner() {
 		if timer == nil {
 			debugLog("starting scanner timer...")
-			let sampleTimeDuration = 0.5
-			let sampleTimeInterval = 0.01
+			let sampleTimeDuration = 0.75		// time for scanner to go from one edge to another
+			let sampleTimeInterval = 1.0 / 30.0 // frames per second
 			let sampleTimeStep = sampleTimeInterval / sampleTimeDuration
 			timer = Timer.scheduledTimer(withTimeInterval: sampleTimeInterval, repeats: true, block: { timer in
 				self.updateScreenLayer(at: self.lastPoint, timeInterval: self.scannerTimeInterval)
@@ -294,12 +337,24 @@ class RadarEffect: NotchEffect {
 			filter.setDefaults()
 			filter.setValue(screenBaseImage, forKey: kCIInputImageKey)
 			let xOffset = timeInterval * screenBaseImage.extent.width - screenBaseImage.extent.width
+			//let xOffset = -150.0
 			filter.setValue(scannerImage.transformed(by:CGAffineTransform(translationX: xOffset, y: 0)), forKey: kCIInputBackgroundImageKey)
 			return filter.outputImage?.cropped(to: screenBaseImage.extent)
 		}() else { return }
 
-//		if let filteredBitmap = context.createCGImage(screenBaseImage, from: screenBaseImage.extent) {
-		if let filteredBitmap = context.createCGImage(compositeImage, from: screenBaseImage.extent) {
+		guard let falseColorImage: CIImage = {
+			guard let filter = CIFilter(name: "CIFalseColor") else { return nil }
+			guard let lightColor = NSColor(named: "xrayEffect-light") else { return nil }
+			guard let darkColor = NSColor(named: "xrayEffect-dark") else { return nil }
+			filter.setDefaults()
+			filter.setValue(compositeImage, forKey: kCIInputImageKey)
+			filter.setValue(CIColor.init(cgColor:darkColor.cgColor), forKey: "inputColor0")
+			filter.setValue(CIColor.init(cgColor:lightColor.cgColor), forKey: "inputColor1")
+			return filter.outputImage?.cropped(to: screenBaseImage.extent)
+		}() else { return }
+
+//		if let filteredBitmap = context.createCGImage(scannerImage, from: scannerImage.extent) {
+		if let filteredBitmap = context.createCGImage(falseColorImage, from: screenBaseImage.extent) {
 			CATransaction.withActionsDisabled {
 				screenLayer.contents = filteredBitmap
 			}
