@@ -685,7 +685,7 @@
         <scene sceneID="R2V-B0-nI4">
             <objects>
                 <windowController id="B8D-0N-5wS" sceneMemberID="viewController">
-                    <window key="window" title="Notchmeister™" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="_Notchmeister" animationBehavior="default" id="IQv-IB-iLA">
+                    <window key="window" title="Notchmeister" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="_Notchmeister" animationBehavior="default" id="IQv-IB-iLA">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES"/>
                         <windowCollectionBehavior key="collectionBehavior" canJoinAllSpaces="YES"/>
                         <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
@@ -719,8 +719,48 @@
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
+                            <stackView distribution="fill" orientation="horizontal" alignment="top" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PPi-Xy-Y4k">
+                                <rect key="frame" x="180" y="171" width="120" height="20"/>
+                                <subviews>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="pwF-E2-nS0">
+                                        <rect key="frame" x="-2" y="4" width="44" height="16"/>
+                                        <textFieldCell key="cell" lineBreakMode="clipping" title="Effect:" id="vQt-if-c95">
+                                            <font key="font" metaFont="system"/>
+                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="2TI-ZC-i2V">
+                                        <rect key="frame" x="41" y="-4" width="83" height="25"/>
+                                        <popUpButtonCell key="cell" type="push" title="Glow" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="UuA-aU-a9p" id="gw7-Ab-WA0">
+                                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="menu"/>
+                                            <menu key="menu" id="3NN-jH-lPd">
+                                                <items>
+                                                    <menuItem title="Glow" state="on" id="UuA-aU-a9p"/>
+                                                    <menuItem title="Cylon" tag="1" id="IPc-kO-S4N"/>
+                                                    <menuItem title="Plasma" tag="2" id="kLF-aV-OO3"/>
+                                                    <menuItem title="Festive" tag="3" id="kXd-lN-dfU"/>
+                                                    <menuItem title="Radar" tag="4" id="jjJ-vz-Urr"/>
+                                                </items>
+                                            </menu>
+                                        </popUpButtonCell>
+                                        <connections>
+                                            <action selector="selectedEffectValueChanged:" target="XfG-lQ-9wD" id="GuE-yn-Kjf"/>
+                                        </connections>
+                                    </popUpButton>
+                                </subviews>
+                                <visibilityPriorities>
+                                    <integer value="1000"/>
+                                    <integer value="1000"/>
+                                </visibilityPriorities>
+                                <customSpacing>
+                                    <real value="3.4028234663852886e+38"/>
+                                    <real value="3.4028234663852886e+38"/>
+                                </customSpacing>
+                            </stackView>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Qh7-pz-oeU">
-                                <rect key="frame" x="204" y="176" width="161" height="18"/>
+                                <rect key="frame" x="188" y="114" width="161" height="18"/>
                                 <buttonCell key="cell" type="check" title="Enable debug drawing" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="dmw-rr-miI">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -730,8 +770,8 @@
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="GpJ-jA-PUB">
-                                <rect key="frame" x="204" y="154" width="245" height="18"/>
-                                <buttonCell key="cell" type="check" title="Counterfeit notch for the notch-less" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="9af-4Q-E6A">
+                                <rect key="frame" x="188" y="92" width="204" height="18"/>
+                                <buttonCell key="cell" type="check" title="Fake notch for the notch-less" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="9af-4Q-E6A">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
@@ -739,9 +779,8 @@
                                     <action selector="fakeNotchValueChanged:" target="XfG-lQ-9wD" id="o7F-gL-vB3"/>
                                 </connections>
                             </button>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rKO-N3-Lc5">
-                                <rect key="frame" x="204" y="132" width="131" height="18"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="rKO-N3-Lc5">
+                                <rect key="frame" x="188" y="70" width="131" height="18"/>
                                 <buttonCell key="cell" type="check" title="Outline the notch" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="ohU-Sq-GOo">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -751,16 +790,15 @@
                                 </connections>
                             </button>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="EFD-t6-idF">
-                                <rect key="frame" x="112" y="177" width="88" height="16"/>
+                                <rect key="frame" x="96" y="115" width="88" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Development:" id="9Py-Sc-DOI">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="n8l-IV-LaP">
-                                <rect key="frame" x="204" y="110" width="105" height="18"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="n8l-IV-LaP">
+                                <rect key="frame" x="188" y="48" width="105" height="18"/>
                                 <buttonCell key="cell" type="check" title="Fill the notch" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="lhG-hn-ete">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -769,39 +807,22 @@
                                     <action selector="fillNotchValueChanged:" target="XfG-lQ-9wD" id="ZDg-eE-ytM"/>
                                 </connections>
                             </button>
-                            <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2TI-ZC-i2V">
-                                <rect key="frame" x="203" y="67" width="127" height="25"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <popUpButtonCell key="cell" type="push" title="Glow" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="UuA-aU-a9p" id="gw7-Ab-WA0">
-                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="menu"/>
-                                    <menu key="menu" id="3NN-jH-lPd">
-                                        <items>
-                                            <menuItem title="Glow" state="on" id="UuA-aU-a9p"/>
-                                            <menuItem title="Cylon" tag="1" id="IPc-kO-S4N"/>
-                                            <menuItem title="Plasma" tag="2" id="kLF-aV-OO3"/>
-                                            <menuItem title="Festive" tag="3" id="kXd-lN-dfU"/>
-                                            <menuItem title="X-ray" tag="4" id="jjJ-vz-Urr"/>
-                                        </items>
-                                    </menu>
-                                </popUpButtonCell>
-                                <connections>
-                                    <action selector="selectedEffectValueChanged:" target="XfG-lQ-9wD" id="GuE-yn-Kjf"/>
-                                </connections>
-                            </popUpButton>
                         </subviews>
                         <constraints>
-                            <constraint firstItem="Qh7-pz-oeU" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="EFD-t6-idF" secondAttribute="trailing" constant="8" symbolic="YES" id="BGl-5f-rW4"/>
-                            <constraint firstItem="EFD-t6-idF" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="114" id="GrS-dR-oYY"/>
+                            <constraint firstItem="n8l-IV-LaP" firstAttribute="leading" secondItem="rKO-N3-Lc5" secondAttribute="leading" id="4xI-Rq-pmI"/>
+                            <constraint firstItem="rKO-N3-Lc5" firstAttribute="top" secondItem="GpJ-jA-PUB" secondAttribute="bottom" constant="6" symbolic="YES" id="9Jw-lq-hnU"/>
+                            <constraint firstItem="rKO-N3-Lc5" firstAttribute="leading" secondItem="GpJ-jA-PUB" secondAttribute="leading" id="Dbd-mF-cZL"/>
+                            <constraint firstItem="Qh7-pz-oeU" firstAttribute="top" secondItem="PPi-Xy-Y4k" secondAttribute="bottom" constant="40" id="Emw-RW-yvc"/>
+                            <constraint firstItem="GpJ-jA-PUB" firstAttribute="leading" secondItem="Qh7-pz-oeU" secondAttribute="leading" id="Jfa-Dy-Nua"/>
+                            <constraint firstItem="PPi-Xy-Y4k" firstAttribute="top" secondItem="DQb-Wa-YfR" secondAttribute="bottom" constant="40" id="L6v-GG-jEZ"/>
                             <constraint firstItem="Qh7-pz-oeU" firstAttribute="baseline" secondItem="EFD-t6-idF" secondAttribute="baseline" id="PK6-5Q-MG8"/>
                             <constraint firstItem="DQb-Wa-YfR" firstAttribute="centerX" secondItem="m2S-Jp-Qdl" secondAttribute="centerX" id="Rt6-GL-ImR"/>
-                            <constraint firstItem="Qh7-pz-oeU" firstAttribute="top" secondItem="DQb-Wa-YfR" secondAttribute="bottom" constant="38" id="Xld-7C-Vxy"/>
-                            <constraint firstAttribute="trailing" secondItem="Qh7-pz-oeU" secondAttribute="trailing" constant="115" id="enO-TC-Ooi"/>
+                            <constraint firstItem="Qh7-pz-oeU" firstAttribute="leading" secondItem="EFD-t6-idF" secondAttribute="trailing" constant="8" symbolic="YES" id="WS3-Wd-OmT"/>
+                            <constraint firstItem="n8l-IV-LaP" firstAttribute="top" secondItem="rKO-N3-Lc5" secondAttribute="bottom" constant="6" symbolic="YES" id="a5d-nC-AK6"/>
+                            <constraint firstItem="PPi-Xy-Y4k" firstAttribute="centerX" secondItem="DQb-Wa-YfR" secondAttribute="centerX" id="agV-c3-SFn"/>
                             <constraint firstItem="GpJ-jA-PUB" firstAttribute="top" secondItem="Qh7-pz-oeU" secondAttribute="bottom" constant="6" symbolic="YES" id="iUx-pB-Dih"/>
-                            <constraint firstAttribute="trailing" secondItem="GpJ-jA-PUB" secondAttribute="trailing" constant="31" id="jfJ-hE-jLu"/>
                             <constraint firstItem="DQb-Wa-YfR" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="20" symbolic="YES" id="obc-h5-hEI"/>
-                            <constraint firstItem="Qh7-pz-oeU" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="206" id="vFP-ga-oth"/>
-                            <constraint firstItem="Qh7-pz-oeU" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="GpJ-jA-PUB" secondAttribute="leading" id="wbX-Da-qu3"/>
+                            <constraint firstItem="Qh7-pz-oeU" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="190" id="vFP-ga-oth"/>
                         </constraints>
                     </view>
                     <connections>

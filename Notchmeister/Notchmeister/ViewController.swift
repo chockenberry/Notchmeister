@@ -27,6 +27,8 @@ class ViewController: NSViewController {
     }
     
     private func configureForDefaults() {
+		Defaults.register()
+		
         debugDrawingCheckbox.state = Defaults.shouldDebugDrawing ? .on : .off
         fakeNotchCheckbox.state = Defaults.shouldFakeNotch ? .on : .off
         outlineNotchCheckbox.state = Defaults.shouldDrawNotchOutline ? .on : .off

@@ -19,14 +19,20 @@ enum Defaults : String
     case notchFillEnabled
 	case effectSelection
 
-    static func register() {
-        UserDefaults.standard.register(defaults: [
-            Defaults.debugDrawingEnabled.rawValue: false,
-            Defaults.fakeNotchEnabled.rawValue: false,
-            Defaults.notchOutlineEnabled.rawValue : false,
-            Defaults.notchFillEnabled.rawValue: false,
-        ])
-    }
+	static var registered = false
+	
+	static func register() {
+		if !registered	 {
+			UserDefaults.standard.register(defaults: [
+				Defaults.debugDrawingEnabled.rawValue: false,
+				Defaults.fakeNotchEnabled.rawValue: true,
+				Defaults.notchOutlineEnabled.rawValue : false,
+				Defaults.notchFillEnabled.rawValue: true,
+				Defaults.effectSelection.rawValue: 3,
+			])
+			registered = true
+		}
+	}
     
     static var shouldDebugDrawing: Bool {
         get { UserDefaults.standard.bool(forKey: Defaults.debugDrawingEnabled.rawValue) }
