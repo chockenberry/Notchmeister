@@ -9,8 +9,6 @@ import AppKit
 
 class RadarEffect: NotchEffect {
 	
-	let context = CIContext(options: [.outputColorSpace: NSNull(), .workingColorSpace: NSNull()])
-
 	var timer: Timer?
 
 	lazy var cursorImage: CIImage? = {
@@ -143,14 +141,30 @@ class RadarEffect: NotchEffect {
 	}()
 
 	var radarLayer: CATransformLayer
+#if false
+	var screenLayer: CAMetalLayer
+#else
 	var screenLayer: CALayer
+#endif
 	var frameLayer: CALayer
+
+	var context: CIContext
 
 	required init(with parentLayer: CALayer) {
 		self.radarLayer = CATransformLayer()
-		self.screenLayer = CALayer()
 		self.frameLayer = CALayer()
-
+#if false
+		self.screenLayer = CAMetalLayer()
+		let device = screenLayer.preferredDevice!
+		screenLayer.framebufferOnly = false
+		screenLayer.device = device
+//		self.context = CIContext(mtlDevice: device, options: [.outputColorSpace: NSNull(), .workingColorSpace: NSNull()])
+		self.context = CIContext(mtlDevice: device)
+#else
+		self.screenLayer = CALayer()
+		self.context = CIContext(options: [.outputColorSpace: NSNull(), .workingColorSpace: NSNull()])
+#endif
+		
 		super.init(with: parentLayer)
 
 		configureSublayers()
@@ -163,7 +177,7 @@ class RadarEffect: NotchEffect {
 		
 		do { // the layer that will present sublayers with a perspective transform
 			radarLayer.bounds = bounds
-			radarLayer.contentsScale = parentLayer.contentsScale
+			//radarLayer.contentsScale = parentLayer.contentsScale
 			radarLayer.position = CGPoint(x: bounds.midX, y: bounds.maxY)
 			radarLayer.anchorPoint = CGPoint(x: 0.5, y: 0)
 			
@@ -176,7 +190,7 @@ class RadarEffect: NotchEffect {
 			screenLayer.bounds = radarLayer.bounds
 			screenLayer.masksToBounds = true
 			//screenLayer.masksToBounds = false // DEBUG
-			screenLayer.contentsScale = radarLayer.contentsScale
+			screenLayer.contentsScale = parentLayer.contentsScale
 			screenLayer.contentsGravity = .bottom // which is really the top
 			//screenLayer.contentsGravity = .resizeAspect // DEBUG
 			screenLayer.position = CGPoint(x: screenLayer.bounds.midX, y: screenLayer.bounds.midY)
@@ -196,7 +210,7 @@ class RadarEffect: NotchEffect {
 			frameLayer.borderColor = NSColor(named: "radarEffect-frame")?.cgColor
 			frameLayer.cornerRadius = CGFloat.notchLowerRadius
 			frameLayer.masksToBounds = true
-			frameLayer.contentsScale = radarLayer.contentsScale
+			frameLayer.contentsScale = parentLayer.contentsScale
 			frameLayer.position = .zero
 			frameLayer.anchorPoint = .zero
 		}
@@ -396,7 +410,19 @@ class RadarEffect: NotchEffect {
 			
 			return filter.outputImage?.cropped(to: screenImage.extent)
 		}() else { return }
+
+#if false
+		guard let device = screenLayer.device else { return }
+		guard let drawable = screenLayer.nextDrawable() else { return }
+		guard let commandQueue = device.makeCommandQueue() else { return }
+		guard let commandBuffer = commandQueue.makeCommandBuffer() else { return }
+		let renderDestination = CIRenderDestination(mtlTexture: drawable.texture, commandBuffer: nil)
 		
+		try? context.prepareRender(colorMapImage, from: screenImage.extent, to: renderDestination, at: .zero)
+		_ = try? context.startTask(toRender: colorMapImage, to: renderDestination)
+		commandBuffer.present(drawable)
+		commandBuffer.commit()
+#else
 //		if let filteredBitmap = context.createCGImage(scannerImage, from: scannerImage.extent) {
 		if let filteredBitmap = context.createCGImage(colorMapImage, from: screenImage.extent) {
 //		if let filteredBitmap = context.createCGImage(falseColorImage, from: screenImage.extent) {
@@ -404,6 +430,7 @@ class RadarEffect: NotchEffect {
 				screenLayer.contents = filteredBitmap
 			}
 		}
+#endif
 	}
 	
 }
