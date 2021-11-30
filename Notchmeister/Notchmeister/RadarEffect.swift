@@ -11,13 +11,20 @@ class RadarEffect: NotchEffect {
 	
 	var timer: Timer?
 
+	let XRAY_MODE = false
+	
 	lazy var cursorImage: CIImage? = {
 		debugLog("creating cursorImage...")
 		let cursor = NSCursor.current
 
 		guard let cursorBitmap = cursor.image.cgImage(forProposedRect: nil, context: nil, hints: nil) else { return nil }
-
-		return CIImage(cgImage: cursorBitmap, options: [.colorSpace: NSNull()]).applyingFilter("CIColorInvert")
+		
+		if XRAY_MODE {
+			return CIImage(cgImage: cursorBitmap, options: [.colorSpace: NSNull()]).applyingFilter("CIColorInvert")
+		}
+		else {
+			return CIImage(cgImage: cursorBitmap, options: [.colorSpace: NSNull()]).applyingFilter("CIColorInvert")
+		}
 	}()
 	
 	lazy var baseImage: CIImage? = {
@@ -34,7 +41,13 @@ class RadarEffect: NotchEffect {
 		let cropBounds = CGRect(origin: CGPoint(x: baseBounds.midX - scaledScreenBounds.midX, y: 0), size: scaledScreenBounds.size)
 
 		guard let croppedBitmap = baseBitmap.cropping(to: cropBounds) else { return nil }
-		return CIImage(cgImage: croppedBitmap, options: [.colorSpace: NSNull()])
+		let croppedImage = CIImage(cgImage: croppedBitmap, options: [.colorSpace: NSNull()])
+		if XRAY_MODE {
+			return croppedImage.applyingFilter("CIColorControls", parameters: [kCIInputBrightnessKey: -0.25, kCIInputContrastKey: 0.75])
+		}
+		else {
+			return croppedImage.applyingFilter("CIColorControls", parameters: [kCIInputBrightnessKey: -0.15, kCIInputContrastKey: 0.75])
+		}
 	}()
 	
 	lazy var scannerImage: CIImage? = {
@@ -196,8 +209,12 @@ class RadarEffect: NotchEffect {
 			screenLayer.position = CGPoint(x: screenLayer.bounds.midX, y: screenLayer.bounds.midY)
 			screenLayer.backgroundColor = NSColor.black.cgColor
 			screenLayer.cornerRadius = CGFloat.notchLowerRadius
-			//screenLayer.opacity = 0.75
-			screenLayer.opacity = 1
+			if XRAY_MODE {
+				screenLayer.opacity = 1
+			}
+			else {
+				screenLayer.opacity = 1
+			}
 			
 			//var proposedRect: CGRect? = nil
 			//screenLayer.contents = image.cgImage(forProposedRect: nil, context: nil, hints: nil)
@@ -377,6 +394,7 @@ class RadarEffect: NotchEffect {
 			return filter.outputImage?.cropped(to: screenImage.extent)
 		}() else { return }
 
+		/*
 		guard let screenScannerSlitImage: CIImage = {
 			guard let filter = CIFilter(name: "CILinearDodgeBlendMode") else { return nil }
 			filter.setDefaults()
@@ -388,13 +406,14 @@ class RadarEffect: NotchEffect {
 
 			return filter.outputImage?.cropped(to: screenImage.extent)
 		}() else { return }
+		*/
 		
 		guard let falseColorImage: CIImage = {
 			guard let filter = CIFilter(name: "CIFalseColor") else { return nil }
 			guard let lightColor = NSColor(named: "xrayEffect-light") else { return nil }
 			guard let darkColor = NSColor(named: "xrayEffect-dark") else { return nil }
 			filter.setDefaults()
-			filter.setValue(screenScannerSlitImage, forKey: kCIInputImageKey)
+			filter.setValue(screenScannerImage, forKey: kCIInputImageKey)
 			filter.setValue(CIColor.init(cgColor:darkColor.cgColor), forKey: "inputColor0")
 			filter.setValue(CIColor.init(cgColor:lightColor.cgColor), forKey: "inputColor1")
 			
@@ -405,8 +424,24 @@ class RadarEffect: NotchEffect {
 			guard let filter = CIFilter(name: "CIColorMap") else { return nil }
 			guard let colorMapImage = colorMapImage else { return nil }
 			filter.setDefaults()
-			filter.setValue(screenScannerSlitImage, forKey: kCIInputImageKey)
+			filter.setValue(screenScannerImage, forKey: kCIInputImageKey)
 			filter.setValue(colorMapImage, forKey: kCIInputGradientImageKey)
+			
+			return filter.outputImage?.cropped(to: screenImage.extent)
+		}() else { return }
+
+		guard let screenScannerSlitImage: CIImage = {
+			guard let filter = CIFilter(name: "CIScreenBlendMode") else { return nil }
+			filter.setDefaults()
+			if XRAY_MODE {
+				filter.setValue(falseColorImage, forKey: kCIInputImageKey)
+			}
+			else {
+				filter.setValue(colorMapImage, forKey: kCIInputImageKey)
+			}
+			let xOffset = timeInterval * screenImage.extent.width - screenImage.extent.width
+			//let xOffset = -150.0
+			filter.setValue(slitImage.transformed(by:CGAffineTransform(translationX: xOffset, y: 0)), forKey: kCIInputBackgroundImageKey)
 			
 			return filter.outputImage?.cropped(to: screenImage.extent)
 		}() else { return }
@@ -424,7 +459,7 @@ class RadarEffect: NotchEffect {
 		commandBuffer.commit()
 #else
 //		if let filteredBitmap = context.createCGImage(scannerImage, from: scannerImage.extent) {
-		if let filteredBitmap = context.createCGImage(colorMapImage, from: screenImage.extent) {
+		if let filteredBitmap = context.createCGImage(screenScannerSlitImage, from: screenImage.extent) {
 //		if let filteredBitmap = context.createCGImage(falseColorImage, from: screenImage.extent) {
 			CATransaction.withActionsDisabled {
 				screenLayer.contents = filteredBitmap
