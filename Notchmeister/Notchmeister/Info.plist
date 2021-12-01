@@ -24,5 +24,7 @@
 	<string>NSApplication</string>
 	<key>OrganizationIdentifier</key>
 	<string>$(ORGANIZATION_IDENTIFIER)</string>
+	<key>NSHumanReadableCopyright</key>
+	<string>© 2021 The Iconfactory</string>
 </dict>
 </plist>

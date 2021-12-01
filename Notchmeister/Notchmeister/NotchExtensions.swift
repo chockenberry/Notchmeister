@@ -70,7 +70,7 @@ extension NSScreen {
         let visibleFrame = self.visibleFrame
         
 #if DEBUG
-		let DEBUG_HEIGHT = false // use true to simulate height of real notch instead of menubar height
+		let DEBUG_HEIGHT = true // use true to simulate height of real notch instead of menubar height
 #else
 		let DEBUG_HEIGHT = false
 #endif

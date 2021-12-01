@@ -47,6 +47,12 @@ class ViewController: NSViewController {
 		guard let effect = Effects(rawValue: Defaults.selectedEffect) else { return }
 		effectDescriptionTextField.stringValue = effect.displayDescription()
 		effectPopUpButton.selectItem(withTag: effect.rawValue)
+		
+#if DEBUG
+		debugButton.isHidden = false
+#else
+		debugButton.isHidden = true
+#endif
     }
     
     private func createNotchWindows() {
