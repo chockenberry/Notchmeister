@@ -37,9 +37,9 @@ enum Effects: Int, CaseIterable {
 		case .cylon:
 			return "By your command."
 		case .plasma:
-			return "Don’t let your mouse break down the magnetic field that contains the power of your M1."
+			return "WARNING: Your mouse can break down the magnetic containment field that keeps the M1‘s power in check!"
 		case .festive:
-			return "Let your Mac celebrate the holidays the best way it can: in binary.\n\n01101100 01101111 01101100"
+			return "Let your Mac celebrate the holidays the best way it can—in binary.\n\n01101100 01101111 01101100"
 		case .radar:
 			return "Notchmeister’s patented Nano Radar lets you know exactly where your mouse has gone."
 		}
