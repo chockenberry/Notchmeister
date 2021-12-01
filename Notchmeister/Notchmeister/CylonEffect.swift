@@ -110,6 +110,11 @@ class CylonEffect: NotchEffect {
 			let globalPoint = CGPoint(x: screenPoint.x, y: screenFrame.size.height - screenPoint.y)
 
 			CGWarpMouseCursorPosition(globalPoint)
+			
+			//guard let animation = redEyeLayer.animation(forKey: "Red Eye Animation") else { return }
+			guard let position = redEyeLayer.presentation()?.position else { return }
+			redEyeLayer.removeAnimation(forKey: "Red Eye Animation")
+			redEyeLayer.position = CGPoint(x: point.x, y: parentView.bounds.maxY)
 		}
 	}
 	
