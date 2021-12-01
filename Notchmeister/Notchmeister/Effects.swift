@@ -30,7 +30,7 @@ enum Effects: Int, CaseIterable {
 		}
 	}
 	
-	func effectDescription() -> String {
+	func displayDescription() -> String {
 		switch self {
 		case .glow:
 			return "Did you know that the underside of a notch is shiny?\n\n⚠️ Works best in Dark Mode."

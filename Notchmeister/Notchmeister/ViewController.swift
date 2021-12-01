@@ -45,7 +45,7 @@ class ViewController: NSViewController {
 		effectPopUpButton.menu = menu
 		
 		guard let effect = Effects(rawValue: Defaults.selectedEffect) else { return }
-		effectDescriptionTextField.stringValue = effect.effectDescription()
+		effectDescriptionTextField.stringValue = effect.displayDescription()
 		effectPopUpButton.selectItem(withTag: effect.rawValue)
     }
     
@@ -102,7 +102,7 @@ class ViewController: NSViewController {
 		createNotchWindows()
 		
 		guard let effect = Effects(rawValue: Defaults.selectedEffect) else { return }
-		effectDescriptionTextField.stringValue = effect.effectDescription()
+		effectDescriptionTextField.stringValue = effect.displayDescription()
 	}
 }
 
