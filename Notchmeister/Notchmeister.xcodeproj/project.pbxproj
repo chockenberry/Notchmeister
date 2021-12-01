@@ -43,6 +43,7 @@
 		44A817B627446C5200731822 /* FestiveEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44A817B527446C5200731822 /* FestiveEffect.swift */; };
 		44E32191274C528200358040 /* RadarEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44E32190274C528200358040 /* RadarEffect.swift */; };
 		44E42D6A2756DA0500BDD3DC /* Effects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44E42D692756DA0500BDD3DC /* Effects.swift */; };
+		44E42D6C27570B2500BDD3DC /* DebugViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44E42D6B27570B2500BDD3DC /* DebugViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -82,6 +83,7 @@
 		44A817BB2749B8B700731822 /* Experiments */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Experiments; path = ../Experiments; sourceTree = "<group>"; };
 		44E32190274C528200358040 /* RadarEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadarEffect.swift; sourceTree = "<group>"; };
 		44E42D692756DA0500BDD3DC /* Effects.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Effects.swift; sourceTree = "<group>"; };
+		44E42D6B27570B2500BDD3DC /* DebugViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DebugViewController.swift; sourceTree = "<group>"; };
 		44F0CC482740516500F79D8D /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		51F8A85A272CCB9100D349F1 /* Notchmeister_project_release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Notchmeister_project_release.xcconfig; sourceTree = "<group>"; };
 		51F8A85B272CCB9100D349F1 /* Notchmeister_project_debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Notchmeister_project_debug.xcconfig; sourceTree = "<group>"; };
@@ -126,6 +128,7 @@
 			children = (
 				441C5AB1272C9FD10094507E /* AppDelegate.swift */,
 				441C5AB3272C9FD10094507E /* ViewController.swift */,
+				44E42D6B27570B2500BDD3DC /* DebugViewController.swift */,
 				441C5AC0272CA0780094507E /* NotchWindow.swift */,
 				44961D81273B3E42004E1A0B /* TrackingView.swift */,
 				44A817AF274322A300731822 /* FakeNotchView.swift */,
@@ -294,6 +297,7 @@
 				44961D7E27372F4D004E1A0B /* NotchEffect.swift in Sources */,
 				44A68CED273E18C900CCBCF4 /* CoreGraphics.swift in Sources */,
 				441C5AB4272C9FD10094507E /* ViewController.swift in Sources */,
+				44E42D6C27570B2500BDD3DC /* DebugViewController.swift in Sources */,
 				44A817B0274322A300731822 /* FakeNotchView.swift in Sources */,
 				44961D82273B3E42004E1A0B /* TrackingView.swift in Sources */,
 				44961D80273732ED004E1A0B /* GlowEffect.swift in Sources */,

@@ -22,26 +22,26 @@ enum Effects: Int, CaseIterable {
 		case .cylon:
 			return "Cylon"
 		case .plasma:
-			return "Plasma"
+			return "Plasma Leak"
 		case .festive:
 			return "Festive"
 		case .radar:
-			return "Radar"
+			return "Nano Radar"
 		}
 	}
 	
 	func effectDescription() -> String {
 		switch self {
 		case .glow:
-			return "Did you know that the underside of your notch is shiny?\n\n⚠️ Works best in Dark Mode."
+			return "Did you know that the underside of a notch is shiny?\n\n⚠️ Works best in Dark Mode."
 		case .cylon:
 			return "By your command."
 		case .plasma:
-			return "Don't your mouse break down the magnetic field that contains the power of your M1."
+			return "Don’t let your mouse break down the magnetic field that contains the power of your M1."
 		case .festive:
-			return "Let your Mac celebrate the holidays the best way it can: in binary. 01101100 01101111 01101100"
+			return "Let your Mac celebrate the holidays the best way it can: in binary.\n\n01101100 01101111 01101100"
 		case .radar:
-			return "Notchmeister's patented Nano Radar lets you know exactly where your mouse has gone."
+			return "Notchmeister’s patented Nano Radar lets you know exactly where your mouse has gone."
 		}
 	}
 

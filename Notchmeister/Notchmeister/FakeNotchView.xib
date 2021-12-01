@@ -14,7 +14,7 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="ln6-Kb-VUa">
-                    <rect key="frame" x="28" y="12" width="155" height="22"/>
+                    <rect key="frame" x="28" y="13" width="155" height="22"/>
                     <textFieldCell key="cell" selectable="YES" alignment="center" id="uz1-Fq-paK">
                         <font key="font" metaFont="miniSystem"/>
                         <string key="title">NOTCHMEISTER • NO-F4K3
@@ -25,7 +25,7 @@ GENUINE REPLACEMENT NOTCH</string>
                 </textField>
             </subviews>
             <constraints>
-                <constraint firstItem="ln6-Kb-VUa" firstAttribute="centerY" secondItem="c22-O7-iKe" secondAttribute="centerY" id="GKo-ic-otL"/>
+                <constraint firstItem="ln6-Kb-VUa" firstAttribute="centerY" secondItem="c22-O7-iKe" secondAttribute="centerY" constant="-1" id="GKo-ic-otL"/>
                 <constraint firstItem="ln6-Kb-VUa" firstAttribute="centerX" secondItem="c22-O7-iKe" secondAttribute="centerX" id="Zku-UG-npf"/>
             </constraints>
             <connections>

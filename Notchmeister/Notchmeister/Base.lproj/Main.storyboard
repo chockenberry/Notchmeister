@@ -688,8 +688,7 @@
                     <window key="window" title="Notchmeister" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="_Notchmeister" animationBehavior="default" id="IQv-IB-iLA">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES"/>
                         <windowCollectionBehavior key="collectionBehavior" canJoinAllSpaces="YES"/>
-                        <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-                        <rect key="contentRect" x="196" y="240" width="480" height="270"/>
+                        <rect key="contentRect" x="196" y="240" width="400" height="200"/>
                         <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1027"/>
                         <connections>
                             <outlet property="delegate" destination="B8D-0N-5wS" id="98r-iN-zZc"/>
@@ -708,11 +707,11 @@
             <objects>
                 <viewController id="XfG-lQ-9wD" customClass="ViewController" customModule="Notchmeister" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="m2S-Jp-Qdl">
-                        <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
+                        <rect key="frame" x="0.0" y="0.0" width="400" height="161"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DQb-Wa-YfR">
-                                <rect key="frame" x="104" y="231" width="273" height="19"/>
+                                <rect key="frame" x="64" y="122" width="273" height="19"/>
                                 <textFieldCell key="cell" controlSize="large" lineBreakMode="clipping" title="Move your mouse under the notch!" id="D7s-5M-fM7">
                                     <font key="font" metaFont="systemBold" size="16"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -720,38 +719,66 @@
                                 </textFieldCell>
                             </textField>
                             <stackView distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PPi-Xy-Y4k">
-                                <rect key="frame" x="178" y="191" width="124" height="20"/>
+                                <rect key="frame" x="76" y="20" width="248" height="82"/>
                                 <subviews>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="pwF-E2-nS0">
-                                        <rect key="frame" x="-2" y="3" width="44" height="16"/>
+                                        <rect key="frame" x="-2" y="65" width="44" height="16"/>
                                         <textFieldCell key="cell" lineBreakMode="clipping" title="Effect:" id="vQt-if-c95">
                                             <font key="font" metaFont="system"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="2TI-ZC-i2V">
-                                        <rect key="frame" x="45" y="-4" width="83" height="25"/>
-                                        <popUpButtonCell key="cell" type="push" title="Glow" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="UuA-aU-a9p" id="gw7-Ab-WA0">
-                                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="menu"/>
-                                            <menu key="menu" id="3NN-jH-lPd">
-                                                <items>
-                                                    <menuItem title="Glow" state="on" id="UuA-aU-a9p"/>
-                                                    <menuItem title="Cylon" tag="1" id="IPc-kO-S4N"/>
-                                                    <menuItem title="Plasma" tag="2" id="kLF-aV-OO3"/>
-                                                    <menuItem title="Festive" tag="3" id="kXd-lN-dfU"/>
-                                                    <menuItem title="Radar" tag="4" id="jjJ-vz-Urr"/>
-                                                </items>
-                                            </menu>
-                                        </popUpButtonCell>
-                                        <connections>
-                                            <action selector="selectedEffectValueChanged:" target="XfG-lQ-9wD" id="GuE-yn-Kjf"/>
-                                        </connections>
-                                    </popUpButton>
+                                    <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="6" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Tc8-Lp-iio">
+                                        <rect key="frame" x="48" y="0.0" width="200" height="82"/>
+                                        <subviews>
+                                            <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="2TI-ZC-i2V">
+                                                <rect key="frame" x="-3" y="58" width="83" height="25"/>
+                                                <popUpButtonCell key="cell" type="push" title="Glow" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="UuA-aU-a9p" id="gw7-Ab-WA0">
+                                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                                    <font key="font" metaFont="menu"/>
+                                                    <menu key="menu" id="3NN-jH-lPd">
+                                                        <items>
+                                                            <menuItem title="Glow" state="on" id="UuA-aU-a9p"/>
+                                                            <menuItem title="Cylon" tag="1" id="IPc-kO-S4N"/>
+                                                            <menuItem title="Plasma" tag="2" id="kLF-aV-OO3"/>
+                                                            <menuItem title="Festive" tag="3" id="kXd-lN-dfU"/>
+                                                            <menuItem title="Radar" tag="4" id="jjJ-vz-Urr"/>
+                                                        </items>
+                                                    </menu>
+                                                </popUpButtonCell>
+                                                <connections>
+                                                    <action selector="selectedEffectValueChanged:" target="XfG-lQ-9wD" id="GuE-yn-Kjf"/>
+                                                </connections>
+                                            </popUpButton>
+                                            <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="eJu-Vj-QTs">
+                                                <rect key="frame" x="-2" y="0.0" width="204" height="56"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="56" id="Nwq-Hj-jnc"/>
+                                                    <constraint firstAttribute="width" constant="200" id="OeG-Yc-Qrz"/>
+                                                </constraints>
+                                                <textFieldCell key="cell" allowsUndo="NO" id="61X-6b-sGb">
+                                                    <font key="font" metaFont="smallSystem"/>
+                                                    <string key="title">Effect description that can span multiple lines.
+
+⚠️ With warnings!</string>
+                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                </textFieldCell>
+                                            </textField>
+                                        </subviews>
+                                        <visibilityPriorities>
+                                            <integer value="1000"/>
+                                            <integer value="1000"/>
+                                        </visibilityPriorities>
+                                        <customSpacing>
+                                            <real value="3.4028234663852886e+38"/>
+                                            <real value="3.4028234663852886e+38"/>
+                                        </customSpacing>
+                                    </stackView>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstItem="pwF-E2-nS0" firstAttribute="firstBaseline" secondItem="2TI-ZC-i2V" secondAttribute="firstBaseline" id="4Zq-qO-z5e"/>
+                                    <constraint firstItem="pwF-E2-nS0" firstAttribute="firstBaseline" secondItem="2TI-ZC-i2V" secondAttribute="firstBaseline" id="MGq-3k-O0u"/>
                                 </constraints>
                                 <visibilityPriorities>
                                     <integer value="1000"/>
@@ -762,87 +789,29 @@
                                     <real value="3.4028234663852886e+38"/>
                                 </customSpacing>
                             </stackView>
-                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Qh7-pz-oeU">
-                                <rect key="frame" x="188" y="90" width="161" height="18"/>
-                                <buttonCell key="cell" type="check" title="Enable debug drawing" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="dmw-rr-miI">
-                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ewE-fL-l0e">
+                                <rect key="frame" x="361" y="15.5" width="19" height="18"/>
+                                <buttonCell key="cell" type="bevel" bezelStyle="rounded" image="wrench.and.screwdriver" catalog="system" imagePosition="only" alignment="center" controlSize="large" imageScaling="proportionallyDown" inset="2" id="3DI-vc-m08">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                                 <connections>
-                                    <action selector="debugDrawingValueChanged:" target="XfG-lQ-9wD" id="pK1-vN-0wH"/>
+                                    <action selector="openDebugViewController:" target="XfG-lQ-9wD" id="f34-Xo-ft1"/>
                                 </connections>
                             </button>
-                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="GpJ-jA-PUB">
-                                <rect key="frame" x="188" y="68" width="204" height="18"/>
-                                <buttonCell key="cell" type="check" title="Fake notch for the notch-less" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="9af-4Q-E6A">
-                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="fakeNotchValueChanged:" target="XfG-lQ-9wD" id="o7F-gL-vB3"/>
-                                </connections>
-                            </button>
-                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="rKO-N3-Lc5">
-                                <rect key="frame" x="188" y="46" width="131" height="18"/>
-                                <buttonCell key="cell" type="check" title="Outline the notch" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="ohU-Sq-GOo">
-                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="outlineNotchValueChanaged:" target="XfG-lQ-9wD" id="V12-TG-VN9"/>
-                                </connections>
-                            </button>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="EFD-t6-idF">
-                                <rect key="frame" x="96" y="91" width="88" height="16"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" title="Development:" id="9Py-Sc-DOI">
-                                    <font key="font" metaFont="system"/>
-                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
-                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="n8l-IV-LaP">
-                                <rect key="frame" x="188" y="24" width="105" height="18"/>
-                                <buttonCell key="cell" type="check" title="Fill the notch" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="lhG-hn-ete">
-                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="fillNotchValueChanged:" target="XfG-lQ-9wD" id="ZDg-eE-ytM"/>
-                                </connections>
-                            </button>
-                            <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="eJu-Vj-QTs">
-                                <rect key="frame" x="224" y="127" width="238" height="56"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="56" id="Nwq-Hj-jnc"/>
-                                </constraints>
-                                <textFieldCell key="cell" allowsUndo="NO" title="Effect description" id="61X-6b-sGb">
-                                    <font key="font" metaFont="smallSystem"/>
-                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
                         </subviews>
                         <constraints>
-                            <constraint firstItem="n8l-IV-LaP" firstAttribute="leading" secondItem="rKO-N3-Lc5" secondAttribute="leading" id="4xI-Rq-pmI"/>
-                            <constraint firstItem="rKO-N3-Lc5" firstAttribute="top" secondItem="GpJ-jA-PUB" secondAttribute="bottom" constant="6" symbolic="YES" id="9Jw-lq-hnU"/>
-                            <constraint firstItem="rKO-N3-Lc5" firstAttribute="leading" secondItem="GpJ-jA-PUB" secondAttribute="leading" id="Dbd-mF-cZL"/>
-                            <constraint firstItem="GpJ-jA-PUB" firstAttribute="leading" secondItem="Qh7-pz-oeU" secondAttribute="leading" id="Jfa-Dy-Nua"/>
-                            <constraint firstItem="eJu-Vj-QTs" firstAttribute="leading" secondItem="2TI-ZC-i2V" secondAttribute="leading" id="Kg5-Jt-DY8"/>
                             <constraint firstItem="PPi-Xy-Y4k" firstAttribute="top" secondItem="DQb-Wa-YfR" secondAttribute="bottom" constant="20" id="L6v-GG-jEZ"/>
-                            <constraint firstItem="Qh7-pz-oeU" firstAttribute="baseline" secondItem="EFD-t6-idF" secondAttribute="baseline" id="PK6-5Q-MG8"/>
+                            <constraint firstItem="eJu-Vj-QTs" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="85" id="LAT-Dq-eyx"/>
+                            <constraint firstAttribute="bottom" secondItem="ewE-fL-l0e" secondAttribute="bottom" constant="20" id="RZE-a3-tcl"/>
                             <constraint firstItem="DQb-Wa-YfR" firstAttribute="centerX" secondItem="m2S-Jp-Qdl" secondAttribute="centerX" id="Rt6-GL-ImR"/>
-                            <constraint firstItem="Qh7-pz-oeU" firstAttribute="leading" secondItem="EFD-t6-idF" secondAttribute="trailing" constant="8" symbolic="YES" id="WS3-Wd-OmT"/>
-                            <constraint firstItem="n8l-IV-LaP" firstAttribute="top" secondItem="rKO-N3-Lc5" secondAttribute="bottom" constant="6" symbolic="YES" id="a5d-nC-AK6"/>
                             <constraint firstItem="PPi-Xy-Y4k" firstAttribute="centerX" secondItem="DQb-Wa-YfR" secondAttribute="centerX" id="agV-c3-SFn"/>
-                            <constraint firstItem="GpJ-jA-PUB" firstAttribute="top" secondItem="Qh7-pz-oeU" secondAttribute="bottom" constant="6" symbolic="YES" id="iUx-pB-Dih"/>
-                            <constraint firstAttribute="trailing" secondItem="eJu-Vj-QTs" secondAttribute="trailing" constant="20" id="m38-gf-iZo"/>
+                            <constraint firstAttribute="trailing" secondItem="ewE-fL-l0e" secondAttribute="trailing" constant="20" id="byx-Ou-ToC"/>
                             <constraint firstItem="DQb-Wa-YfR" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="20" symbolic="YES" id="obc-h5-hEI"/>
-                            <constraint firstItem="Qh7-pz-oeU" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="190" id="vFP-ga-oth"/>
-                            <constraint firstItem="eJu-Vj-QTs" firstAttribute="top" secondItem="PPi-Xy-Y4k" secondAttribute="bottom" constant="8" symbolic="YES" id="wkA-mW-dUi"/>
-                            <constraint firstItem="Qh7-pz-oeU" firstAttribute="top" secondItem="eJu-Vj-QTs" secondAttribute="bottom" constant="20" id="woK-Wl-DIc"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="debugButton" destination="ewE-fL-l0e" id="OrL-ua-Tgy"/>
                         <outlet property="debugDrawingCheckbox" destination="Qh7-pz-oeU" id="ZIs-Cn-n5R"/>
                         <outlet property="effectDescriptionTextField" destination="eJu-Vj-QTs" id="NN9-zc-WIK"/>
                         <outlet property="effectPopUpButton" destination="2TI-ZC-i2V" id="lZY-dw-l49"/>
@@ -853,7 +822,109 @@
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="75" y="655"/>
+            <point key="canvasLocation" x="75" y="635.5"/>
+        </scene>
+        <!--Debug View Controller-->
+        <scene sceneID="dMZ-Fk-pfK">
+            <objects>
+                <viewController storyboardIdentifier="debugViewController" id="Cb5-Lm-sZD" customClass="DebugViewController" customModule="Notchmeister" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="yHf-hb-Xxs">
+                        <rect key="frame" x="0.0" y="0.0" width="334" height="122"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <stackView distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" fixedFrame="YES" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Aih-3p-shV">
+                                <rect key="frame" x="20" y="20" width="294" height="82"/>
+                                <subviews>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="EFD-t6-idF">
+                                        <rect key="frame" x="-2" y="66" width="88" height="16"/>
+                                        <textFieldCell key="cell" lineBreakMode="clipping" title="Development:" id="9Py-Sc-DOI">
+                                            <font key="font" metaFont="system"/>
+                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                    <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="6" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Srn-qg-VXb">
+                                        <rect key="frame" x="92" y="0.0" width="202" height="82"/>
+                                        <subviews>
+                                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Qh7-pz-oeU">
+                                                <rect key="frame" x="-2" y="65" width="161" height="18"/>
+                                                <buttonCell key="cell" type="check" title="Enable debug drawing" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="dmw-rr-miI">
+                                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                    <font key="font" metaFont="system"/>
+                                                </buttonCell>
+                                                <connections>
+                                                    <action selector="debugDrawingValueChanged:" target="Cb5-Lm-sZD" id="IX6-Km-WED"/>
+                                                </connections>
+                                            </button>
+                                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="GpJ-jA-PUB">
+                                                <rect key="frame" x="-2" y="43" width="204" height="18"/>
+                                                <buttonCell key="cell" type="check" title="Fake notch for the notch-less" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="9af-4Q-E6A">
+                                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                    <font key="font" metaFont="system"/>
+                                                </buttonCell>
+                                                <connections>
+                                                    <action selector="fakeNotchValueChanged:" target="Cb5-Lm-sZD" id="eyk-w7-9kV"/>
+                                                </connections>
+                                            </button>
+                                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="rKO-N3-Lc5">
+                                                <rect key="frame" x="-2" y="21" width="131" height="18"/>
+                                                <buttonCell key="cell" type="check" title="Outline the notch" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="ohU-Sq-GOo">
+                                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                    <font key="font" metaFont="system"/>
+                                                </buttonCell>
+                                                <connections>
+                                                    <action selector="outlineNotchValueChanaged:" target="Cb5-Lm-sZD" id="LdV-3j-hry"/>
+                                                </connections>
+                                            </button>
+                                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="n8l-IV-LaP">
+                                                <rect key="frame" x="-2" y="-1" width="105" height="18"/>
+                                                <buttonCell key="cell" type="check" title="Fill the notch" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="lhG-hn-ete">
+                                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                    <font key="font" metaFont="system"/>
+                                                </buttonCell>
+                                                <connections>
+                                                    <action selector="fillNotchValueChanged:" target="Cb5-Lm-sZD" id="10f-GQ-F3r"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                        <visibilityPriorities>
+                                            <integer value="1000"/>
+                                            <integer value="1000"/>
+                                            <integer value="1000"/>
+                                            <integer value="1000"/>
+                                        </visibilityPriorities>
+                                        <customSpacing>
+                                            <real value="3.4028234663852886e+38"/>
+                                            <real value="3.4028234663852886e+38"/>
+                                            <real value="3.4028234663852886e+38"/>
+                                            <real value="3.4028234663852886e+38"/>
+                                        </customSpacing>
+                                    </stackView>
+                                </subviews>
+                                <visibilityPriorities>
+                                    <integer value="1000"/>
+                                    <integer value="1000"/>
+                                </visibilityPriorities>
+                                <customSpacing>
+                                    <real value="3.4028234663852886e+38"/>
+                                    <real value="3.4028234663852886e+38"/>
+                                </customSpacing>
+                            </stackView>
+                        </subviews>
+                    </view>
+                    <connections>
+                        <outlet property="debugDrawingCheckbox" destination="Qh7-pz-oeU" id="xxR-Et-FnP"/>
+                        <outlet property="fakeNotchCheckbox" destination="GpJ-jA-PUB" id="dh3-iz-Iep"/>
+                        <outlet property="fillNotchCheckbox" destination="n8l-IV-LaP" id="x7N-8K-xPf"/>
+                        <outlet property="outlineNotchCheckbox" destination="rKO-N3-Lc5" id="hQc-bO-cMR"/>
+                    </connections>
+                </viewController>
+                <customObject id="fN4-Qi-AUp" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="488" y="616"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="wrench.and.screwdriver" catalog="system" width="19" height="18"/>
+    </resources>
 </document>

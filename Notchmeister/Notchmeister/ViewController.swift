@@ -11,12 +11,13 @@ class ViewController: NSViewController {
 
 	var notchWindows: [NotchWindow] = []
 	
-    @IBOutlet weak var debugDrawingCheckbox: NSButton!
-    @IBOutlet weak var fakeNotchCheckbox: NSButton!
-    @IBOutlet weak var outlineNotchCheckbox: NSButton!
-    @IBOutlet weak var fillNotchCheckbox: NSButton!
+//    @IBOutlet weak var debugDrawingCheckbox: NSButton!
+//    @IBOutlet weak var fakeNotchCheckbox: NSButton!
+//    @IBOutlet weak var outlineNotchCheckbox: NSButton!
+//    @IBOutlet weak var fillNotchCheckbox: NSButton!
 	@IBOutlet weak var effectPopUpButton: NSPopUpButton!
 	@IBOutlet weak var effectDescriptionTextField: NSTextField!
+	@IBOutlet weak var debugButton: NSButton!
 	
     //MARK: - Life Cycle
     
@@ -30,10 +31,10 @@ class ViewController: NSViewController {
     private func configureForDefaults() {
 		Defaults.register()
 		
-        debugDrawingCheckbox.state = Defaults.shouldDebugDrawing ? .on : .off
-        fakeNotchCheckbox.state = Defaults.shouldFakeNotch ? .on : .off
-        outlineNotchCheckbox.state = Defaults.shouldDrawNotchOutline ? .on : .off
-        fillNotchCheckbox.state = Defaults.shouldDrawNotchFill ? .on : .off
+//        debugDrawingCheckbox.state = Defaults.shouldDebugDrawing ? .on : .off
+//        fakeNotchCheckbox.state = Defaults.shouldFakeNotch ? .on : .off
+//        outlineNotchCheckbox.state = Defaults.shouldDrawNotchOutline ? .on : .off
+//        fillNotchCheckbox.state = Defaults.shouldDrawNotchFill ? .on : .off
 		
 		let menu = NSMenu(title: "Notch Effects")
 		for effect in Effects.allCases {
@@ -65,28 +66,37 @@ class ViewController: NSViewController {
 		}
     }
     
+	func updateWindows() {
+		createNotchWindows()
+	}
+	
     //MARK: - Actions
     
-    @IBAction func debugDrawingValueChanged(_ sender: Any) {
-        Defaults.shouldDebugDrawing = (debugDrawingCheckbox.state == .on)
-        createNotchWindows()
-    }
-    
-    @IBAction func fakeNotchValueChanged(_ sender: Any) {
-        Defaults.shouldFakeNotch = (fakeNotchCheckbox.state == .on)
-        createNotchWindows()
-    }
-    
-    @IBAction func outlineNotchValueChanaged(_ sender: Any) {
-        Defaults.shouldDrawNotchOutline = (outlineNotchCheckbox.state == .on)
-		createNotchWindows()
-    }
-    
-    @IBAction func fillNotchValueChanged(_ sender: Any) {
-        Defaults.shouldDrawNotchFill = (fillNotchCheckbox.state == .on)
-		createNotchWindows()
-    }
+//    @IBAction func debugDrawingValueChanged(_ sender: Any) {
+//        Defaults.shouldDebugDrawing = (debugDrawingCheckbox.state == .on)
+//        createNotchWindows()
+//    }
+//
+//    @IBAction func fakeNotchValueChanged(_ sender: Any) {
+//        Defaults.shouldFakeNotch = (fakeNotchCheckbox.state == .on)
+//        createNotchWindows()
+//    }
+//
+//    @IBAction func outlineNotchValueChanaged(_ sender: Any) {
+//        Defaults.shouldDrawNotchOutline = (outlineNotchCheckbox.state == .on)
+//		createNotchWindows()
+//    }
+//
+//    @IBAction func fillNotchValueChanged(_ sender: Any) {
+//        Defaults.shouldDrawNotchFill = (fillNotchCheckbox.state == .on)
+//		createNotchWindows()
+//    }
 
+	@IBAction func openDebugViewController(_ sender: Any) {
+		guard let viewController = self.storyboard?.instantiateController(withIdentifier: "debugViewController") as? NSViewController else { return }
+		self.present(viewController, asPopoverRelativeTo: debugButton.frame, of: view, preferredEdge: NSRectEdge.maxX, behavior: .transient)
+	}
+	
 	@IBAction func selectedEffectValueChanged(_ sender: Any) {
 		Defaults.selectedEffect = effectPopUpButton.selectedTag()
 		createNotchWindows()
