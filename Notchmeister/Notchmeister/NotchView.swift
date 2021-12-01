@@ -8,10 +8,7 @@
 import AppKit
 
 class NotchView: NSView {
-
-	var trackingMouse: Bool = false
 	
-//    var notchOutlineLayer: CAShapeLayer?
 	var notchEffect: NotchEffect?
 	
     // MARK: - NSView
@@ -46,26 +43,12 @@ class NotchView: NSView {
 					layer.backgroundColor = NSColor.clear.cgColor
 				}
 
-                // effect under the outline so we can use the outline layer
-                // to cover the effect in screen captures
-                // or on notchless displays
-				switch (Defaults.selectedEffect) {
-				case 0:
-					notchEffect = createGlowEffect()
-				case 1:
-					notchEffect = createCylonEffect()
-				case 2:
-					notchEffect = createPlasmaEffect()
-				case 3:
-					notchEffect = createFestiveEffect()
-				case 4:
-					notchEffect = createRadarEffect()
-				default:
-					notchEffect = nil
-				}
-                notchEffect?.start()
-                
-//                createOutlineLayer()
+				guard let parentLayer = self.layer else { return }
+
+				let effect = Effects(rawValue: Defaults.selectedEffect)
+				notchEffect = effect?.notchEffect(with: parentLayer)
+ 
+				notchEffect?.start()
 			}
 		}
 		else {
@@ -73,55 +56,7 @@ class NotchView: NSView {
 			notchEffect = nil
 		}
 	}
-	
-//    private func createOutlineLayer() {
-//        guard let layer = layer else { return }
-//
-//        let outlineLayer = CAShapeLayer.notchOutlineLayer(for: bounds.size, flipped: isFlipped)
-//
-//        outlineLayer.masksToBounds = false
-//
-//        outlineLayer.anchorPoint = .zero
-//        outlineLayer.autoresizingMask = [.layerHeightSizable, .layerWidthSizable]
-//        layer.addSublayer(outlineLayer)
-//
-//        notchOutlineLayer = outlineLayer
-//    }
     
-    private func createCylonEffect() -> CylonEffect? {
-        guard let parentLayer = self.layer else { return nil }
-        return CylonEffect(with: parentLayer)
-    }
-
-	private func createGlowEffect() -> GlowEffect? {
-		guard let parentLayer = self.layer else { return nil }
-		return GlowEffect(with: parentLayer)
-	}
-
-	private func createPlasmaEffect() -> PlasmaEffect? {
-		guard let parentLayer = self.layer else { return nil }
-		return PlasmaEffect(with: parentLayer)
-	}
-
-	private func createFestiveEffect() -> FestiveEffect? {
-		guard let parentLayer = self.layer else { return nil }
-		return FestiveEffect(with: parentLayer)
-	}
-
-	private func createRadarEffect() -> RadarEffect? {
-		guard let parentLayer = self.layer else { return nil }
-		return RadarEffect(with: parentLayer)
-	}
-
-//	override func acceptsFirstMouse(for event: NSEvent?) -> Bool {
-//		return true
-//	}
-
-//	override func hitTest(_ point: NSPoint) -> NSView? {
-//		//return debugResult(self.layer?.hitTest(point) == nil ? nil : super.hitTest(point))
-//		return debugResult(super.hitTest(point))
-//	}
-
     //MARK: - NSResponder
 
 	func notchLocation(with windowPoint: CGPoint) -> NSPoint {
@@ -130,33 +65,20 @@ class NotchView: NSView {
 	
 	func mouseEntered(windowPoint: CGPoint) {
 		//debugLog()
-		trackingMouse = true
-		
-		//NSCursor.hide() // NOTE: This only works when the app is frontmost, which in this case is unlikely.
-
 		let point = notchLocation(with: windowPoint)
 		let underNotch = bounds.contains(point)
 		notchEffect?.mouseEntered(at: point, underNotch: underNotch)
 	}
 	
 	func mouseMoved(windowPoint: CGPoint) {
-		//if trackingMouse {
-			let point = notchLocation(with: windowPoint)
-			let underNotch = bounds.contains(point)
-			//debugLog("point = \(point), underNotch = \(underNotch)")
-			notchEffect?.mouseMoved(at: point, underNotch: underNotch)
-		//}
-		//else {
-		//	debugLog("not tracking mouse")
-		//}
+		let point = notchLocation(with: windowPoint)
+		let underNotch = bounds.contains(point)
+		//debugLog("point = \(point), underNotch = \(underNotch)")
+		notchEffect?.mouseMoved(at: point, underNotch: underNotch)
 	}
 	
 	func mouseExited(windowPoint: CGPoint) {
 		//debugLog()
-		trackingMouse = false
-
-		//NSCursor.unhide() // NOTE: This only works when the app is frontmost, which in this case is unlikely.
-
 		let point = notchLocation(with: windowPoint)
 		let underNotch = bounds.contains(point)
 		notchEffect?.mouseExited(at: point, underNotch: underNotch)
