@@ -24,7 +24,7 @@ class GlowEffect: NotchEffect {
 	let edgeWidth = 1.0
 	let offset = 0
 	
-	required init(with parentLayer: CALayer) {
+	required init (with parentLayer: CALayer, in parentView: NSView) {
 		self.glowLayer = CAGradientLayer()
 		self.edgeLayer = CAShapeLayer.notchOutlineLayer(for: parentLayer.bounds.size, flipped: true)
 		self.maskLayer = CAGradientLayer()
@@ -33,7 +33,7 @@ class GlowEffect: NotchEffect {
 			self.debugLayer = CALayer()
 		}
 		
-		super.init(with: parentLayer)
+		super.init(with: parentLayer, in: parentView)
 
 		configureSublayers()
 	}

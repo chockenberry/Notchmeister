@@ -11,10 +11,10 @@ class PlasmaEffect: NotchEffect {
 	
 	var plasmaLayer: CAEmitterLayer
 
-	required init(with parentLayer: CALayer) {
+	required init (with parentLayer: CALayer, in parentView: NSView) {
 		self.plasmaLayer = CAEmitterLayer()
 
-		super.init(with: parentLayer)
+		super.init(with: parentLayer, in: parentView)
 
 		configureSublayers()
 	}

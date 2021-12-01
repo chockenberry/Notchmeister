@@ -5,7 +5,7 @@
 //  Created by Craig Hockenberry on 11/30/21.
 //
 
-import Foundation
+import AppKit
 import QuartzCore
 
 enum Effects: Int, CaseIterable {
@@ -45,18 +45,18 @@ enum Effects: Int, CaseIterable {
 		}
 	}
 
-	func notchEffect(with parentLayer: CALayer) -> NotchEffect {
+	func notchEffect(with parentLayer: CALayer, in parentView: NSView) -> NotchEffect {
 		switch self {
 		case .glow:
-			return GlowEffect(with: parentLayer)
+			return GlowEffect(with: parentLayer, in: parentView)
 		case .cylon:
-			return CylonEffect(with: parentLayer)
+			return CylonEffect(with: parentLayer, in: parentView)
 		case .plasma:
-			return PlasmaEffect(with: parentLayer)
+			return PlasmaEffect(with: parentLayer, in: parentView)
 		case .festive:
-			return FestiveEffect(with: parentLayer)
+			return FestiveEffect(with: parentLayer, in: parentView)
 		case .radar:
-			return RadarEffect(with: parentLayer)
+			return RadarEffect(with: parentLayer, in: parentView)
 		}
 	}
 	

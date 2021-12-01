@@ -13,16 +13,18 @@ import AppKit
 
 protocol NotchEffectable { // yeah, this is a terrible name
 	
-	init (with parentLayer: CALayer)
+	init (with parentLayer: CALayer, in parentView: NSView)
 
 }
 
 class NotchEffect: NotchEffectable {
 	
 	private(set) weak var parentLayer: CALayer?
-	
-	required init (with parentLayer: CALayer) {
+	private(set) weak var parentView: NSView?
+
+	required init (with parentLayer: CALayer, in parentView: NSView) {
 		self.parentLayer = parentLayer
+		self.parentView = parentView
 	}
 	
 	func start() {

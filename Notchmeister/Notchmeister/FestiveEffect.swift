@@ -39,10 +39,10 @@ class FestiveEffect: NotchEffect {
 		return bulbImage(named: "bulb-blue-on")
 	}()
 
-	required init(with parentLayer: CALayer) {
+	required init (with parentLayer: CALayer, in parentView: NSView) {
 		self.bulbLayers = []
 		
-		super.init(with: parentLayer)
+		super.init(with: parentLayer, in: parentView)
 
 		configureSublayers()
 	}
