@@ -12,7 +12,13 @@ import AppKit
 //MARK: - NSScreen Extensions
 
 extension NSScreen {
-    
+
+	/// Returns true if there are one or more screens with a notch.
+	static var hasNotchedScreen: Bool {
+		let notchedScreens = NSScreen.screens.filter { $0.notchArea != nil }
+		return (notchedScreens.count != 0)
+	}
+
     /// All of the attached screens that have notches. Could include displays
     /// without a physical notch if Defaults.shouldFakeNotch is true
     static var notchedScreens: [NSScreen] {
