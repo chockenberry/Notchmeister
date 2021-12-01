@@ -28,7 +28,7 @@ enum Defaults : String
 				Defaults.fakeNotchEnabled.rawValue: true,
 				Defaults.notchOutlineEnabled.rawValue : false,
 				Defaults.notchFillEnabled.rawValue: true,
-				Defaults.effectSelection.rawValue: 3,
+				Defaults.effectSelection.rawValue: Effects.festive.rawValue,
 			])
 			registered = true
 		}
