@@ -64,11 +64,12 @@ class CylonEffect: NotchEffect {
 		
 		redEyeLayer.opacity = 0
     }
-    
-	override func mouseEntered(at point: CGPoint, underNotch: Bool) {
+   
+	var cylonAlert = false
+	
+	private func startScanning() {
 		guard let parentLayer = parentLayer else { return }
-		
-		//if false {
+
 		if redEyeLayer.animation(forKey: "Red Eye Animation") == nil {
 			debugLog("creating scanning animation")
 			let path = NSBezierPath.notchPath(size: parentLayer.bounds.size)
@@ -95,26 +96,53 @@ class CylonEffect: NotchEffect {
 
 			redEyeLayer.add(animation, forKey: "Red Eye Animation")
 		}
+	}
+	
+	override func mouseEntered(at point: CGPoint, underNotch: Bool) {
+		guard let parentLayer = parentLayer else { return }
+		
+		cylonAlert = false
+		
+		startScanning()
 		
 		redEyeLayer.opacity = 1
 	}
 	
+	let cylonProtectionDistance: CGFloat = 5
+	let cylonProtectionThreshold: CGFloat = 2
+
 	override func mouseMoved(at point: CGPoint, underNotch: Bool) {
+		guard let parentLayer = parentLayer else { return }
+
 		if underNotch {
 			guard let parentView = parentView else { return }
 			guard let screen = parentView.window?.screen else { return }
 			let screenFrame = screen.frame
-			let viewPoint = CGPoint(x: point.x, y: parentView.bounds.maxY + 5)
+			let viewPoint = CGPoint(x: point.x, y: parentView.bounds.maxY + cylonProtectionDistance)
 			let windowPoint = parentView.convert(viewPoint, to: nil)
-			guard let screenPoint = parentView.window?.convertPoint(toScreen: windowPoint) else { return }
-			let globalPoint = CGPoint(x: screenPoint.x, y: screenFrame.size.height - screenPoint.y)
+			guard let screenPoint = parentView.window?.convertPoint(toScreen: windowPoint) else { return } // origin in lower-left corner
+			let globalPoint = CGPoint(x: screenPoint.x, y: screenFrame.size.height - screenPoint.y) // origin in upper-left corner
 
 			CGWarpMouseCursorPosition(globalPoint)
 			
+			cylonAlert = true
+		}
+		else {
+			let edgeDistance = edgeDistance(at: point)
+			//debugLog("edgeDistance = \(edgeDistance), cylonAlert = \(cylonAlert)")
+			if cylonAlert {
+				if edgeDistance < -(cylonProtectionDistance + cylonProtectionThreshold) {
+					cylonAlert = false
+					startScanning()
+				}
+			}
+		}
+		
+		if (cylonAlert) {
 			//guard let animation = redEyeLayer.animation(forKey: "Red Eye Animation") else { return }
-			guard let position = redEyeLayer.presentation()?.position else { return }
+			//guard let position = redEyeLayer.presentation()?.position else { return }
 			redEyeLayer.removeAnimation(forKey: "Red Eye Animation")
-			redEyeLayer.position = CGPoint(x: point.x, y: parentView.bounds.maxY)
+			redEyeLayer.position = CGPoint(x: point.x, y: parentLayer.bounds.maxY)
 		}
 	}
 	
