@@ -66,7 +66,7 @@ class GlowEffect: NotchEffect {
 			
 			let points = [0, 1.0/8.0, 2.0/8.0, 3.0/8.0, 4.0/8.0, 5.0/8.0, 6.0/8.0, 7.0/8.0]
 			let a = 0.0
-			let b = 100.0
+			let b = 80.0 // 100.0 is more physically accurate, but harder to see. So...
 			var colors: [CGColor] = points.map { point in
 				let attenuation = 1.0 / (1.0 - a * point + b * point * point)
 				//let attenuation = 1.0 / 1.0 - point * point
