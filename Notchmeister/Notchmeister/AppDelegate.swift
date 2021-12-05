@@ -44,5 +44,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 			window.makeKeyAndOrderFront(self)
 		}
 	}
+	
+	@IBAction func showHelp(_ sender: Any) {
+		guard let url = URL(string: "https://twitter.com/notchmeister") else { NSSound.beep(); return }
+		NSWorkspace.shared.open(url)
+	}
+
 }
 
