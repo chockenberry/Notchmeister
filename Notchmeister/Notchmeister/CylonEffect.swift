@@ -21,6 +21,8 @@ class CylonEffect: NotchEffect {
     let irisColor = NSColor(srgbRed: 0.9979979396, green: 0.4895141721, blue: 0.491407156, alpha: 1.0)
     let glowStartColor = NSColor(srgbRed: 0.82, green: 0.22, blue: 0.19, alpha: 1.0)
     
+	var redEyeAnimation: CAKeyframeAnimation?
+	
 	required init (with parentLayer: CALayer, in parentView: NSView) {
 		super.init(with: parentLayer, in: parentView)
 
@@ -67,58 +69,114 @@ class CylonEffect: NotchEffect {
    
 	var cylonAlert = false
 	
+	let redEyeScanningDuration: CFTimeInterval = 1
+	
 	private func startScanning() {
 		guard let parentLayer = parentLayer else { return }
 
 		if redEyeLayer.animation(forKey: "Red Eye Animation") == nil {
-			debugLog("creating scanning animation")
-			let path = NSBezierPath.notchPath(size: parentLayer.bounds.size)
-			
-			// becasue our parent layer is in a flipped coordinate space
-			// we have to flip the path to match if we want to animate
-			// along the outline of the notch view
-			
-			if (parentLayer.isGeometryFlipped) {
-				var flipTransform = AffineTransform(scaleByX: 1, byY: -1)
-				flipTransform.translate(x: 0, y: -parentLayer.bounds.height)
-				path.transform(using: flipTransform)
+			if redEyeAnimation == nil {
+				debugLog("creating scanning animation")
+				let path = NSBezierPath.notchPath(size: parentLayer.bounds.size)
+				
+				// becasue our parent layer is in a flipped coordinate space
+				// we have to flip the path to match if we want to animate
+				// along the outline of the notch view
+				
+				if (parentLayer.isGeometryFlipped) {
+					var flipTransform = AffineTransform(scaleByX: 1, byY: -1)
+					flipTransform.translate(x: 0, y: -parentLayer.bounds.height)
+					path.transform(using: flipTransform)
+				}
+				
+				let animation = CAKeyframeAnimation(keyPath: "position")
+				
+				animation.path = path.cgPath
+				animation.timingFunctions = [CAMediaTimingFunction(name: .easeInEaseOut)]
+				animation.duration = redEyeScanningDuration
+				animation.calculationMode = .paced
+				animation.repeatCount = .infinity
+				animation.autoreverses = true
+				animation.rotationMode = .rotateAuto
+				
+				redEyeAnimation = animation
 			}
 			
-			let animation = CAKeyframeAnimation(keyPath: "position")
-			
-			animation.path = path.cgPath
-			animation.timingFunctions = [CAMediaTimingFunction(name: .easeInEaseOut)]
-			animation.duration = 1.0
-			animation.calculationMode = .paced
-			animation.repeatCount = .infinity
-			animation.autoreverses = true
-			animation.rotationMode = .rotateAuto
-
-			redEyeLayer.add(animation, forKey: "Red Eye Animation")
+			redEyeLayer.add(redEyeAnimation!, forKey: "Red Eye Animation")
 		}
+	}
+	
+	var scanningTimer: Timer?
+
+	var isScanning = false
+
+	var pausedTime: CFTimeInterval = 0
+	
+	private func pauseScanning() {
+		pausedTime = redEyeLayer.convertTime(CACurrentMediaTime(), from:nil)
+		//let pausedTime = redEyeLayer.convertTime(CACurrentMediaTime(), from:nil)
+		redEyeLayer.speed = 0
+		redEyeLayer.timeOffset = pausedTime
+	}
+	
+	private func resumeScanning() {
+		//let pausedTime = redEyeLayer.timeOffset
+		redEyeLayer.speed = 1
+		redEyeLayer.timeOffset = 0
+		redEyeLayer.beginTime = 0
+		let timeSincePause = redEyeLayer.convertTime(CACurrentMediaTime(), from: nil) - pausedTime
+		redEyeLayer.beginTime = timeSincePause
 	}
 	
 	override func mouseEntered(at point: CGPoint, underNotch: Bool) {
 		guard let parentLayer = parentLayer else { return }
 		
+		
 		cylonAlert = false
 		
 		startScanning()
 		
-		redEyeLayer.opacity = 1
+		if scanningTimer == nil {
+			resumeScanning()
+			redEyeLayer.opacity = 1
+		}
+		else {
+			scanningTimer?.invalidate()
+			scanningTimer = nil
+		}
 	}
 	
-	let cylonProtectionDistance: CGFloat = 5
-	let cylonProtectionThreshold: CGFloat = 2
+	let cylonProtectionDistance: Int = 6 // pointer hotspot offset is 4
+	let cylonProtectionThreshold: Int = 2
 
+	
 	override func mouseMoved(at point: CGPoint, underNotch: Bool) {
 		guard let parentLayer = parentLayer else { return }
 
-		if underNotch {
+		let edgeDistance = edgeDistance(at: point)
+		debugLog("edgeDistance = \(edgeDistance), cylonAlert = \(cylonAlert)")
+
+		var blockMouse = false
+		if edgeDistance < 0 {
+			// outside of notch
+			debugLog("outside of notch")
+			if !cylonAlert && abs(edgeDistance) < 5 {
+				debugLog("blocking mouse")
+				blockMouse = true
+			}
+		}
+		else {
+			// under notch
+			debugLog("under notch, blocking mouse")
+			blockMouse = true
+		}
+		
+		if blockMouse {
 			guard let parentView = parentView else { return }
 			guard let screen = parentView.window?.screen else { return }
 			let screenFrame = screen.frame
-			let viewPoint = CGPoint(x: point.x, y: parentView.bounds.maxY + cylonProtectionDistance)
+			let randomOffset = CGPoint(x: Int.random(in: -cylonProtectionDistance...cylonProtectionDistance), y: Int.random(in: 0...cylonProtectionDistance))
+			let viewPoint = CGPoint(x: point.x + randomOffset.x, y: parentView.bounds.maxY + randomOffset.y)
 			let windowPoint = parentView.convert(viewPoint, to: nil)
 			guard let screenPoint = parentView.window?.convertPoint(toScreen: windowPoint) else { return } // origin in lower-left corner
 			let globalPoint = CGPoint(x: screenPoint.x, y: screenFrame.size.height - screenPoint.y) // origin in upper-left corner
@@ -128,12 +186,11 @@ class CylonEffect: NotchEffect {
 			cylonAlert = true
 		}
 		else {
-			let edgeDistance = edgeDistance(at: point)
-			//debugLog("edgeDistance = \(edgeDistance), cylonAlert = \(cylonAlert)")
 			if cylonAlert {
-				if edgeDistance < -(cylonProtectionDistance + cylonProtectionThreshold) {
+				if edgeDistance < -CGFloat(cylonProtectionDistance + cylonProtectionThreshold) {
 					cylonAlert = false
-					startScanning()
+					//startScanning()
+					resumeScanning()
 				}
 			}
 		}
@@ -141,13 +198,43 @@ class CylonEffect: NotchEffect {
 		if (cylonAlert) {
 			//guard let animation = redEyeLayer.animation(forKey: "Red Eye Animation") else { return }
 			//guard let position = redEyeLayer.presentation()?.position else { return }
-			redEyeLayer.removeAnimation(forKey: "Red Eye Animation")
-			redEyeLayer.position = CGPoint(x: point.x, y: parentLayer.bounds.maxY)
+			//redEyeLayer.removeAnimation(forKey: "Red Eye Animation")
+
+			pauseScanning()
+//			pausedTime = redEyeLayer.convertTime(CACurrentMediaTime(), from:nil)
+//
+//			redEyeLayer.speed = 0
+			redEyeLayer.timeOffset = point.x / parentLayer.bounds.width
+//			redEyeLayer.timeOffset = pausedTime
+
+			redEyeAnimation?.beginTime = 0.5
+
+			//redEyeLayer.position = CGPoint(x: point.x, y: parentLayer.bounds.maxY)
 		}
 	}
 	
 	override func mouseExited(at point: CGPoint, underNotch: Bool) {
-		redEyeLayer.opacity = 0
+		pausedTime = redEyeLayer.convertTime(CACurrentMediaTime(), from:nil)
+//		let pausedTime = redEyeLayer.convertTime(CACurrentMediaTime(), from:nil)
+//		redEyeLayer.speed = 0
+//		redEyeLayer.timeOffset = pausedTime
+		
+		//redEyeLayer.opacity = 0
 		//redEyeLayer.speed = 0
+		
+		scanningTimer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false, block: { timer in
+			
+			self.redEyeLayer.opacity = 0
+
+			self.pausedTime = self.redEyeLayer.convertTime(CACurrentMediaTime(), from:nil)
+			
+//			let pausedTime = self.redEyeLayer.convertTime(CACurrentMediaTime(), from:nil)
+//			self.redEyeLayer.speed = 0
+//			self.redEyeLayer.timeOffset = pausedTime
+			
+			//redEyeLayer.speed = 0
+			
+			self.scanningTimer = nil
+		})
 	}
 }
