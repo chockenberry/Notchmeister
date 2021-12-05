@@ -131,19 +131,22 @@ class CylonEffect: NotchEffect {
 	override func mouseEntered(at point: CGPoint, underNotch: Bool) {
 		guard let parentLayer = parentLayer else { return }
 		
+		debugLog()
 		
 		cylonAlert = false
 		
 		startScanning()
 		
+		redEyeLayer.removeAnimation(forKey: "opacity")
 		if scanningTimer == nil {
 			resumeScanning()
-			redEyeLayer.opacity = 1
 		}
 		else {
 			scanningTimer?.invalidate()
 			scanningTimer = nil
 		}
+		redEyeLayer.opacity = 1
+
 	}
 	
 	let cylonProtectionDistance: Int = 6 // pointer hotspot offset is 4
@@ -153,21 +156,23 @@ class CylonEffect: NotchEffect {
 	override func mouseMoved(at point: CGPoint, underNotch: Bool) {
 		guard let parentLayer = parentLayer else { return }
 
+		redEyeLayer.opacity = 1
+
 		let edgeDistance = edgeDistance(at: point)
-		debugLog("edgeDistance = \(edgeDistance), cylonAlert = \(cylonAlert)")
+		//debugLog("edgeDistance = \(edgeDistance), cylonAlert = \(cylonAlert)")
 
 		var blockMouse = false
 		if edgeDistance < 0 {
 			// outside of notch
-			debugLog("outside of notch")
+			//debugLog("outside of notch")
 			if !cylonAlert && abs(edgeDistance) < 5 {
-				debugLog("blocking mouse")
+				//debugLog("blocking mouse")
 				blockMouse = true
 			}
 		}
 		else {
 			// under notch
-			debugLog("under notch, blocking mouse")
+			//debugLog("under notch, blocking mouse")
 			blockMouse = true
 		}
 		
@@ -207,14 +212,16 @@ class CylonEffect: NotchEffect {
 			redEyeLayer.timeOffset = point.x / parentLayer.bounds.width
 //			redEyeLayer.timeOffset = pausedTime
 
-			redEyeAnimation?.beginTime = 0.5
+//			redEyeAnimation?.beginTime = 0.5
 
 			//redEyeLayer.position = CGPoint(x: point.x, y: parentLayer.bounds.maxY)
 		}
 	}
 	
 	override func mouseExited(at point: CGPoint, underNotch: Bool) {
-		pausedTime = redEyeLayer.convertTime(CACurrentMediaTime(), from:nil)
+		debugLog()
+
+//		pausedTime = redEyeLayer.convertTime(CACurrentMediaTime(), from:nil)
 //		let pausedTime = redEyeLayer.convertTime(CACurrentMediaTime(), from:nil)
 //		redEyeLayer.speed = 0
 //		redEyeLayer.timeOffset = pausedTime
@@ -222,17 +229,42 @@ class CylonEffect: NotchEffect {
 		//redEyeLayer.opacity = 0
 		//redEyeLayer.speed = 0
 		
+		if scanningTimer != nil {
+			debugLog("cancelling timer")
+			scanningTimer?.invalidate()
+			scanningTimer = nil
+
+			redEyeLayer.removeAnimation(forKey: "opacity")
+		}
+		
 		scanningTimer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false, block: { timer in
-			
+			debugLog("scanning spindown")
 			self.redEyeLayer.opacity = 0
 
-			self.pausedTime = self.redEyeLayer.convertTime(CACurrentMediaTime(), from:nil)
+			CATransaction.begin()
+			CATransaction.setCompletionBlock { [weak self] in
+				if self?.redEyeLayer.presentation()?.opacity == 0 {
+					debugLog("scanning paused")
+					self?.pauseScanning()
+				}
+			}
+			
+			let animation = CABasicAnimation(keyPath: "opacity")
+			animation.duration = 1
+			animation.fromValue = 1
+			animation.toValue = 0
+			animation.isRemovedOnCompletion = true
+			self.redEyeLayer.add(animation, forKey: "opacity")
+
+//			self.pausedTime = self.redEyeLayer.convertTime(CACurrentMediaTime(), from:nil)
 			
 //			let pausedTime = self.redEyeLayer.convertTime(CACurrentMediaTime(), from:nil)
 //			self.redEyeLayer.speed = 0
 //			self.redEyeLayer.timeOffset = pausedTime
 			
 			//redEyeLayer.speed = 0
+			
+			CATransaction.commit()
 			
 			self.scanningTimer = nil
 		})
