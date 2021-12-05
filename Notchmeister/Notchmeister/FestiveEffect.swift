@@ -51,9 +51,9 @@ class FestiveEffect: NotchEffect {
 		self.bulbLayers.removeAll()
 	}
 	
-	var patternIndex = 0
+	var patternAddress = 0b0000_0000_0000_0000
 	
-	static let patterns = [
+	static let patternRom = [
 		// scan left then right
 		0b0000_0001,
 		0b0000_0010,
@@ -206,35 +206,35 @@ class FestiveEffect: NotchEffect {
 		0b0000_0000,
 		0b0000_0000,
 
-		// a word from our sponsor (that's why)
-		0b00000000,
-		0b11111111,
-		0b00000000,
-		0b11111111,
-		0b00000000,
-		0b01000011,
-		0b01001000,
-		0b01001111,
-		0b01000011,
-		0b01001011,
-		0b00100000,
-		0b01010111,
-		0b01000001,
-		0b01010011,
-		0b00100000,
-		0b01001000,
-		0b01000101,
-		0b01010010,
-		0b01000101,
-		0b00100000,
-		0b01000100,
-		0b01010101,
-		0b01001000,
-		0b00000000,
-		0b11111111,
-		0b00000000,
-		0b11111111,
-		0b00000000,
+		// and now a word from our sponsor (that's why)
+		0b0_0000000,
+		0b11_111111,
+		0b000_00000,
+		0b1111_1111,
+		0b00000_000,
+		0b010000_11,
+		0b0100100_0,
+		0b0_1001111,
+		0b01_000011,
+		0b010_01011,
+		0b0000_0000,
+		0b01010_111,
+		0b010000_01,
+		0b0101001_1,
+		0b0_0000000,
+		0b01_001000,
+		0b010_00101,
+		0b0101_0010,
+		0b01000_101,
+		0b000000_00,
+		0b0100010_0,
+		0b0_1010101,
+		0b01_001000,
+		0b000_00000,
+		0b1111_1111,
+		0b00000_000,
+		0b111111_11,
+		0b0000000_0,
 	]
 	+ Array(repeating: 0b0000_0000, count: 4)
 	+ Array(0b0000_0000...0b1111_1111) // doing what computers do best
@@ -275,9 +275,9 @@ class FestiveEffect: NotchEffect {
 	
 	private func startLights() {
 		if timer == nil {
-			patternIndex = 0
+			patternAddress = 0b0000_0000_0000_0000
 			timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true, block: { timer in
-				let pattern = Self.patterns[self.patternIndex]
+				let pattern = Self.patternRom[self.patternAddress]
 				
 				var shift = pattern
 				for index in 0..<self.bulbCount {
@@ -306,9 +306,9 @@ class FestiveEffect: NotchEffect {
 					shift = shift << 1
 				}
 				
-				self.patternIndex += 1
-				if self.patternIndex >= Self.patterns.count {
-					self.patternIndex = 0
+				self.patternAddress += 0b0000_0000_0000_0001
+				if self.patternAddress >= Self.patternRom.count {
+					self.patternAddress = 0b0000_0000_0000_0000
 				}
 			})
 		}
