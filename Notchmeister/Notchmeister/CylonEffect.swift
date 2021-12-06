@@ -71,7 +71,7 @@ class CylonEffect: NotchEffect {
 	
 	let redEyeScanningDuration: CFTimeInterval = 1
 	
-	private func startScanning() {
+	private func createScanner() {
 		guard let parentLayer = parentLayer else { return }
 
 		if redEyeLayer.animation(forKey: "Red Eye Animation") == nil {
@@ -103,21 +103,18 @@ class CylonEffect: NotchEffect {
 			}
 			
 			redEyeLayer.add(redEyeAnimation!, forKey: "Red Eye Animation")
-			//isScanning = true
 		}
 	}
 	
-	var scanningTimer: Timer?
-
-	var isScanning = false
-
-	var pausedTime: CFTimeInterval = 0
+	// this is a helluva state machine - seems appropriate for a Cylon
+	var scanningTimer: Timer? // a timer that lets the scanner run for awhile after the mouse leaves the tracking area
+	var isScanning = false // a flag that indicates if the redEyeAnimation is running with a speed of 1, or stopped at 0
+	var pausedTime: CFTimeInterval = 0 // the time of the current paused animation - adjusted to block mouse
 	
 	private func pauseScanning() {
 		if isScanning {
-			debugLog("pausing scan")
 			pausedTime = redEyeLayer.convertTime(CACurrentMediaTime(), from:nil)
-			//let pausedTime = redEyeLayer.convertTime(CACurrentMediaTime(), from:nil)
+			debugLog("pausing scan at \(pausedTime)")
 			redEyeLayer.speed = 0
 			redEyeLayer.timeOffset = pausedTime
 		}
@@ -126,8 +123,7 @@ class CylonEffect: NotchEffect {
 	
 	private func resumeScanning() {
 		if !isScanning {
-			debugLog("resuming scan")
-			//let pausedTime = redEyeLayer.timeOffset
+			debugLog("resuming scan at \(pausedTime)")
 			redEyeLayer.speed = 1
 			redEyeLayer.timeOffset = 0
 			redEyeLayer.beginTime = 0
@@ -138,13 +134,11 @@ class CylonEffect: NotchEffect {
 	}
 	
 	override func mouseEntered(at point: CGPoint, underNotch: Bool) {
-		guard let parentLayer = parentLayer else { return }
-		
 		debugLog()
 		
 		cylonAlert = false
 		
-		startScanning()
+		createScanner()
 		
 		redEyeLayer.removeAnimation(forKey: "opacity")
 		if scanningTimer != nil {
@@ -201,50 +195,34 @@ class CylonEffect: NotchEffect {
 			if cylonAlert {
 				if edgeDistance < -CGFloat(cylonProtectionDistance + cylonProtectionThreshold) {
 					cylonAlert = false
-					//startScanning()
 					resumeScanning()
 				}
 			}
 		}
 		
 		if (cylonAlert) {
-			//guard let animation = redEyeLayer.animation(forKey: "Red Eye Animation") else { return }
-			//guard let position = redEyeLayer.presentation()?.position else { return }
-			//redEyeLayer.removeAnimation(forKey: "Red Eye Animation")
-
 			if isScanning {
 				pauseScanning()
 			}
-//			pausedTime = redEyeLayer.convertTime(CACurrentMediaTime(), from:nil)
-//
-//			redEyeLayer.speed = 0
-			redEyeLayer.timeOffset = point.x / parentLayer.bounds.width
+			
+			let bounds = parentLayer.bounds
+			let timeDistance = bounds.height + bounds.width + bounds.height // an approximation, doesn't take radii into account
+			let pointDistance = bounds.height + point.x
+			let timeOffset = pointDistance / timeDistance
+			
+			redEyeLayer.timeOffset = timeOffset
 			pausedTime = redEyeLayer.convertTime(CACurrentMediaTime(), from:nil)
-//			redEyeLayer.timeOffset = pausedTime
-
-//			redEyeAnimation?.beginTime = 0.5
-
-			//redEyeLayer.position = CGPoint(x: point.x, y: parentLayer.bounds.maxY)
+			debugLog("moved scan to \(redEyeLayer.timeOffset) from \(pausedTime)")
 		}
 	}
 	
 	override func mouseExited(at point: CGPoint, underNotch: Bool) {
 		debugLog()
-
-//		pausedTime = redEyeLayer.convertTime(CACurrentMediaTime(), from:nil)
-//		let pausedTime = redEyeLayer.convertTime(CACurrentMediaTime(), from:nil)
-//		redEyeLayer.speed = 0
-//		redEyeLayer.timeOffset = pausedTime
-		
-		//redEyeLayer.opacity = 0
-		//redEyeLayer.speed = 0
 		
 		if scanningTimer != nil {
 			debugLog("cancelling timer")
 			scanningTimer?.invalidate()
 			scanningTimer = nil
-
-			//redEyeLayer.removeAnimation(forKey: "opacity")
 		}
 		
 		scanningTimer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false, block: { timer in
@@ -253,6 +231,8 @@ class CylonEffect: NotchEffect {
 
 			CATransaction.begin()
 			CATransaction.setCompletionBlock { [weak self] in
+				// NOTE: This is a nasty way to check if the animation completed (instead of delegate to watch for it
+				// being cancelled or removed. A slight error in programming never caused anything bad to happen, right?
 				if self?.redEyeLayer.presentation()?.opacity == 0 {
 					debugLog("scanning paused")
 					self?.pauseScanning()
@@ -266,14 +246,6 @@ class CylonEffect: NotchEffect {
 			animation.isRemovedOnCompletion = true
 			self.redEyeLayer.add(animation, forKey: "opacity")
 
-//			self.pausedTime = self.redEyeLayer.convertTime(CACurrentMediaTime(), from:nil)
-			
-//			let pausedTime = self.redEyeLayer.convertTime(CACurrentMediaTime(), from:nil)
-//			self.redEyeLayer.speed = 0
-//			self.redEyeLayer.timeOffset = pausedTime
-			
-			//redEyeLayer.speed = 0
-			
 			CATransaction.commit()
 			
 			self.scanningTimer = nil
