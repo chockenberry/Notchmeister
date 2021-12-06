@@ -176,13 +176,30 @@ class CylonEffect: NotchEffect {
 			//debugLog("under notch, blocking mouse")
 			blockMouse = true
 		}
-		
+
+		guard let parentView = parentView else { return }
+
+		let bounds = parentView.bounds
+		let leftDistance = abs(point.x - bounds.minX)
+		let rightDistance = abs(point.x - bounds.maxX)
+		let bottomDistance = abs(point.y - bounds.maxY)
+
 		if blockMouse {
-			guard let parentView = parentView else { return }
 			guard let screen = parentView.window?.screen else { return }
 			let screenFrame = screen.frame
-			let randomOffset = CGPoint(x: Int.random(in: -cylonProtectionDistance...cylonProtectionDistance), y: Int.random(in: 0...cylonProtectionDistance))
-			let viewPoint = CGPoint(x: point.x + randomOffset.x, y: parentView.bounds.maxY + randomOffset.y)
+			let viewPoint: CGPoint
+			if leftDistance < bottomDistance {
+				let randomOffset = CGPoint(x: Int.random(in: -cylonProtectionDistance...0), y: Int.random(in: -cylonProtectionDistance...cylonProtectionDistance))
+				viewPoint = CGPoint(x: bounds.minX + randomOffset.x, y: point.y + randomOffset.y)
+			}
+			else if rightDistance < bottomDistance {
+				let randomOffset = CGPoint(x: Int.random(in: 0...cylonProtectionDistance), y: Int.random(in: -cylonProtectionDistance...cylonProtectionDistance))
+				viewPoint = CGPoint(x: bounds.maxX + randomOffset.x, y: point.y + randomOffset.y)
+			}
+			else {
+				let randomOffset = CGPoint(x: Int.random(in: -cylonProtectionDistance...cylonProtectionDistance), y: Int.random(in: 0...cylonProtectionDistance))
+				viewPoint = CGPoint(x: point.x + randomOffset.x, y: parentView.bounds.maxY + randomOffset.y)
+			}
 			let windowPoint = parentView.convert(viewPoint, to: nil)
 			guard let screenPoint = parentView.window?.convertPoint(toScreen: windowPoint) else { return } // origin in lower-left corner
 			let globalPoint = CGPoint(x: screenPoint.x, y: screenFrame.size.height + screenFrame.origin.y - screenPoint.y) // origin in upper-left corner
@@ -207,8 +224,21 @@ class CylonEffect: NotchEffect {
 			
 			let bounds = parentLayer.bounds
 			let timeDistance = bounds.height + bounds.width + bounds.height // an approximation, doesn't take radii into account
-			let pointDistance = bounds.height + point.x
-			let timeOffset = pointDistance / timeDistance
+			let pointDistance: CGFloat
+			if leftDistance < bottomDistance {
+				pointDistance = point.y
+			}
+			else if rightDistance < bottomDistance {
+				pointDistance = bounds.height + bounds.width + (bounds.height - point.y)
+			}
+			else {
+				pointDistance = bounds.height + point.x
+			}
+			var timeOffset = pointDistance / timeDistance
+			// a timeOffset of 0, or close to it, causes the red eye to move unpredicably - even robots don't like floating point precision
+			if timeOffset < 0.005 {
+				timeOffset = 0.005
+			}
 			
 			redEyeLayer.timeOffset = timeOffset
 			pausedTime = redEyeLayer.convertTime(CACurrentMediaTime(), from:nil)
