@@ -35,7 +35,7 @@ enum Effects: Int, CaseIterable {
 		case .glow:
 			return "Did you know that the underside of a notch is shiny?\n\n⚠️ Works best in Dark Mode."
 		case .cylon:
-			return "By your command."
+			return "By your command.\n\nAnd don‘t get too close."
 		case .plasma:
 			return "WARNING: Your mouse can break down the magnetic containment field that keeps the M1‘s power in check!"
 		case .festive:

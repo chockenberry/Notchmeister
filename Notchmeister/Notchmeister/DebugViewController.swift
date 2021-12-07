@@ -11,6 +11,8 @@ class DebugViewController: NSViewController {
 
     @IBOutlet weak var debugDrawingCheckbox: NSButton!
     @IBOutlet weak var fakeNotchCheckbox: NSButton!
+	@IBOutlet weak var largeFakeNotchCheckbox: NSButton!
+	@IBOutlet weak var deactivateFakeNotchCheckbox: NSButton!
     @IBOutlet weak var outlineNotchCheckbox: NSButton!
     @IBOutlet weak var fillNotchCheckbox: NSButton!
 	
@@ -27,6 +29,8 @@ class DebugViewController: NSViewController {
 		
         debugDrawingCheckbox.state = Defaults.shouldDebugDrawing ? .on : .off
         fakeNotchCheckbox.state = Defaults.shouldFakeNotch ? .on : .off
+		largeFakeNotchCheckbox.state = Defaults.shouldLargeFakeNotch ? .on : .off
+		deactivateFakeNotchCheckbox.state = Defaults.shouldDeactivateFakeNotch ? .on : .off
         outlineNotchCheckbox.state = Defaults.shouldDrawNotchOutline ? .on : .off
         fillNotchCheckbox.state = Defaults.shouldDrawNotchFill ? .on : .off
     }
@@ -47,7 +51,18 @@ class DebugViewController: NSViewController {
         Defaults.shouldFakeNotch = (fakeNotchCheckbox.state == .on)
 		updateWindows()
     }
-    
+
+	@IBAction func largeFakeNotchValueChanged(_ sender: Any) {
+		Defaults.shouldLargeFakeNotch = (largeFakeNotchCheckbox.state == .on)
+		updateWindows()
+	}
+
+	@IBAction func deactivateFakeNotchValueChanged(_ sender: Any) {
+		Defaults.shouldDeactivateFakeNotch = (deactivateFakeNotchCheckbox.state == .on)
+		updateWindows()
+	}
+
+
     @IBAction func outlineNotchValueChanaged(_ sender: Any) {
         Defaults.shouldDrawNotchOutline = (outlineNotchCheckbox.state == .on)
 		updateWindows()

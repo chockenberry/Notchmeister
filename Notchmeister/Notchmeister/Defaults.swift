@@ -15,6 +15,8 @@ enum Defaults : String
 {
     case debugDrawingEnabled
     case fakeNotchEnabled
+	case largeFakeNotchEnabled
+	case deactivateFakeNotchEnabled
     case notchOutlineEnabled
     case notchFillEnabled
 	case effectSelection
@@ -26,6 +28,8 @@ enum Defaults : String
 			UserDefaults.standard.register(defaults: [
 				Defaults.debugDrawingEnabled.rawValue: false,
 				Defaults.fakeNotchEnabled.rawValue: true,
+				Defaults.largeFakeNotchEnabled.rawValue: false,
+				Defaults.deactivateFakeNotchEnabled.rawValue: false,
 				Defaults.notchOutlineEnabled.rawValue : false,
 				Defaults.notchFillEnabled.rawValue: true,
 				Defaults.effectSelection.rawValue: Effects.festive.rawValue,
@@ -43,7 +47,17 @@ enum Defaults : String
         get { UserDefaults.standard.bool(forKey: Defaults.fakeNotchEnabled.rawValue) }
         set { UserDefaults.standard.set(newValue, forKey: Defaults.fakeNotchEnabled.rawValue)}
     }
-    
+
+	static var shouldLargeFakeNotch: Bool {
+		get { UserDefaults.standard.bool(forKey: Defaults.largeFakeNotchEnabled.rawValue) }
+		set { UserDefaults.standard.set(newValue, forKey: Defaults.largeFakeNotchEnabled.rawValue)}
+	}
+
+	static var shouldDeactivateFakeNotch: Bool {
+		get { UserDefaults.standard.bool(forKey: Defaults.deactivateFakeNotchEnabled.rawValue) }
+		set { UserDefaults.standard.set(newValue, forKey: Defaults.deactivateFakeNotchEnabled.rawValue)}
+	}
+
     static var shouldDrawNotchOutline: Bool {
         get { UserDefaults.standard.bool(forKey: Defaults.notchOutlineEnabled.rawValue) }
         set { UserDefaults.standard.set(newValue, forKey: Defaults.notchOutlineEnabled.rawValue)}

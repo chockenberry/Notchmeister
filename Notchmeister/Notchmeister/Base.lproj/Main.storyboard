@@ -263,25 +263,25 @@
             <objects>
                 <viewController storyboardIdentifier="debugViewController" id="Cb5-Lm-sZD" customClass="DebugViewController" customModule="Notchmeister" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="yHf-hb-Xxs">
-                        <rect key="frame" x="0.0" y="0.0" width="334" height="122"/>
+                        <rect key="frame" x="0.0" y="0.0" width="334" height="176"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <stackView distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" fixedFrame="YES" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Aih-3p-shV">
-                                <rect key="frame" x="20" y="20" width="294" height="82"/>
+                            <stackView distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Aih-3p-shV">
+                                <rect key="frame" x="20" y="20" width="294" height="136"/>
                                 <subviews>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="EFD-t6-idF">
-                                        <rect key="frame" x="-2" y="66" width="88" height="16"/>
+                                        <rect key="frame" x="-2" y="120" width="88" height="16"/>
                                         <textFieldCell key="cell" lineBreakMode="clipping" title="Development:" id="9Py-Sc-DOI">
                                             <font key="font" metaFont="system"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="6" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Srn-qg-VXb">
-                                        <rect key="frame" x="92" y="0.0" width="202" height="82"/>
+                                    <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Srn-qg-VXb">
+                                        <rect key="frame" x="92" y="0.0" width="202" height="136"/>
                                         <subviews>
                                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Qh7-pz-oeU">
-                                                <rect key="frame" x="-2" y="65" width="161" height="18"/>
+                                                <rect key="frame" x="-2" y="119" width="161" height="18"/>
                                                 <buttonCell key="cell" type="check" title="Enable debug drawing" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="dmw-rr-miI">
                                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                     <font key="font" metaFont="system"/>
@@ -291,7 +291,7 @@
                                                 </connections>
                                             </button>
                                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="GpJ-jA-PUB">
-                                                <rect key="frame" x="-2" y="43" width="204" height="18"/>
+                                                <rect key="frame" x="-2" y="95" width="204" height="18"/>
                                                 <buttonCell key="cell" type="check" title="Fake notch for the notch-less" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="9af-4Q-E6A">
                                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                     <font key="font" metaFont="system"/>
@@ -300,8 +300,28 @@
                                                     <action selector="fakeNotchValueChanged:" target="Cb5-Lm-sZD" id="eyk-w7-9kV"/>
                                                 </connections>
                                             </button>
+                                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="XxQ-Du-PQi">
+                                                <rect key="frame" x="-2" y="71" width="128" height="18"/>
+                                                <buttonCell key="cell" type="check" title="Large fake notch" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="EJ6-v0-Now">
+                                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                    <font key="font" metaFont="system"/>
+                                                </buttonCell>
+                                                <connections>
+                                                    <action selector="largeFakeNotchValueChanged:" target="Cb5-Lm-sZD" id="clG-oU-vh0"/>
+                                                </connections>
+                                            </button>
+                                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="b3D-fJ-mEF">
+                                                <rect key="frame" x="-2" y="47" width="158" height="18"/>
+                                                <buttonCell key="cell" type="check" title="Deactivate fake notch" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="rk0-rN-Ui1">
+                                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                    <font key="font" metaFont="system"/>
+                                                </buttonCell>
+                                                <connections>
+                                                    <action selector="deactivateFakeNotchValueChanged:" target="Cb5-Lm-sZD" id="Lfn-jR-LHy"/>
+                                                </connections>
+                                            </button>
                                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="rKO-N3-Lc5">
-                                                <rect key="frame" x="-2" y="21" width="131" height="18"/>
+                                                <rect key="frame" x="-2" y="23" width="131" height="18"/>
                                                 <buttonCell key="cell" type="check" title="Outline the notch" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="ohU-Sq-GOo">
                                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                     <font key="font" metaFont="system"/>
@@ -326,8 +346,12 @@
                                             <integer value="1000"/>
                                             <integer value="1000"/>
                                             <integer value="1000"/>
+                                            <integer value="1000"/>
+                                            <integer value="1000"/>
                                         </visibilityPriorities>
                                         <customSpacing>
+                                            <real value="3.4028234663852886e+38"/>
+                                            <real value="3.4028234663852886e+38"/>
                                             <real value="3.4028234663852886e+38"/>
                                             <real value="3.4028234663852886e+38"/>
                                             <real value="3.4028234663852886e+38"/>
@@ -345,17 +369,25 @@
                                 </customSpacing>
                             </stackView>
                         </subviews>
+                        <constraints>
+                            <constraint firstItem="Aih-3p-shV" firstAttribute="top" secondItem="yHf-hb-Xxs" secondAttribute="top" constant="20" symbolic="YES" id="5OL-QE-xp9"/>
+                            <constraint firstAttribute="trailing" secondItem="Aih-3p-shV" secondAttribute="trailing" constant="20" symbolic="YES" id="91S-dJ-YrY"/>
+                            <constraint firstItem="Aih-3p-shV" firstAttribute="leading" secondItem="yHf-hb-Xxs" secondAttribute="leading" constant="20" symbolic="YES" id="HiP-Bp-37e"/>
+                            <constraint firstAttribute="bottom" secondItem="Aih-3p-shV" secondAttribute="bottom" constant="20" symbolic="YES" id="m44-FO-OfK"/>
+                        </constraints>
                     </view>
                     <connections>
+                        <outlet property="deactivateFakeNotchCheckbox" destination="b3D-fJ-mEF" id="UTv-Zf-EqJ"/>
                         <outlet property="debugDrawingCheckbox" destination="Qh7-pz-oeU" id="xxR-Et-FnP"/>
                         <outlet property="fakeNotchCheckbox" destination="GpJ-jA-PUB" id="dh3-iz-Iep"/>
                         <outlet property="fillNotchCheckbox" destination="n8l-IV-LaP" id="x7N-8K-xPf"/>
+                        <outlet property="largeFakeNotchCheckbox" destination="XxQ-Du-PQi" id="y3E-nF-gra"/>
                         <outlet property="outlineNotchCheckbox" destination="rKO-N3-Lc5" id="hQc-bO-cMR"/>
                     </connections>
                 </viewController>
                 <customObject id="fN4-Qi-AUp" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="488" y="616"/>
+            <point key="canvasLocation" x="488" y="631"/>
         </scene>
     </scenes>
     <resources>

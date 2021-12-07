@@ -69,14 +69,8 @@ extension NSScreen {
         let screenFrame = self.frame
         let visibleFrame = self.visibleFrame
         
-#if DEBUG
-		let DEBUG_HEIGHT = true // use true to simulate height of real notch instead of menubar height
-#else
-		let DEBUG_HEIGHT = false
-#endif
-
 		let fakeNotchSize: CGSize
-		if DEBUG_HEIGHT {
+		if Defaults.shouldLargeFakeNotch {
 			fakeNotchSize = NSSize(width:220, height:38)
 		}
 		else {

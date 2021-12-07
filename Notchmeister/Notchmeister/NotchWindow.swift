@@ -24,11 +24,12 @@ class NotchWindow: NSWindow {
 		//self.level = .statusBar
 		self.level = .popUpMenu // NOTE: I think this is probably best - keeps the window under a screensaver.
 		if Defaults.shouldFakeNotch {
-#if DEBUG
-			self.hidesOnDeactivate = false // use false to simulate how real notch works
-#else
-			self.hidesOnDeactivate = true
-#endif
+			if Defaults.shouldDeactivateFakeNotch {
+				self.hidesOnDeactivate = true // use true to keep fake notch from interfering with other apps
+			}
+			else {
+				self.hidesOnDeactivate = false // use false to simulate how real notch works
+			}
 		}
 		else {
 			self.hidesOnDeactivate = false
