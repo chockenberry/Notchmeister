@@ -246,6 +246,9 @@ class CylonEffect: NotchEffect {
 		}
 	}
 	
+	let spindownTimeInterval: CFTimeInterval = 3.0
+	let disappearTimeInterval: CFTimeInterval = 0.5
+	
 	override func mouseExited(at point: CGPoint, underNotch: Bool) {
 		debugLog()
 		
@@ -255,14 +258,14 @@ class CylonEffect: NotchEffect {
 			scanningTimer = nil
 		}
 		
-		scanningTimer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false, block: { timer in
+		scanningTimer = Timer.scheduledTimer(withTimeInterval: spindownTimeInterval, repeats: false, block: { timer in
 			debugLog("scanning spindown")
 			self.redEyeLayer.opacity = 0
 
 			CATransaction.begin()
 			CATransaction.setCompletionBlock { [weak self] in
 				// NOTE: This is a nasty way to check if the animation completed (instead of delegate to watch for it
-				// being cancelled or removed. A slight error in programming never caused anything bad to happen, right?
+				// being cancelled or removed. A "slight error in programming" never caused anything bad to happen, right?
 				if self?.redEyeLayer.presentation()?.opacity == 0 {
 					debugLog("scanning paused")
 					self?.pauseScanning()
@@ -270,7 +273,7 @@ class CylonEffect: NotchEffect {
 			}
 			
 			let animation = CABasicAnimation(keyPath: "opacity")
-			animation.duration = 1
+			animation.duration = self.disappearTimeInterval
 			animation.fromValue = 1
 			animation.toValue = 0
 			animation.isRemovedOnCompletion = true
