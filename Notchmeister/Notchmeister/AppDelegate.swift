@@ -13,11 +13,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	func applicationDidFinishLaunching(_ aNotification: Notification) {
         Defaults.register()
 		
-#if !DEBUG
+#if true //!DEBUG
 		if !NSScreen.hasNotchedScreen {
 			let alert = NSAlert()
 			alert.messageText = "Notch Simulation Mode"
-			alert.informativeText = "This Mac doesn’t have a notch.\n\nThanks to Notchmeister‘s built-in genuine replacement notch, you can still join in on the fun. This replacement part, like all others, doesn't quite work as original. The notch height is a bit shorter and the mouse won‘t disappear underneath it.\n\nNote also that the replacement notch only appears when the app is active: this prevents it from interfering with a long menu bar in another app.\n\nSide-effects of this app include making you want a new MacBook Pro even more than you already do. Sorry."
+			alert.informativeText = "This Mac doesn’t have a notch.\n\nThanks to Notchmeister‘s built-in genuine replacement notch, you can still have fun. This replacement part, like all others, doesn't quite work as original: it‘s shorter and the mouse doesn‘t disappear underneath.\n\nNote also that this notch only appears when the app is active so it doesn't interfering with other apps.\n\nSide-effects of this app include making you want a new MacBook Pro even more than you already do. Sorry."
 			alert.runModal()
 		}
 #endif
