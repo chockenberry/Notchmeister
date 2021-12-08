@@ -13,7 +13,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	func applicationDidFinishLaunching(_ aNotification: Notification) {
         Defaults.register()
 		
-#if true //!DEBUG
+#if !DEBUG
 		if !NSScreen.hasNotchedScreen {
 			let alert = NSAlert()
 			alert.messageText = "Notch Simulation Mode"
