@@ -68,10 +68,18 @@ enum Defaults : String
         set { UserDefaults.standard.set(newValue, forKey: Defaults.notchFillEnabled.rawValue)}
     }
 	
-	// TODO: This should eventually be an enumeration
+	// the Effects enumeration's rawValue is stored here
 	static var selectedEffect: Int {
 		get { UserDefaults.standard.integer(forKey: Defaults.effectSelection.rawValue) }
 		set { UserDefaults.standard.set(newValue, forKey: Defaults.effectSelection.rawValue)}
 	}
 
+
+	static let notchlessHelp = "This Mac doesn't have a notch.\n\nThanks to Notchmeister's built-in genuine replacement notch, you can still have fun. This replacement part, like all others, doesn't quite work as original: it's shorter and the mouse doesn't disappear underneath.\n\nNote also that this notch only appears when the app is active so it doesn't interfere with other apps.\n\n"
+
+	static let notchlessHelpIntro = "Side effects of this app include making you want a new MacBook Pro even more than you already do. Sorry."
+	static let notchlessHelpButton = "If you need more assistance, take a look at the Help menu."
+
+	static let notchedHelp = "Congratulations, you have a notch!\n\nIt‘s unlikely that you‘ll need help with Notchmeister, but if you do, get in touch with @Notchmeister on Twitter. If you think the app needs a fix or new feature, take a look at the GitHub project.\n\nLinks for both are in the Help menu."
+	
 }

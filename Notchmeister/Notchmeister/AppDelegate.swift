@@ -17,7 +17,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		if !NSScreen.hasNotchedScreen {
 			let alert = NSAlert()
 			alert.messageText = "Notch Simulation Mode"
-			alert.informativeText = "This Mac doesn’t have a notch.\n\nThanks to Notchmeister‘s built-in genuine replacement notch, you can still have fun. This replacement part, like all others, doesn't quite work as original: it‘s shorter and the mouse doesn‘t disappear underneath.\n\nNote also that this notch only appears when the app is active so it doesn't interfere with other apps.\n\nSide-effects of this app include making you want a new MacBook Pro even more than you already do. Sorry."
+			alert.informativeText = Defaults.notchlessHelp + Defaults.notchlessHelpIntro
 			alert.runModal()
 		}
 #endif
@@ -45,8 +45,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		}
 	}
 	
-	@IBAction func showHelp(_ sender: Any) {
+	@IBAction func openTwitter(_ sender: Any) {
 		guard let url = URL(string: "https://twitter.com/notchmeister") else { NSSound.beep(); return }
+		NSWorkspace.shared.open(url)
+	}
+
+	@IBAction func openGitHub(_ sender: Any) {
+		guard let url = URL(string: "https://github.com/chockenberry/Notchmeister") else { NSSound.beep(); return }
 		NSWorkspace.shared.open(url)
 	}
 

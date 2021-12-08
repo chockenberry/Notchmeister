@@ -88,7 +88,7 @@ class ViewController: NSViewController {
 
 	@IBAction func openDebugViewController(_ sender: Any) {
 		guard let viewController = self.storyboard?.instantiateController(withIdentifier: "debugViewController") as? NSViewController else { return }
-		self.present(viewController, asPopoverRelativeTo: debugButton.frame, of: view, preferredEdge: NSRectEdge.maxX, behavior: .transient)
+		self.present(viewController, asPopoverRelativeTo: debugButton.frame, of: view, preferredEdge: NSRectEdge.minX, behavior: .transient)
 	}
 	
 	@IBAction func selectedEffectValueChanged(_ sender: Any) {
@@ -97,6 +97,18 @@ class ViewController: NSViewController {
 		
 		guard let effect = Effects(rawValue: Defaults.selectedEffect) else { return }
 		effectDescriptionTextField.stringValue = effect.displayDescription()
+	}
+	
+	@IBAction func openHelp(_ sender: Any) {
+		let alert = NSAlert()
+		alert.messageText = "Notchmeister Help"
+		if NSScreen.hasNotchedScreen {
+			alert.informativeText = Defaults.notchedHelp
+		}
+		else {
+			alert.informativeText = Defaults.notchlessHelp + Defaults.notchlessHelpButton
+		}
+		alert.runModal()
 	}
 }
 

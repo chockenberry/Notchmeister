@@ -97,7 +97,13 @@
                                     <items>
                                         <menuItem title="Notchmeister Help" keyEquivalent="?" id="FKE-Sm-Kum">
                                             <connections>
-                                                <action selector="showHelp:" target="Voe-Tx-rLC" id="zuf-wQ-5GN"/>
+                                                <action selector="openTwitter:" target="Voe-Tx-rLC" id="cMv-gU-nS5"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Open GitHub Project" id="bTe-eD-z3R">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="openGitHub:" target="Voe-Tx-rLC" id="3io-zz-1Al"/>
                                             </connections>
                                         </menuItem>
                                     </items>
@@ -224,7 +230,7 @@
                                 </customSpacing>
                             </stackView>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ewE-fL-l0e">
-                                <rect key="frame" x="361" y="15.5" width="19" height="18"/>
+                                <rect key="frame" x="20" y="15.5" width="19" height="18"/>
                                 <buttonCell key="cell" type="bevel" bezelStyle="rounded" image="wrench.and.screwdriver" catalog="system" imagePosition="only" alignment="center" controlSize="large" imageScaling="proportionallyDown" inset="2" id="3DI-vc-m08">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -233,14 +239,26 @@
                                     <action selector="openDebugViewController:" target="XfG-lQ-9wD" id="f34-Xo-ft1"/>
                                 </connections>
                             </button>
+                            <button horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="omC-Yz-2sa">
+                                <rect key="frame" x="350" y="12" width="35" height="35"/>
+                                <buttonCell key="cell" type="help" bezelStyle="helpButton" alignment="center" controlSize="large" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="nfV-tt-cmW">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="openHelp:" target="XfG-lQ-9wD" id="enV-n5-Zs0"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <constraints>
+                            <constraint firstAttribute="trailing" secondItem="omC-Yz-2sa" secondAttribute="trailing" constant="20" symbolic="YES" id="0kc-Ed-MZr"/>
+                            <constraint firstAttribute="bottom" secondItem="omC-Yz-2sa" secondAttribute="bottom" constant="20" symbolic="YES" id="B05-dU-5bQ"/>
                             <constraint firstItem="PPi-Xy-Y4k" firstAttribute="top" secondItem="DQb-Wa-YfR" secondAttribute="bottom" constant="20" id="L6v-GG-jEZ"/>
                             <constraint firstItem="eJu-Vj-QTs" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="85" id="LAT-Dq-eyx"/>
                             <constraint firstAttribute="bottom" secondItem="ewE-fL-l0e" secondAttribute="bottom" constant="20" id="RZE-a3-tcl"/>
                             <constraint firstItem="DQb-Wa-YfR" firstAttribute="centerX" secondItem="m2S-Jp-Qdl" secondAttribute="centerX" id="Rt6-GL-ImR"/>
                             <constraint firstItem="PPi-Xy-Y4k" firstAttribute="centerX" secondItem="DQb-Wa-YfR" secondAttribute="centerX" id="agV-c3-SFn"/>
-                            <constraint firstAttribute="trailing" secondItem="ewE-fL-l0e" secondAttribute="trailing" constant="20" id="byx-Ou-ToC"/>
+                            <constraint firstItem="ewE-fL-l0e" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="20" id="byx-Ou-ToC"/>
                             <constraint firstItem="DQb-Wa-YfR" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="20" symbolic="YES" id="obc-h5-hEI"/>
                         </constraints>
                     </view>
