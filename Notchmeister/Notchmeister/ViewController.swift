@@ -79,8 +79,9 @@ class ViewController: NSViewController {
 		}
     }
     
-	func updateWindows() {
+	func updateConfiguration() {
 		// called from DebugViewController to rebuild window and view hierarchies when settings change
+		configureForDefaults()
 		createNotchWindows()
 	}
 	

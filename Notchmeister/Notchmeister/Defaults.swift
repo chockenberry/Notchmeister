@@ -11,7 +11,7 @@ import Foundation
 // I'm sure a treatment with protocols and generics
 // that extends NSUserDefaults would be nicer
 
-enum Defaults : String
+enum Defaults : String, CaseIterable
 {
     case debugDrawingEnabled
     case fakeNotchEnabled
@@ -29,7 +29,7 @@ enum Defaults : String
 				Defaults.debugDrawingEnabled.rawValue: false,
 				Defaults.fakeNotchEnabled.rawValue: true,
 				Defaults.largeFakeNotchEnabled.rawValue: false,
-				Defaults.deactivateFakeNotchEnabled.rawValue: false,
+				Defaults.deactivateFakeNotchEnabled.rawValue: true,
 				Defaults.notchOutlineEnabled.rawValue : false,
 				Defaults.notchFillEnabled.rawValue: true,
 				Defaults.effectSelection.rawValue: Effects.festive.rawValue,
@@ -38,6 +38,14 @@ enum Defaults : String
 		}
 	}
     
+	static func reset() {
+		if registered {
+			for aCase in allCases {
+				UserDefaults.standard.removeObject(forKey: aCase.rawValue)
+			}
+		}
+	}
+	
     static var shouldDebugDrawing: Bool {
         get { UserDefaults.standard.bool(forKey: Defaults.debugDrawingEnabled.rawValue) }
         set { UserDefaults.standard.set(newValue, forKey: Defaults.debugDrawingEnabled.rawValue)}

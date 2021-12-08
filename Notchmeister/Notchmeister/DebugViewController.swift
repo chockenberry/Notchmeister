@@ -37,41 +37,45 @@ class DebugViewController: NSViewController {
         
     //MARK: - Actions
     
-	private func updateWindows() {
+	private func updateConfiguration() {
 		guard let viewController = presentingViewController as? ViewController else { return }
-		viewController.updateWindows()
+		viewController.updateConfiguration()
 	}
 	
     @IBAction func debugDrawingValueChanged(_ sender: Any) {
         Defaults.shouldDebugDrawing = (debugDrawingCheckbox.state == .on)
-		updateWindows()
+		updateConfiguration()
     }
     
     @IBAction func fakeNotchValueChanged(_ sender: Any) {
         Defaults.shouldFakeNotch = (fakeNotchCheckbox.state == .on)
-		updateWindows()
+		updateConfiguration()
     }
 
 	@IBAction func largeFakeNotchValueChanged(_ sender: Any) {
 		Defaults.shouldLargeFakeNotch = (largeFakeNotchCheckbox.state == .on)
-		updateWindows()
+		updateConfiguration()
 	}
 
 	@IBAction func deactivateFakeNotchValueChanged(_ sender: Any) {
 		Defaults.shouldDeactivateFakeNotch = (deactivateFakeNotchCheckbox.state == .on)
-		updateWindows()
+		updateConfiguration()
 	}
-
 
     @IBAction func outlineNotchValueChanaged(_ sender: Any) {
         Defaults.shouldDrawNotchOutline = (outlineNotchCheckbox.state == .on)
-		updateWindows()
+		updateConfiguration()
     }
     
     @IBAction func fillNotchValueChanged(_ sender: Any) {
         Defaults.shouldDrawNotchFill = (fillNotchCheckbox.state == .on)
-		updateWindows()
+		updateConfiguration()
     }
 
+	@IBAction func resetDefaults(_ sender: Any) {
+		Defaults.reset()	
+		configureForDefaults()
+		updateConfiguration()
+	}
 }
 
