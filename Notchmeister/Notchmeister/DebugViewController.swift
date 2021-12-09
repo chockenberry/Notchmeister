@@ -15,7 +15,8 @@ class DebugViewController: NSViewController {
 	@IBOutlet weak var deactivateFakeNotchCheckbox: NSButton!
     @IBOutlet weak var outlineNotchCheckbox: NSButton!
     @IBOutlet weak var fillNotchCheckbox: NSButton!
-	
+	@IBOutlet weak var textNotchCheckbox: NSButton!
+
     //MARK: - Life Cycle
     
     override func viewDidLoad() {
@@ -33,6 +34,7 @@ class DebugViewController: NSViewController {
 		deactivateFakeNotchCheckbox.state = Defaults.shouldDeactivateFakeNotch ? .on : .off
         outlineNotchCheckbox.state = Defaults.shouldDrawNotchOutline ? .on : .off
         fillNotchCheckbox.state = Defaults.shouldDrawNotchFill ? .on : .off
+		textNotchCheckbox.state = Defaults.shouldDrawNotchText ? .on : .off
     }
         
     //MARK: - Actions
@@ -71,6 +73,12 @@ class DebugViewController: NSViewController {
         Defaults.shouldDrawNotchFill = (fillNotchCheckbox.state == .on)
 		updateConfiguration()
     }
+
+	@IBAction func textNotchValueChanged(_ sender: Any) {
+		Defaults.shouldDrawNotchText = (textNotchCheckbox.state == .on)
+		updateConfiguration()
+	}
+
 
 	@IBAction func resetDefaults(_ sender: Any) {
 		Defaults.reset()	

@@ -19,6 +19,7 @@ enum Defaults : String, CaseIterable
 	case deactivateFakeNotchEnabled
     case notchOutlineEnabled
     case notchFillEnabled
+	case notchTextEnabled
 	case effectSelection
 
 	static var registered = false
@@ -32,6 +33,7 @@ enum Defaults : String, CaseIterable
 				Defaults.deactivateFakeNotchEnabled.rawValue: true,
 				Defaults.notchOutlineEnabled.rawValue : false,
 				Defaults.notchFillEnabled.rawValue: true,
+				Defaults.notchTextEnabled.rawValue: true,
 				Defaults.effectSelection.rawValue: Effects.festive.rawValue,
 			])
 			registered = true
@@ -75,7 +77,12 @@ enum Defaults : String, CaseIterable
         get { UserDefaults.standard.bool(forKey: Defaults.notchFillEnabled.rawValue) }
         set { UserDefaults.standard.set(newValue, forKey: Defaults.notchFillEnabled.rawValue)}
     }
-	
+
+	static var shouldDrawNotchText: Bool {
+		get { UserDefaults.standard.bool(forKey: Defaults.notchTextEnabled.rawValue) }
+		set { UserDefaults.standard.set(newValue, forKey: Defaults.notchTextEnabled.rawValue)}
+	}
+
 	// the Effects enumeration's rawValue is stored here
 	static var selectedEffect: Int {
 		get { UserDefaults.standard.integer(forKey: Defaults.effectSelection.rawValue) }

@@ -32,7 +32,7 @@ class FakeNotchView: NSView {
 	}
 	
 	private func configureView() {
-		notchTextField?.isHidden = false
+		notchTextField?.isHidden = Defaults.shouldDrawNotchText == false
 	}
 	
 	private func createNotchLayer() {
