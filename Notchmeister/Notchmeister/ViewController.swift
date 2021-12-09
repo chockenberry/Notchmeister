@@ -34,7 +34,6 @@ class ViewController: NSViewController {
 		
 		// NOTE: Turn on the debug button in the release build by holding down the Option key while closing the main window,
 		// then reopen the window using the Dock icon.
-		
 		if NSEvent.modifierFlags.contains(.option) {
 			debugButton.isHidden = false
 		}

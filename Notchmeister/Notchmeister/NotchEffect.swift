@@ -9,7 +9,7 @@ import AppKit
 
 // NOTE: Maybe a protocol is the right thing to do here, or maybe just let subclasses override methods.
 // I don't really have an opinion about this yet, but I'm sure that day will come after we make a few
-// of these.
+// of these. I suspect that the terrible name is an indication that we won't need it.
 
 protocol NotchEffectable { // yeah, this is a terrible name
 	
@@ -67,27 +67,17 @@ class NotchEffect: NotchEffectable {
 
 		let notchBounds = parentLayer.bounds
 		
-		// TODO: corners are special cases - that aren't handled yet...
-//		let leftCorner = CGRect(x: notchBounds.minX, y: notchBounds.maxY - .notchLowerRadius, width: .notchLowerRadius, height: .notchLowerRadius)
-//		let rightCorner = CGRect(x: notchBounds.maxX - .notchLowerRadius, y: notchBounds.maxY - .notchLowerRadius, width: .notchLowerRadius, height: .notchLowerRadius)
-//
-//		if leftCorner.contains(point) {
-//			return 0
-//		}
-//		else if rightCorner.contains(point) {
-//			return 0
-//		}
-//		else {
-			let xDelta: CGFloat
-			if point.x < notchBounds.midX {
-				xDelta = point.x - notchBounds.minX
-			}
-			else {
-				xDelta = notchBounds.maxX - point.x
-			}
-			let yDelta = notchBounds.maxY - point.y
-			return min(xDelta, yDelta)
-//		}
+		// NOTE: This is an approximation that doesn't take the corner radii into account. So far, the effects haven't
+		// needed a precise distance.
+		let xDelta: CGFloat
+		if point.x < notchBounds.midX {
+			xDelta = point.x - notchBounds.minX
+		}
+		else {
+			xDelta = notchBounds.maxX - point.x
+		}
+		let yDelta = notchBounds.maxY - point.y
+		return min(xDelta, yDelta)
 	}
 }
 
