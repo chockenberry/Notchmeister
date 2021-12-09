@@ -19,7 +19,8 @@ class GlowEffect: NotchEffect {
 
 	var hotSpotOffset: CGPoint = .zero
 	
-	let glowRadius = 100.0 // notch height is 38 pt
+//	let glowRadius = 100.0 // notch height is 38 pt
+	let glowRadius = 60.0 // notch height is 38 pt, with 50 pt border
 	let maskRadius = 12.0 // cursor radius is 23 pt / 2 = 11.5
 	let edgeWidth = 1.0
 	let offset = 0
@@ -57,6 +58,7 @@ class GlowEffect: NotchEffect {
 			glowLayer.position = .zero
 			glowLayer.opacity = 0
 			
+#if false
 			// NOTE: The glow gradient is drawn with exponential falloff at eight equidistant points along the radius
 			// (to simulate a single point of light). There is also an exponential falloff on the layer opacity
 			// as the mouse gets closer to the edge. See Glow.gcx for how this is modeled.
@@ -77,7 +79,20 @@ class GlowEffect: NotchEffect {
 				return NSNumber(value: point)
 			}
 			locations.append(NSNumber(value: 1))
+#else
+			// NOTE: The glow gradient is drawn with sinusoidal falloff at eight equidistant points along the radius.
+			// Exponential falloff is more physically accurate, but gets lost in the user interface.
 
+			let points = [0, 1.0/8.0, 2.0/8.0, 3.0/8.0, 4.0/8.0, 5.0/8.0, 6.0/8.0, 7.0/8.0, 8.0/8.0]
+			let colors: [CGColor] = points.map { point in
+				let attenuation = ((cos(.pi * point) - 1.0) / 2.0) + 1
+				return glowColor.withAlphaComponent(attenuation).cgColor
+			}
+			let locations: [NSNumber] = points.map { point in
+				return NSNumber(value: point)
+			}
+#endif
+			
 			glowLayer.type = .radial
 //			let startColor = glowColor
 //			let middleColor = glowColor.withAlphaComponent(0.5)
