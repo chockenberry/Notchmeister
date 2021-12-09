@@ -266,13 +266,6 @@ class FestiveEffect: NotchEffect {
 		}
 	}
 	
-	override func start() {
-	}
-
-	override func end() {
-	}
-
-	
 	private func startLights() {
 		if timer == nil {
 			patternAddress = 0b0000_0000_0000_0000
@@ -370,7 +363,7 @@ class FestiveEffect: NotchEffect {
 				if bulbIndex >= 0 && bulbIndex < bulbCount {
 					if bulbIndex != currentBulbIndex {
 						currentBulbIndex = bulbIndex
-						debugLog("starting bulbIndex = \(bulbIndex), point.x = \(point.x)")
+
 						let bulbLayer = bulbLayers[bulbIndex]
 						
 						CATransaction.begin()

@@ -33,7 +33,7 @@ enum Effects: Int, CaseIterable {
 	func displayDescription() -> String {
 		switch self {
 		case .glow:
-			return "Did you know that the underside of a notch is shiny?\n\n⚠️ Works best in Dark Mode."
+			return "A cursor will light your way.\n\n⚠️ Works best in Dark Mode."
 		case .cylon:
 			return "By your command.\n\nAnd don‘t get too close."
 		case .plasma:

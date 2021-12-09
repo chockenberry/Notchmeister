@@ -146,7 +146,6 @@ extension NSBezierPath {
         
         // default coordinate space is flipped so (0,0) is lower-left
         
-		//let radius: CGFloat = .notchLowerRadius
         let path = NSBezierPath()
 
 		let startPoint = NSPoint(x: -.notchUpperRadius, y: size.height)

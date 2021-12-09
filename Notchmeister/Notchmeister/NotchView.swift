@@ -19,16 +19,6 @@ class NotchView: NSView {
 			return true
 		}
 	}
-
-//    override func updateLayer() {
-//        guard let notchOutlineLayer = notchOutlineLayer else { return }
-//
-//        notchOutlineLayer.fillColor = Defaults.shouldDrawNotchFill ? NSColor.black.cgColor : NSColor.clear.cgColor
-//        notchOutlineLayer.strokeColor = Defaults.shouldDrawNotchOutline ? NSColor.white.cgColor : NSColor.clear.cgColor
-//        notchOutlineLayer.lineWidth = 2.0
-//    }
-    
-	//private let notchPadding: CGFloat = 50
 	
 	override func viewDidMoveToSuperview() {
 		if self.superview != nil {
@@ -73,7 +63,6 @@ class NotchView: NSView {
 	func mouseMoved(windowPoint: CGPoint) {
 		let point = notchLocation(with: windowPoint)
 		let underNotch = bounds.contains(point)
-		//debugLog("point = \(point), underNotch = \(underNotch)")
 		notchEffect?.mouseMoved(at: point, underNotch: underNotch)
 	}
 	

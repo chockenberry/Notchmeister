@@ -109,7 +109,7 @@ class CylonEffect: NotchEffect {
 	// this is a helluva state machine - seems appropriate for a Cylon
 	var scanningTimer: Timer? // a timer that lets the scanner run for awhile after the mouse leaves the tracking area
 	var isScanning = false // a flag that indicates if the redEyeAnimation is running with a speed of 1, or stopped at 0
-	var pausedTime: CFTimeInterval = 0 // the time of the current paused animation - adjusted to block mouse
+	var pausedTime: CFTimeInterval = 0 // the time of the current paused animation - adjusted to stay near mouse
 	
 	private func pauseScanning() {
 		if isScanning {
@@ -165,7 +165,6 @@ class CylonEffect: NotchEffect {
 		var blockMouse = false
 		if edgeDistance < 0 {
 			// outside of notch
-			//debugLog("outside of notch")
 			if !cylonAlert && abs(edgeDistance) < 5 {
 				//debugLog("blocking mouse")
 				blockMouse = true
@@ -173,7 +172,6 @@ class CylonEffect: NotchEffect {
 		}
 		else {
 			// under notch
-			//debugLog("under notch, blocking mouse")
 			blockMouse = true
 		}
 
@@ -188,6 +186,7 @@ class CylonEffect: NotchEffect {
 			guard let screen = parentView.window?.screen else { return }
 			let screenFrame = screen.frame
 			let viewPoint: CGPoint
+			// the randomOffsets make the mouse movement annoying - unless you back off
 			if leftDistance < bottomDistance {
 				let randomOffset = CGPoint(x: Int.random(in: -cylonProtectionDistance...0), y: Int.random(in: -cylonProtectionDistance...cylonProtectionDistance))
 				viewPoint = CGPoint(x: bounds.minX + randomOffset.x, y: point.y + randomOffset.y)

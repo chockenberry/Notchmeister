@@ -14,7 +14,6 @@ class RadarEffect: NotchEffect {
 	let XRAY_MODE = false
 	
 	lazy var cursorImage: CIImage? = {
-		debugLog("creating cursorImage...")
 		let cursor = NSCursor.current
 
 		guard let cursorBitmap = cursor.image.cgImage(forProposedRect: nil, context: nil, hints: nil) else { return nil }
@@ -51,7 +50,6 @@ class RadarEffect: NotchEffect {
 	}()
 	
 	lazy var scannerImage: CIImage? = {
-		debugLog("creating scannerImage...")
 		guard let parentLayer = parentLayer else { return nil }
 
 		let scale = parentLayer.contentsScale
@@ -99,7 +97,6 @@ class RadarEffect: NotchEffect {
 	}()
 
 	lazy var slitImage: CIImage? = {
-		debugLog("creating slitImage...")
 		guard let parentLayer = parentLayer else { return nil }
 
 		let scale = parentLayer.contentsScale
@@ -154,11 +151,7 @@ class RadarEffect: NotchEffect {
 	}()
 
 	var radarLayer: CATransformLayer
-#if false
-	var screenLayer: CAMetalLayer
-#else
 	var screenLayer: CALayer
-#endif
 	var frameLayer: CALayer
 
 	var context: CIContext
@@ -166,17 +159,8 @@ class RadarEffect: NotchEffect {
 	required init (with parentLayer: CALayer, in parentView: NSView) {
 		self.radarLayer = CATransformLayer()
 		self.frameLayer = CALayer()
-#if false
-		self.screenLayer = CAMetalLayer()
-		let device = screenLayer.preferredDevice!
-		screenLayer.framebufferOnly = false
-		screenLayer.device = device
-//		self.context = CIContext(mtlDevice: device, options: [.outputColorSpace: NSNull(), .workingColorSpace: NSNull()])
-		self.context = CIContext(mtlDevice: device)
-#else
 		self.screenLayer = CALayer()
 		self.context = CIContext(options: [.outputColorSpace: NSNull(), .workingColorSpace: NSNull()])
-#endif
 		
 		super.init(with: parentLayer, in: parentView)
 
@@ -215,9 +199,6 @@ class RadarEffect: NotchEffect {
 			else {
 				screenLayer.opacity = 1
 			}
-			
-			//var proposedRect: CGRect? = nil
-			//screenLayer.contents = image.cgImage(forProposedRect: nil, context: nil, hints: nil)
 		}
 		
 		do { // the layer that is a frame holding the screen
@@ -274,15 +255,10 @@ class RadarEffect: NotchEffect {
 	override func mouseMoved(at point: CGPoint, underNotch: Bool) {
 		if underNotch {
 			lastPoint = point
-			//updateScreenLayer(at: point, timeInterval: 0.0)
-		}
-		else {
-			//updateImage(at: point) // DEBUG
-			//return // DEBUG
 		}
 		
 		if underNotch != wasUnderNotch {
-			debugLog("underNotch = \(underNotch), wasUnderNotch() = \(wasUnderNotch)")
+			//debugLog("underNotch = \(underNotch), wasUnderNotch() = \(wasUnderNotch)")
 			if underNotch {
 				stopScanner()
 				startScanner()
@@ -308,11 +284,9 @@ class RadarEffect: NotchEffect {
 
 			let toTransform: CATransform3D
 			if underNotch {
-				//toTransform = CATransform3DMakeRotation(0, 1, 0, 0)
 				toTransform = CATransform3DRotate(perspective, 0, 1, 0, 0)
 			}
 			else {
-				//toTransform = CATransform3DMakeRotation(.pi, 1, 0, 0)
 				toTransform = CATransform3DRotate(perspective, -.pi/2, 1, 0, 0)
 			}
 			
@@ -344,7 +318,6 @@ class RadarEffect: NotchEffect {
 
 	override func mouseExited(at point: CGPoint, underNotch: Bool) {
 		wasUnderNotch = false
-		//stopScanner()
 	}
 
 	private func updateScreenLayer(at point: CGPoint, timeInterval: TimeInterval) {
@@ -361,7 +334,7 @@ class RadarEffect: NotchEffect {
 
 		// NOTE: The cursor has an origin in the upper-left and is measured in points, the image has an origin in the lower-left
 		// and is measured in pixels, and the point in layer has an origin in the upper-left that is measured in points.
-		// The image also has a different size than the layer (which anchors it to the top center). This complicates the compositing
+		// The image also has a different size than the layer (and anchors it to the top center). This complicates the compositing
 		// operation for the base and cursor images.
 		
 		// get all the coordinates we're working with into (scaled) pixel values
@@ -393,20 +366,6 @@ class RadarEffect: NotchEffect {
 			
 			return filter.outputImage?.cropped(to: screenImage.extent)
 		}() else { return }
-
-		/*
-		guard let screenScannerSlitImage: CIImage = {
-			guard let filter = CIFilter(name: "CILinearDodgeBlendMode") else { return nil }
-			filter.setDefaults()
-			filter.setValue(screenScannerImage, forKey: kCIInputImageKey)
-			//filter.setValue(slitImage, forKey: kCIInputBackgroundImageKey)
-			let xOffset = timeInterval * screenImage.extent.width - screenImage.extent.width
-			//let xOffset = -150.0
-			filter.setValue(slitImage.transformed(by:CGAffineTransform(translationX: xOffset, y: 0)), forKey: kCIInputBackgroundImageKey)
-
-			return filter.outputImage?.cropped(to: screenImage.extent)
-		}() else { return }
-		*/
 		
 		guard let falseColorImage: CIImage = {
 			guard let filter = CIFilter(name: "CIFalseColor") else { return nil }
@@ -446,26 +405,11 @@ class RadarEffect: NotchEffect {
 			return filter.outputImage?.cropped(to: screenImage.extent)
 		}() else { return }
 
-#if false
-		guard let device = screenLayer.device else { return }
-		guard let drawable = screenLayer.nextDrawable() else { return }
-		guard let commandQueue = device.makeCommandQueue() else { return }
-		guard let commandBuffer = commandQueue.makeCommandBuffer() else { return }
-		let renderDestination = CIRenderDestination(mtlTexture: drawable.texture, commandBuffer: nil)
-		
-		try? context.prepareRender(colorMapImage, from: screenImage.extent, to: renderDestination, at: .zero)
-		_ = try? context.startTask(toRender: colorMapImage, to: renderDestination)
-		commandBuffer.present(drawable)
-		commandBuffer.commit()
-#else
-//		if let filteredBitmap = context.createCGImage(scannerImage, from: scannerImage.extent) {
 		if let filteredBitmap = context.createCGImage(screenScannerSlitImage, from: screenImage.extent) {
-//		if let filteredBitmap = context.createCGImage(falseColorImage, from: screenImage.extent) {
 			CATransaction.withActionsDisabled {
 				screenLayer.contents = filteredBitmap
 			}
 		}
-#endif
 	}
 	
 }

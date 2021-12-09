@@ -38,7 +38,6 @@ class TrackingView: NSView {
 	private func createTrackingArea() {
 		if trackingArea == nil {
 			// create a tracking area for mouse movements
-//			let options: NSTrackingArea.Options = [.inVisibleRect, .activeAlways, .mouseEnteredAndExited, .mouseMoved]
 			let options: NSTrackingArea.Options = [.inVisibleRect, .activeAlways, .mouseEnteredAndExited]
 			let trackingRect = self.bounds
 			let trackingArea = NSTrackingArea(rect: trackingRect, options: options, owner: self, userInfo: nil)
@@ -130,11 +129,6 @@ class TrackingView: NSView {
 		removeEventMonitors()
 		addEventMonitors()
 	}
-	
-//	override func mouseMoved(with event: NSEvent) {
-//		debugLog()
-//		super.mouseMoved(with: event)
-//	}
 	
 	override func mouseExited(with event: NSEvent) {
 		debugLog()
