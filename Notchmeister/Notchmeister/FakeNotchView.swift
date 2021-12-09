@@ -25,13 +25,20 @@ class FakeNotchView: NSView {
 		if self.superview != nil {
 			// create a layer hosting view
 			wantsLayer = true
-				
+			
+			configureView()
 			createNotchLayer()
 		}
 	}
 	
+	private func configureView() {
+		notchTextField?.isHidden = false
+	}
+	
 	private func createNotchLayer() {
 		guard let layer = layer else { return }
+
+		layer.masksToBounds = false
 		
 		let notchOutlineLayer = CAShapeLayer.notchOutlineLayer(for: bounds.size, flipped: isFlipped)
 				

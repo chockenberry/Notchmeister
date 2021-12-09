@@ -149,19 +149,27 @@ extension NSBezierPath {
 		//let radius: CGFloat = .notchLowerRadius
         let path = NSBezierPath()
 
-        path.move(to: NSPoint(x: 0, y: size.height))
+		let startPoint = NSPoint(x: -.notchUpperRadius, y: size.height)
+		let upperLeftPoint = NSPoint(x: 0, y: size.height)
+		let upperRightPoint = NSPoint(x: size.width, y: size.height)
+		let endPoint = NSPoint(x: size.width + .notchUpperRadius, y: size.height)
+
+		path.move(to: startPoint)
+		path.appendArc(from: upperLeftPoint, to: startPoint + NSPoint(x: .notchUpperRadius, y: -.notchUpperRadius), radius: .notchUpperRadius)
         path.line(to: NSPoint(x: 0, y: .notchLowerRadius))
         path.appendArc(from: .zero, to: NSPoint(x: .notchLowerRadius, y: 0), radius: .notchLowerRadius)
         path.line(to: NSPoint(x: size.width - .notchLowerRadius, y: 0))
         path.appendArc(from: NSPoint(x: size.width, y: 0), to: NSPoint(x: size.width, y: .notchLowerRadius), radius: .notchLowerRadius)
-        path.line(to: NSPoint(x: size.width, y: size.height))
+		path.line(to: NSPoint(x: size.width, y: size.height - .notchUpperRadius))
+		path.appendArc(from: upperRightPoint, to: endPoint, radius: .notchUpperRadius)
 
         return path
     }
 }
 
 extension CGFloat {
-	
+
+	public static let notchUpperRadius = 4.0
 	public static let notchLowerRadius = 8.0
 	
 }
