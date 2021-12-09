@@ -19,6 +19,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 			alert.messageText = "Notch Simulation Mode"
 			alert.informativeText = Defaults.notchlessHelp + Defaults.notchlessHelpIntro
 			alert.runModal()
+			
+			Defaults.shouldFakeNotch = true
+		}
+		else {
+			Defaults.shouldFakeNotch = false
 		}
 #endif
 	}

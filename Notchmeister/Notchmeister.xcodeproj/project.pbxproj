@@ -26,6 +26,7 @@
 		012BA33A27363699008AF04E /* CylonEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 012BA33927363699008AF04E /* CylonEffect.swift */; };
 		012BA33C273749A5008AF04E /* NotchExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 012BA33B273749A5008AF04E /* NotchExtensions.swift */; };
 		440EAB84275812AD009DBAF5 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 440EAB83275812AD009DBAF5 /* Credits.rtf */; };
+		441BC79E27629D5800BE0F01 /* WindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 441BC79D27629D5800BE0F01 /* WindowController.swift */; };
 		441C5AB2272C9FD10094507E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 441C5AB1272C9FD10094507E /* AppDelegate.swift */; };
 		441C5AB4272C9FD10094507E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 441C5AB3272C9FD10094507E /* ViewController.swift */; };
 		441C5AB6272C9FD30094507E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 441C5AB5272C9FD30094507E /* Assets.xcassets */; };
@@ -64,6 +65,7 @@
 		012BA33B273749A5008AF04E /* NotchExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotchExtensions.swift; sourceTree = "<group>"; };
 		012BA33E273865ED008AF04E /* Notch Playground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = "Notch Playground.playground"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		440EAB83275812AD009DBAF5 /* Credits.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
+		441BC79D27629D5800BE0F01 /* WindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowController.swift; sourceTree = "<group>"; };
 		441C5AAE272C9FD10094507E /* Notchmeister.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Notchmeister.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		441C5AB1272C9FD10094507E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		441C5AB3272C9FD10094507E /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -129,6 +131,7 @@
 			isa = PBXGroup;
 			children = (
 				441C5AB1272C9FD10094507E /* AppDelegate.swift */,
+				441BC79D27629D5800BE0F01 /* WindowController.swift */,
 				441C5AB3272C9FD10094507E /* ViewController.swift */,
 				44E42D6B27570B2500BDD3DC /* DebugViewController.swift */,
 				441C5AC0272CA0780094507E /* NotchWindow.swift */,
@@ -295,6 +298,7 @@
 				441C5AC3272CA5310094507E /* NotchView.swift in Sources */,
 				011C15B8272F36D3003422E5 /* NSBezierPath.swift in Sources */,
 				44E42D6A2756DA0500BDD3DC /* Effects.swift in Sources */,
+				441BC79E27629D5800BE0F01 /* WindowController.swift in Sources */,
 				012BA33C273749A5008AF04E /* NotchExtensions.swift in Sources */,
 				441C5AC7272CB2B00094507E /* CoreAnimation.swift in Sources */,
 				44A68CEB273DBD5500CCBCF4 /* PlasmaEffect.swift in Sources */,
