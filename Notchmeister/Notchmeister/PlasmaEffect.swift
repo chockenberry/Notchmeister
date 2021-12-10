@@ -10,10 +10,13 @@ import AppKit
 class PlasmaEffect: NotchEffect {
 	
 	var plasmaLayer: CAEmitterLayer
-
+	var lifetimeScale: Float
+	
 	required init (with parentLayer: CALayer, in parentView: NSView) {
 		self.plasmaLayer = CAEmitterLayer()
 
+		self.lifetimeScale = (NSScreen.hasNotchedScreen || Defaults.shouldLargeFakeNotch) ? 0.1 : 0.075
+		
 		super.init(with: parentLayer, in: parentView)
 
 		configureSublayers()
@@ -82,13 +85,20 @@ class PlasmaEffect: NotchEffect {
 	
 	override func mouseMoved(at point: CGPoint, underNotch: Bool) {
 		CATransaction.withActionsDisabled {
-			if underNotch {
-				plasmaLayer.emitterCells?.first?.birthRate = 300
+			if let emitterCell = plasmaLayer.emitterCells?.first {
+				if underNotch {
+					let edgeDistance = edgeDistance(at: point)
+					if edgeDistance > 0 {
+						let normalizedEdgeDistance = Float(edgeDistance / maxEdgeDistance())
+						emitterCell.lifetime = 0.2 + (lifetimeScale * normalizedEdgeDistance)
+					}
+					emitterCell.birthRate = 300
+				}
+				else {
+					emitterCell.birthRate = 0
+				}
 			}
-			else {
-				plasmaLayer.emitterCells?.first?.birthRate = 0
-			}
-		
+			
 			plasmaLayer.emitterPosition = point
 		}
 	}
