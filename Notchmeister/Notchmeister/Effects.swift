@@ -51,7 +51,7 @@ enum Effects: Int, CaseIterable {
 			return "Notchmeister’s patented Nano Radar lets you know exactly where your mouse has gone."
 #if DEBUG
 		case .portal:
-			return "Activate MICE (Macintosh Interdimensional Computation Extension)."
+			return "Activate Macintosh Interdimensional Computation Extension (MICE)."
 #endif
 		}
 	}
