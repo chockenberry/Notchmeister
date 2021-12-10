@@ -14,6 +14,9 @@ enum Effects: Int, CaseIterable {
 	case plasma
 	case festive
 	case radar
+#if DEBUG
+	case portal
+#endif
 	
 	func displayName() -> String {
 		switch self {
@@ -27,6 +30,10 @@ enum Effects: Int, CaseIterable {
 			return "Festive"
 		case .radar:
 			return "Nano Radar"
+#if DEBUG
+		case .portal:
+			return "Portal"
+#endif
 		}
 	}
 	
@@ -42,6 +49,10 @@ enum Effects: Int, CaseIterable {
 			return "Let your Mac celebrate the holidays the best way it can—in binary.\n\n01101100 01101111 01101100"
 		case .radar:
 			return "Notchmeister’s patented Nano Radar lets you know exactly where your mouse has gone."
+#if DEBUG
+		case .portal:
+			return "Activate MICE (Macintosh Interdimensional Computation Extension)."
+#endif
 		}
 	}
 
@@ -57,6 +68,10 @@ enum Effects: Int, CaseIterable {
 			return FestiveEffect(with: parentLayer, in: parentView)
 		case .radar:
 			return RadarEffect(with: parentLayer, in: parentView)
+#if DEBUG
+		case .portal:
+			return PortalEffect(with: parentLayer, in: parentView)
+#endif
 		}
 	}
 	
