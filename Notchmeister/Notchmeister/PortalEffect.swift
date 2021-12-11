@@ -118,7 +118,10 @@ class PortalEffect: NotchEffect {
 
 	}
 	
+	var lastPoint = CGPoint.zero
+
 	override func mouseEntered(at point: CGPoint, underNotch: Bool) {
+		//lastPoint = point
 		//inGlowLayer.opacity = 1
 		//outGlowLayer.opacity = 1
 
@@ -140,7 +143,66 @@ class PortalEffect: NotchEffect {
 		hotSpotOffset = CGPoint(x: cursorBounds.midX - hotSpot.x, y: cursorBounds.midY - hotSpot.y)
 	}
 	
+	let mousePadding: CGFloat = 8
+	let mouseReset: CGFloat = 2
+
 	override func mouseMoved(at point: CGPoint, underNotch: Bool) {
+		guard let parentLayer = parentLayer else { return }
+
+		let edgeDistance = edgeDistance(at: point)
+		//debugLog("edgeDistance = \(edgeDistance), cylonAlert = \(cylonAlert)")
+
+		var blockMouse = false
+		if edgeDistance > mousePadding / 2 {
+			// just outside of notch
+			blockMouse = true
+		}
+
+		guard let parentView = parentView else { return }
+
+		let bounds = parentView.bounds
+		let leftDistance = abs(point.x - bounds.minX)
+		let rightDistance = abs(point.x - bounds.maxX)
+		let bottomDistance = abs(point.y - bounds.maxY)
+
+		if blockMouse {
+			let deltaPoint: CGPoint
+			if lastPoint == .zero {
+				debugLog("init: point = \(point)")
+				lastPoint = point
+				deltaPoint = CGPoint(x: 0, y: -mousePadding)
+			}
+			else {
+				deltaPoint = point - lastPoint
+			}
+			debugLog("start: point = \(point), lastPoint = \(lastPoint), deltaPoint = \(deltaPoint)")
+
+			guard let screen = parentView.window?.screen else { return }
+			let screenFrame = screen.frame
+			let viewPoint: CGPoint
+			if leftDistance < bottomDistance {
+				viewPoint = CGPoint(x: bounds.minX - mousePadding, y: point.y + deltaPoint.y)
+			}
+			else if rightDistance < bottomDistance {
+				viewPoint = CGPoint(x: bounds.maxX + mousePadding, y: point.y + deltaPoint.y)
+			}
+			else {
+//				viewPoint = CGPoint(x: point.x + deltaPoint.x, y: parentView.bounds.maxY + mousePadding)
+				//viewPoint = CGPoint(x: point.x, y: max(parentView.bounds.maxY + mouseReset, ceil(point.y)))
+				viewPoint = CGPoint(x: point.x, y: parentView.bounds.maxY + mousePadding)
+			}
+			let windowPoint = parentView.convert(viewPoint, to: nil)
+			guard let screenPoint = parentView.window?.convertPoint(toScreen: windowPoint) else { return } // origin in lower-left corner
+			let globalPoint = CGPoint(x: screenPoint.x, y: screenFrame.size.height + screenFrame.origin.y - screenPoint.y) // origin in upper-left corner
+
+			CGWarpMouseCursorPosition(globalPoint)
+			
+			lastPoint = viewPoint
+			debugLog("end: viewPoint = \(viewPoint), globalPoint = \(globalPoint), lastPoint = \(lastPoint)")
+		}
+		else {
+		}
+
 		CATransaction.withActionsDisabled {
 
 //			inGlowLayer.position = point + hotSpotOffset
@@ -154,6 +216,8 @@ class PortalEffect: NotchEffect {
 	override func mouseExited(at point: CGPoint, underNotch: Bool) {
 		let currentOpacity = inGlowLayer.presentation()?.opacity
 		
+		lastPoint = .zero
+
 		inGlowLayer.removeAnimation(forKey: "opacity")
 		outGlowLayer.removeAnimation(forKey: "opacity")
 
