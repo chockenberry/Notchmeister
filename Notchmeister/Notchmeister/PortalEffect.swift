@@ -120,15 +120,17 @@ class PortalEffect: NotchEffect {
 	
 	var lastPoint = CGPoint.zero
 
+	let glowPulseDuration: CFTimeInterval = 0.5
+	
 	override func mouseEntered(at point: CGPoint, underNotch: Bool) {
-		//lastPoint = point
+		lastPoint = point
 		//inGlowLayer.opacity = 1
 		//outGlowLayer.opacity = 1
 
 		let pulseAnimation = CABasicAnimation(keyPath: "opacity")
 		pulseAnimation.fromValue = 0.25
 		pulseAnimation.toValue = 1.0
-		pulseAnimation.duration = 0.25
+		pulseAnimation.duration = glowPulseDuration
 		pulseAnimation.timingFunction = CAMediaTimingFunction(name: .easeIn)
 		pulseAnimation.autoreverses = true
 		pulseAnimation.repeatCount = .greatestFiniteMagnitude
@@ -148,7 +150,70 @@ class PortalEffect: NotchEffect {
 
 	override func mouseMoved(at point: CGPoint, underNotch: Bool) {
 		guard let parentLayer = parentLayer else { return }
+		let parentBounds = parentLayer.bounds
 
+
+		if underNotch {
+			let deltaPoint = point - lastPoint
+			debugLog("point = \(point), lastPoint = \(lastPoint), deltaPoint = \(deltaPoint)")
+			if deltaPoint.x > 0 {
+				let halfGlowHeight = glowSize.height / 2
+				if point.x > parentBounds.minX && point.x < parentBounds.minX + mousePadding && point.y > parentBounds.midY - halfGlowHeight && point.y < parentBounds.midY + halfGlowHeight {
+					guard let parentView = parentView else { return }
+					guard let screen = parentView.window?.screen else { return }
+					let screenFrame = screen.frame
+					
+					let viewPoint = CGPoint(x: parentView.bounds.midX, y: parentView.bounds.maxY)
+					let windowPoint = parentView.convert(viewPoint, to: nil)
+					guard let screenPoint = parentView.window?.convertPoint(toScreen: windowPoint) else { return } // origin in lower-left corner
+					let globalPoint = CGPoint(x: screenPoint.x, y: screenFrame.size.height + screenFrame.origin.y - screenPoint.y) // origin in upper-left corner
+					
+					CGWarpMouseCursorPosition(globalPoint)
+					//CGEvent(mouseEventSource: nil, mouseType: CGEventType.mouseMoved, mouseCursorPosition: globalPoint, mouseButton: CGMouseButton.left)?.post(tap: CGEventTapLocation.cghidEventTap)
+
+					let offsets: [CGFloat] = [0, 5, 10, 13, 16, 18, 20, 20]
+					var offsetIndex = 0
+					Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { timer in
+						var newScreenPoint = screenPoint
+						newScreenPoint.y -= offsets[offsetIndex]
+						let newGlobalPoint = CGPoint(x: newScreenPoint.x, y: screenFrame.size.height + screenFrame.origin.y - newScreenPoint.y) // origin in upper-left corner
+						
+						CGWarpMouseCursorPosition(newGlobalPoint)
+						//CGEvent(mouseEventSource: nil, mouseType: CGEventType.mouseMoved, mouseCursorPosition: globalPoint, mouseButton: CGMouseButton.left)?.post(tap: CGEventTapLocation.cghidEventTap)
+						offsetIndex += 1
+						if offsetIndex >= offsets.count {
+							timer.invalidate()
+						}
+					}
+				}
+			}
+		}
+		
+		lastPoint = point
+		
+		/*
+		guard let parentLayer = parentLayer else { return }
+
+		let deltaPoint = lastPoint - point
+		debugLog("point = \(point), lastPoint = \(lastPoint), deltaPoint = \(deltaPoint)")
+
+		guard let parentView = parentView else { return }
+
+		guard let screen = parentView.window?.screen else { return }
+		let screenFrame = screen.frame
+
+		let viewPoint = point + deltaPoint
+		
+		let windowPoint = parentView.convert(viewPoint, to: nil)
+		guard let screenPoint = parentView.window?.convertPoint(toScreen: windowPoint) else { return } // origin in lower-left corner
+		let globalPoint = CGPoint(x: screenPoint.x, y: screenFrame.size.height + screenFrame.origin.y - screenPoint.y) // origin in upper-left corner
+
+		CGWarpMouseCursorPosition(globalPoint)
+
+		lastPoint = point
+		 */
+		
+		/*
 		let edgeDistance = edgeDistance(at: point)
 		//debugLog("edgeDistance = \(edgeDistance), cylonAlert = \(cylonAlert)")
 
@@ -211,6 +276,7 @@ class PortalEffect: NotchEffect {
 //				debugLayer.position = point + hotSpotOffset
 //			}
 		}
+		 */
 	}
 	
 	override func mouseExited(at point: CGPoint, underNotch: Bool) {
