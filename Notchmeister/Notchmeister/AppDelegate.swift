@@ -60,5 +60,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		NSWorkspace.shared.open(url)
 	}
 
+	@IBAction func openWindow(_ sender: Any) {
+		if let window = NSApplication.shared.windows.first {
+			window.makeKeyAndOrderFront(self)
+		}
+	}
+	
 }
 

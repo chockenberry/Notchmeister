@@ -58,9 +58,14 @@
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="File" id="bib-Uj-vzu">
                                     <items>
-                                        <menuItem title="Close" keyEquivalent="w" id="DVo-aG-piG">
+                                        <menuItem title="Open" keyEquivalent="o" id="DVo-aG-piG">
                                             <connections>
-                                                <action selector="performClose:" target="Ady-hI-5gd" id="HmO-Ls-i7Q"/>
+                                                <action selector="openWindow:" target="Ady-hI-5gd" id="3FY-9V-9hA"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Close" keyEquivalent="w" id="Obl-tV-jgw">
+                                            <connections>
+                                                <action selector="performClose:" target="Ady-hI-5gd" id="Ldh-RA-OFu"/>
                                             </connections>
                                         </menuItem>
                                     </items>
