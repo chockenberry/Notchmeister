@@ -10,7 +10,8 @@ import Cocoa
 class ViewController: NSViewController {
 
 	var notchWindows: [NotchWindow] = []
-	
+	var screenParametersNotificationObserver: NSObjectProtocol? = nil
+
 	@IBOutlet weak var effectPopUpButton: NSPopUpButton!
 	@IBOutlet weak var effectDescriptionTextField: NSTextField!
 	@IBOutlet weak var debugButton: NSButton!
@@ -27,6 +28,10 @@ class ViewController: NSViewController {
         
         configureForDefaults()
         createNotchWindows()
+
+		self.screenParametersNotificationObserver = NotificationCenter.default.addObserver(forName: NSApplication.didChangeScreenParametersNotification, object: nil, queue: nil) { [weak self] note in
+			self?.updateConfiguration()
+		}
     }
 
 	override func viewWillDisappear() {
@@ -36,6 +41,11 @@ class ViewController: NSViewController {
 		// then reopen the window using the Dock icon.
 		if NSEvent.modifierFlags.contains(.option) {
 			debugButton.isHidden = false
+		}
+
+		if let observer = self.screenParametersNotificationObserver {
+			NotificationCenter.default.removeObserver(observer)
+			self.screenParametersNotificationObserver = nil
 		}
 	}
 
