@@ -72,8 +72,6 @@ class ViewController: NSViewController {
     }
     
     private func createNotchWindows() {
-        let padding: CGFloat = 50 // amount of padding around the notch that can be used for effect drawing
-        
         for oldWindow in notchWindows {
             oldWindow.orderOut(self)
         }
@@ -81,7 +79,7 @@ class ViewController: NSViewController {
         notchWindows.removeAll()
         
 		for screen in NSScreen.notchedScreens {
-			if let notchWindow = NotchWindow(screen: screen, padding: padding) {
+			if let notchWindow = NotchWindow(screen: screen) {
 				notchWindow.orderFront(self)
                 notchWindows.append(notchWindow)
 			}

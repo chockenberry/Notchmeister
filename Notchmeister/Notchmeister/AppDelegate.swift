@@ -10,6 +10,16 @@ import Cocoa
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
 
+	func applicationWillFinishLaunching(_ notification: Notification) {
+//		if ([userDefaults boolForKey:hideDockIconKey]) {
+//			[NSApp setActivationPolicy:NSApplicationActivationPolicyAccessory];
+//		}
+//		else {
+//			[NSApp setActivationPolicy:NSApplicationActivationPolicyRegular];
+//		}
+		NSApplication.shared.setActivationPolicy(.accessory)
+	}
+	
 	func applicationDidFinishLaunching(_ aNotification: Notification) {
         Defaults.register()
 		
@@ -46,6 +56,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
 	func applicationDidBecomeActive(_ notification: Notification) {
 		if let window = NSApplication.shared.windows.first {
+			// NOTE: The window that triggered this activation could have been the child window underneath the NotchWindow.
+			// Since that window is borderless, we need to ensure that the app is frontmost.
+			NSApplication.shared.activate(ignoringOtherApps: true)
+			
 			window.makeKeyAndOrderFront(self)
 		}
 	}

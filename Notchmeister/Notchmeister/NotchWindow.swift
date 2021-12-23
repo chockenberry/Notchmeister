@@ -11,10 +11,12 @@ class NotchWindow: NSWindow {
     var notchView: NotchView?
 	var fakeNotchView: FakeNotchView?
 
-	required init?(screen: NSScreen, padding: CGFloat) {
+	static let padding: CGFloat = 50 // amount of padding around the notch that can be used for effect drawing
+	
+	required init?(screen: NSScreen) {
 		guard let notchRect = screen.notchRect else { return nil }
         
-		let contentRect = CGRect(x: notchRect.origin.x - padding, y: notchRect.origin.y - padding, width: notchRect.width + (padding * 2), height: notchRect.height + padding)
+		let contentRect = CGRect(x: notchRect.origin.x - Self.padding, y: notchRect.origin.y - Self.padding, width: notchRect.width + (Self.padding * 2), height: notchRect.height + Self.padding)
         super.init(contentRect: contentRect, styleMask: .borderless, backing: .buffered, defer: false)
         
 		// NOTE: In theory, we should be able to create a window above the cursor. In practice, this doesn't work.
@@ -43,8 +45,27 @@ class NotchWindow: NSWindow {
         self.collectionBehavior = [.transient, .canJoinAllSpaces]
 //		self.acceptsMouseMovedEvents = true
 		
+		do {
+			let childWindow = NSWindow(contentRect: notchRect, styleMask: .borderless, backing: .buffered, defer: false)
+			childWindow.ignoresMouseEvents = false
+			childWindow.canHide = false
+			childWindow.isMovable = false
+			childWindow.isOpaque = false
+			childWindow.hasShadow = false
+			
+			let contentView = ActivationView(frame: notchRect)
+			contentView.wantsLayer = false
+			//contentView.wantsLayer = true;
+			
+			childWindow.contentView = contentView
+			
+			childWindow.backgroundColor = .clear
+			
+			self.addChildWindow(childWindow, ordered: .below)
+		}
+		
         if Defaults.shouldDebugDrawing {
-			self.backgroundColor = .systemPurple
+			self.backgroundColor = .systemPurple.withAlphaComponent(0.25)
 		}
 		else {
 			self.backgroundColor = .clear
@@ -151,10 +172,10 @@ class NotchWindow: NSWindow {
 	
 }
 
-//extension NotchWindow: NSWindowDelegate {
-//	
+extension NotchWindow: NSWindowDelegate {
+	
 //	func windowDidUpdate(_ notification: Notification) {
 //		debugLog()
 //	}
-//
-//}
+
+}

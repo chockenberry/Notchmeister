@@ -16,7 +16,7 @@ class TrackingView: NSView {
 
 	override func draw(_ dirtyRect: NSRect) {
 		if Defaults.shouldDebugDrawing {
-			NSColor.systemGray.set()
+			NSColor.systemGray.withAlphaComponent(0.25).set()
 		}
 		else {
 			NSColor.clear.set()
@@ -74,7 +74,7 @@ class TrackingView: NSView {
 	private func addEventMonitors() {
 		debugLog()
 		globalMonitor = NSEvent.addGlobalMonitorForEvents(matching: [.mouseMoved]) { event in
-			//debugLog("global event")
+			//debugLog("global event = \(String(describing: event))")
 			if let window = self.window {
 				let windowLocation = window.convertPoint(fromScreen: event.locationInWindow)
 				if let windowEvent = NSEvent.mouseEvent(with: .mouseMoved, location: windowLocation, modifierFlags: event.modifierFlags, timestamp: event.timestamp, windowNumber: event.windowNumber, context: nil, eventNumber: event.eventNumber, clickCount: event.clickCount, pressure: event.pressure) {
@@ -84,6 +84,7 @@ class TrackingView: NSView {
 		}
 	
 		localMonitor = NSEvent.addLocalMonitorForEvents(matching: [.mouseMoved]) { event in
+			//debugLog("local event = \(String(describing: event))")
 			//debugLog("local event, event.window = \(String(describing: event.window)), window = \(String(describing: self.window))")
 			if let window = self.window {
 				if let eventWindow = event.window {
@@ -137,5 +138,18 @@ class TrackingView: NSView {
 		removeEventMonitors()
 	}
 
+//	override func mouseDown(with event: NSEvent) {
+//		let padding = NotchWindow.padding
+//		let notchRect = CGRect(x: bounds.origin.x + padding, y: bounds.origin.y + padding, width: bounds.width - (padding * 2), height: bounds.height - padding)
+//
+//		let location = event.locationInWindow
+//		debugLog("location = \(location)")
+//		if notchRect.contains(location) {
+//			if let window = NSApplication.shared.windows.first {
+//				window.makeKeyAndOrderFront(self)
+//			}
+//		}
+//	}
+	
 }
 

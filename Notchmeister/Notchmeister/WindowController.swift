@@ -27,3 +27,12 @@ class WindowController: NSWindowController {
 	}
 
 }
+
+extension WindowController: NSWindowDelegate {
+
+	func windowWillClose(_ notification: Notification) {
+		debugLog()
+		NSApplication.shared.hide(nil)
+	}
+}
+
