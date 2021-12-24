@@ -17,6 +17,12 @@ class ActivationView: NSView {
 			NSColor.clear.set()
 		}
 		dirtyRect.fill()
+
+		if let image = NSImage(named: "controlpanel") {
+			let drawRect = CGRect(origin: CGPoint(x: bounds.midX - image.size.width / 2, y: bounds.minY + NotchWindow.activationPadding + 1), size: image.size)
+			//let drawRect = CGRect(origin: CGPoint(x: bounds.midX - image.size.width / 2, y: bounds.maxY - image.size.height), size: image.size)
+			image.draw(in: drawRect, from: .zero, operation: .sourceOver, fraction: 1)
+		}
 	}
 
 /*

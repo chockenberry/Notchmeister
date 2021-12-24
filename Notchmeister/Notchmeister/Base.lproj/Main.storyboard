@@ -170,8 +170,8 @@
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <stackView distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PPi-Xy-Y4k">
-                                <rect key="frame" x="56" y="109" width="288" height="86"/>
+                            <stackView distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" horizontalHuggingPriority="750" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PPi-Xy-Y4k">
+                                <rect key="frame" x="76" y="109" width="248" height="86"/>
                                 <subviews>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="pwF-E2-nS0">
                                         <rect key="frame" x="-2" y="69" width="44" height="16"/>
@@ -181,20 +181,20 @@
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="10" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Tc8-Lp-iio">
-                                        <rect key="frame" x="48" y="0.0" width="240" height="86"/>
+                                    <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="10" horizontalStackHuggingPriority="750" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Tc8-Lp-iio">
+                                        <rect key="frame" x="48" y="0.0" width="200" height="86"/>
                                         <subviews>
-                                            <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="2TI-ZC-i2V">
+                                            <popUpButton horizontalHuggingPriority="800" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="2TI-ZC-i2V">
                                                 <rect key="frame" x="-3" y="62" width="83" height="25"/>
-                                                <popUpButtonCell key="cell" type="push" title="Glow" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="UuA-aU-a9p" id="gw7-Ab-WA0">
+                                                <popUpButtonCell key="cell" type="push" title="Festive" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="3" imageScaling="proportionallyDown" inset="2" selectedItem="kXd-lN-dfU" id="gw7-Ab-WA0">
                                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                     <font key="font" metaFont="menu"/>
                                                     <menu key="menu" id="3NN-jH-lPd">
                                                         <items>
-                                                            <menuItem title="Glow" state="on" id="UuA-aU-a9p"/>
+                                                            <menuItem title="Glow" id="UuA-aU-a9p"/>
                                                             <menuItem title="Cylon" tag="1" id="IPc-kO-S4N"/>
                                                             <menuItem title="Plasma" tag="2" id="kLF-aV-OO3"/>
-                                                            <menuItem title="Festive" tag="3" id="kXd-lN-dfU"/>
+                                                            <menuItem title="Festive" state="on" tag="3" id="kXd-lN-dfU"/>
                                                             <menuItem title="Radar" tag="4" id="jjJ-vz-Urr"/>
                                                         </items>
                                                     </menu>
@@ -203,7 +203,7 @@
                                                     <action selector="selectedEffectValueChanged:" target="XfG-lQ-9wD" id="GuE-yn-Kjf"/>
                                                 </connections>
                                             </popUpButton>
-                                            <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="eJu-Vj-QTs">
+                                            <textField horizontalHuggingPriority="750" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="eJu-Vj-QTs">
                                                 <rect key="frame" x="-2" y="0.0" width="204" height="56"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="56" id="Nwq-Hj-jnc"/>
@@ -243,18 +243,21 @@
                                     <real value="3.4028234663852886e+38"/>
                                 </customSpacing>
                             </stackView>
-                            <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="tMl-9w-Wzm">
-                                <rect key="frame" x="56" y="98" width="284" height="5"/>
+                            <box verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="tMl-9w-Wzm">
+                                <rect key="frame" x="76" y="98" width="264" height="5"/>
                             </box>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ZSS-8U-k2J">
-                                <rect key="frame" x="54" y="75" width="118" height="18"/>
-                                <buttonCell key="cell" type="check" title="Hide Dock icon" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="Q0w-ZP-LLJ">
+                                <rect key="frame" x="74" y="75" width="263" height="18"/>
+                                <buttonCell key="cell" type="check" title="Hide Dock icon and detect notch clicks" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="Q0w-ZP-LLJ">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
+                                <connections>
+                                    <action selector="hideDockIconValueChanged:" target="XfG-lQ-9wD" id="YlH-c9-La2"/>
+                                </connections>
                             </button>
-                            <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="HP6-Vj-CA4">
-                                <rect key="frame" x="74" y="40" width="268" height="28"/>
+                            <textField horizontalHuggingPriority="750" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="HP6-Vj-CA4">
+                                <rect key="frame" x="94" y="40" width="248" height="28"/>
                                 <textFieldCell key="cell" selectable="YES" title="When the Dock icon is hidden, clicking underneath the notch opens this window." id="89U-jp-sSf">
                                     <font key="font" metaFont="smallSystem"/>
                                     <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
@@ -311,6 +314,7 @@
                         <outlet property="effectPopUpButton" destination="2TI-ZC-i2V" id="lZY-dw-l49"/>
                         <outlet property="fakeNotchCheckbox" destination="GpJ-jA-PUB" id="8HI-d4-d7b"/>
                         <outlet property="fillNotchCheckbox" destination="n8l-IV-LaP" id="bUl-15-XHo"/>
+                        <outlet property="hideDockButton" destination="ZSS-8U-k2J" id="E9E-uh-tDZ"/>
                         <outlet property="outlineNotchCheckbox" destination="rKO-N3-Lc5" id="HwJ-52-J7q"/>
                     </connections>
                 </viewController>

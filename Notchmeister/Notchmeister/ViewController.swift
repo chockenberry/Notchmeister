@@ -15,7 +15,8 @@ class ViewController: NSViewController {
 	@IBOutlet weak var effectPopUpButton: NSPopUpButton!
 	@IBOutlet weak var effectDescriptionTextField: NSTextField!
 	@IBOutlet weak var debugButton: NSButton!
-	
+	@IBOutlet weak var hideDockButton: NSButton!
+
     //MARK: - Life Cycle
 
 	deinit {
@@ -64,6 +65,8 @@ class ViewController: NSViewController {
 		effectDescriptionTextField.stringValue = effect.displayDescription()
 		effectPopUpButton.selectItem(withTag: effect.rawValue)
 		
+		hideDockButton.state = Defaults.shouldHideDockIcon ? .on : .off
+		
 #if DEBUG
 		debugButton.isHidden = false
 #else
@@ -105,6 +108,19 @@ class ViewController: NSViewController {
 		
 		guard let effect = Effects(rawValue: Defaults.selectedEffect) else { return }
 		effectDescriptionTextField.stringValue = effect.displayDescription()
+	}
+	
+	@IBAction func hideDockIconValueChanged(_ sender: Any) {
+		Defaults.shouldHideDockIcon = hideDockButton.state == .on
+
+		createNotchWindows()
+
+		if Defaults.shouldHideDockIcon {
+			NSApplication.shared.setActivationPolicy(.accessory)
+		}
+		else {
+			NSApplication.shared.setActivationPolicy(.regular)
+		}
 	}
 	
 	@IBAction func openHelp(_ sender: Any) {

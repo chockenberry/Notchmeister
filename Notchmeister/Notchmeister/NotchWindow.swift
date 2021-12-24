@@ -12,7 +12,7 @@ class NotchWindow: NSWindow {
 	var fakeNotchView: FakeNotchView?
 
 	static let padding: CGFloat = 50 // amount of padding around the notch that can be used for effect drawing
-	static let activationPadding: CGFloat = 5 // amount of padding around the notch that can be used for activating the settings window
+	static let activationPadding: CGFloat = 6 // amount of padding around the notch that can be used for activating the settings window
 
 	required init?(screen: NSScreen) {
 		guard let notchRect = screen.notchRect else { return nil }
@@ -27,7 +27,7 @@ class NotchWindow: NSWindow {
 		//self.level = .statusBar
 		self.level = .popUpMenu // NOTE: I think this is probably best - keeps the window under a screensaver.
 		if Defaults.shouldFakeNotch {
-			if Defaults.shouldDeactivateFakeNotch {
+			if Defaults.shouldDeactivateFakeNotch && !Defaults.shouldHideDockIcon {
 				self.hidesOnDeactivate = true // use true to keep fake notch from interfering with other apps
 			}
 			else {
@@ -46,7 +46,7 @@ class NotchWindow: NSWindow {
         self.collectionBehavior = [.transient, .canJoinAllSpaces]
 //		self.acceptsMouseMovedEvents = true
 		
-		do {
+		if Defaults.shouldHideDockIcon {
 			let contentRect = CGRect(x: notchRect.origin.x - Self.activationPadding, y: notchRect.origin.y - Self.activationPadding, width: notchRect.width + (Self.activationPadding * 2), height: notchRect.height + Self.activationPadding)
 
 			let childWindow = NSWindow(contentRect: contentRect, styleMask: .borderless, backing: .buffered, defer: false)

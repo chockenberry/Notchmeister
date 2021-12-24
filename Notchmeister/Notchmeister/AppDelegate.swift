@@ -17,7 +17,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 //		else {
 //			[NSApp setActivationPolicy:NSApplicationActivationPolicyRegular];
 //		}
-		//NSApplication.shared.setActivationPolicy(.accessory)
+		if Defaults.shouldHideDockIcon {
+			NSApplication.shared.setActivationPolicy(.accessory)
+		}
 	}
 	
 	func applicationDidFinishLaunching(_ aNotification: Notification) {
