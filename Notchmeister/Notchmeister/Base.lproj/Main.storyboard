@@ -159,11 +159,11 @@
             <objects>
                 <viewController id="XfG-lQ-9wD" customClass="ViewController" customModule="Notchmeister" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="m2S-Jp-Qdl">
-                        <rect key="frame" x="0.0" y="0.0" width="400" height="165"/>
+                        <rect key="frame" x="0.0" y="0.0" width="400" height="254"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DQb-Wa-YfR">
-                                <rect key="frame" x="64" y="126" width="273" height="19"/>
+                                <rect key="frame" x="64" y="215" width="273" height="19"/>
                                 <textFieldCell key="cell" controlSize="large" lineBreakMode="clipping" title="Move your mouse under the notch!" id="D7s-5M-fM7">
                                     <font key="font" metaFont="systemBold" size="16"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -171,7 +171,7 @@
                                 </textFieldCell>
                             </textField>
                             <stackView distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PPi-Xy-Y4k">
-                                <rect key="frame" x="76" y="20" width="248" height="86"/>
+                                <rect key="frame" x="56" y="109" width="288" height="86"/>
                                 <subviews>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="pwF-E2-nS0">
                                         <rect key="frame" x="-2" y="69" width="44" height="16"/>
@@ -182,7 +182,7 @@
                                         </textFieldCell>
                                     </textField>
                                     <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="10" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Tc8-Lp-iio">
-                                        <rect key="frame" x="48" y="0.0" width="200" height="86"/>
+                                        <rect key="frame" x="48" y="0.0" width="240" height="86"/>
                                         <subviews>
                                             <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="2TI-ZC-i2V">
                                                 <rect key="frame" x="-3" y="62" width="83" height="25"/>
@@ -243,6 +243,24 @@
                                     <real value="3.4028234663852886e+38"/>
                                 </customSpacing>
                             </stackView>
+                            <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="tMl-9w-Wzm">
+                                <rect key="frame" x="56" y="98" width="284" height="5"/>
+                            </box>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ZSS-8U-k2J">
+                                <rect key="frame" x="54" y="75" width="118" height="18"/>
+                                <buttonCell key="cell" type="check" title="Hide Dock icon" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="Q0w-ZP-LLJ">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                            </button>
+                            <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="HP6-Vj-CA4">
+                                <rect key="frame" x="74" y="40" width="268" height="28"/>
+                                <textFieldCell key="cell" selectable="YES" title="When the Dock icon is hidden, clicking underneath the notch opens this window." id="89U-jp-sSf">
+                                    <font key="font" metaFont="smallSystem"/>
+                                    <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ewE-fL-l0e">
                                 <rect key="frame" x="20" y="15.5" width="19" height="18"/>
                                 <buttonCell key="cell" type="bevel" bezelStyle="rounded" image="wrench.and.screwdriver" catalog="system" imagePosition="only" alignment="center" controlSize="large" imageScaling="proportionallyDown" inset="2" id="3DI-vc-m08">
@@ -267,14 +285,23 @@
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="omC-Yz-2sa" secondAttribute="trailing" constant="20" symbolic="YES" id="0kc-Ed-MZr"/>
                             <constraint firstItem="omC-Yz-2sa" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="PPi-Xy-Y4k" secondAttribute="trailing" constant="10" id="2tU-Zt-WkY"/>
+                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="ZSS-8U-k2J" secondAttribute="trailing" constant="20" id="3Di-vi-EUf"/>
                             <constraint firstAttribute="bottom" secondItem="omC-Yz-2sa" secondAttribute="bottom" constant="20" symbolic="YES" id="B05-dU-5bQ"/>
+                            <constraint firstItem="HP6-Vj-CA4" firstAttribute="leading" secondItem="ZSS-8U-k2J" secondAttribute="leading" constant="20" id="Bzi-pm-cro"/>
+                            <constraint firstAttribute="trailing" secondItem="HP6-Vj-CA4" secondAttribute="trailing" constant="60" id="HGi-Ba-H1b"/>
+                            <constraint firstItem="HP6-Vj-CA4" firstAttribute="top" secondItem="ZSS-8U-k2J" secondAttribute="bottom" constant="8" symbolic="YES" id="JF0-Lu-r8n"/>
                             <constraint firstItem="PPi-Xy-Y4k" firstAttribute="top" secondItem="DQb-Wa-YfR" secondAttribute="bottom" constant="20" id="L6v-GG-jEZ"/>
+                            <constraint firstItem="tMl-9w-Wzm" firstAttribute="leading" secondItem="ZSS-8U-k2J" secondAttribute="leading" id="LZF-J2-mFb"/>
+                            <constraint firstAttribute="bottom" secondItem="HP6-Vj-CA4" secondAttribute="bottom" constant="40" id="Lh4-j8-QBE"/>
                             <constraint firstAttribute="bottom" secondItem="ewE-fL-l0e" secondAttribute="bottom" constant="20" id="RZE-a3-tcl"/>
                             <constraint firstItem="DQb-Wa-YfR" firstAttribute="centerX" secondItem="m2S-Jp-Qdl" secondAttribute="centerX" id="Rt6-GL-ImR"/>
+                            <constraint firstItem="tMl-9w-Wzm" firstAttribute="trailing" secondItem="HP6-Vj-CA4" secondAttribute="trailing" id="ZCs-LT-Wvp"/>
                             <constraint firstItem="PPi-Xy-Y4k" firstAttribute="centerX" secondItem="DQb-Wa-YfR" secondAttribute="centerX" id="agV-c3-SFn"/>
                             <constraint firstItem="ewE-fL-l0e" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="20" id="byx-Ou-ToC"/>
+                            <constraint firstItem="ZSS-8U-k2J" firstAttribute="top" secondItem="tMl-9w-Wzm" secondAttribute="bottom" constant="8" symbolic="YES" id="gc5-NW-hMl"/>
+                            <constraint firstItem="ZSS-8U-k2J" firstAttribute="leading" secondItem="PPi-Xy-Y4k" secondAttribute="leading" id="nE9-bu-meV"/>
                             <constraint firstItem="DQb-Wa-YfR" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="20" symbolic="YES" id="obc-h5-hEI"/>
-                            <constraint firstAttribute="bottom" secondItem="PPi-Xy-Y4k" secondAttribute="bottom" constant="20" id="zSu-Gp-VcC"/>
+                            <constraint firstItem="tMl-9w-Wzm" firstAttribute="top" secondItem="PPi-Xy-Y4k" secondAttribute="bottom" constant="8" symbolic="YES" id="xTm-tX-eFs"/>
                         </constraints>
                     </view>
                     <connections>

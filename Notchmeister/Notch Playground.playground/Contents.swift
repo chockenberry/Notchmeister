@@ -41,7 +41,7 @@ cylonView.layer?.backgroundColor = NSColor.black.cgColor
 view.addSubview(cylonView)
 
 // MARK: current for reference
-let cylonEffect = CylonEffect(with: cylonView.layer!)
+let cylonEffect = CylonEffect(with: cylonView.layer!, in: cylonView)
 
 cylonEffect.redEyeLayer.position = NSPoint(x: cylonView.bounds.midX - 50, y: cylonView.bounds.midY)
 

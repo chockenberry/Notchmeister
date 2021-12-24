@@ -17,7 +17,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 //		else {
 //			[NSApp setActivationPolicy:NSApplicationActivationPolicyRegular];
 //		}
-		NSApplication.shared.setActivationPolicy(.accessory)
+		//NSApplication.shared.setActivationPolicy(.accessory)
 	}
 	
 	func applicationDidFinishLaunching(_ aNotification: Notification) {
@@ -57,7 +57,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	func applicationDidBecomeActive(_ notification: Notification) {
 		if let window = NSApplication.shared.windows.first {
 			// NOTE: The window that triggered this activation could have been the child window underneath the NotchWindow.
-			// Since that window is borderless, we need to ensure that the app is frontmost.
+			// Since that window is borderless and we could be running with the .accessory activation policy, we need to ensure
+			// that the app is frontmost before ordering the window.
 			NSApplication.shared.activate(ignoringOtherApps: true)
 			
 			window.makeKeyAndOrderFront(self)
