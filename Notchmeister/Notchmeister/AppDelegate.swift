@@ -19,6 +19,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 //		}
 		if Defaults.shouldHideDockIcon {
 			NSApplication.shared.setActivationPolicy(.accessory)
+			NSApplication.shared.activate(ignoringOtherApps: true)
 		}
 	}
 	

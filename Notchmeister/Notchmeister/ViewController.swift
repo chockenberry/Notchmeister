@@ -117,12 +117,17 @@ class ViewController: NSViewController {
 
 		if Defaults.shouldHideDockIcon {
 			NSApplication.shared.setActivationPolicy(.accessory)
+			NSApplication.shared.activate(ignoringOtherApps: true)
 		}
 		else {
 			NSApplication.shared.setActivationPolicy(.regular)
 		}
 	}
-	
+
+	@IBAction func quitApplication(_ sender: Any) {
+		NSApplication.shared.terminate(self)
+	}
+
 	@IBAction func openHelp(_ sender: Any) {
 		let alert = NSAlert()
 		alert.messageText = "Notchmeister Help"
