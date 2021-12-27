@@ -43,11 +43,6 @@ class ViewController: NSViewController {
 		if NSEvent.modifierFlags.contains(.option) {
 			debugButton.isHidden = false
 		}
-
-		if let observer = self.screenParametersNotificationObserver {
-			NotificationCenter.default.removeObserver(observer)
-			self.screenParametersNotificationObserver = nil
-		}
 	}
 
     private func configureForDefaults() {
