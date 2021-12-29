@@ -71,7 +71,8 @@ extension NSScreen {
         
 		let fakeNotchSize: CGSize
 		if Defaults.shouldLargeFakeNotch {
-			fakeNotchSize = NSSize(width:220, height:38)
+			fakeNotchSize = NSSize(width:185, height:32) // 14" MacBook Pro
+			//fakeNotchSize = NSSize(width:220, height:38) // 16" MacBook Pro
 		}
 		else {
 			fakeNotchSize = NSSize(width:220, height:screenFrame.maxY - visibleFrame.maxY)

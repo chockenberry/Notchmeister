@@ -18,9 +18,17 @@ class ActivationView: NSView {
 		}
 		dirtyRect.fill()
 
-		if NSScreen.hasNotchedScreen {
-			if let image = NSImage(named: "controlpanel") {
-				let drawRect = CGRect(origin: CGPoint(x: bounds.midX - image.size.width / 2, y: bounds.minY + NotchWindow.activationPadding + 1), size: image.size)
+		#if DEBUG
+			let drawControlPanel = true
+		#else
+			let drawControlPanel = NSScreen.hasNotchedScreen
+		#endif
+		
+		if drawControlPanel {
+			let notchWidth = bounds.width - (NotchWindow.activationPadding * 2)
+			let imageName = notchWidth < 192.0 ? "controlpanel-small" : "controlpanel"
+			if let image = NSImage(named: imageName) {
+				let drawRect = CGRect(origin: CGPoint(x: bounds.midX - image.size.width / 2, y: bounds.minY + NotchWindow.activationPadding), size: image.size)
 				image.draw(in: drawRect, from: .zero, operation: .sourceOver, fraction: 1)
 			}
 		}
