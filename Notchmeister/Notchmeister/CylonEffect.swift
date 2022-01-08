@@ -183,8 +183,7 @@ class CylonEffect: NotchEffect {
 		let bottomDistance = abs(point.y - bounds.maxY)
 
 		if blockMouse {
-			guard let screen = parentView.window?.screen else { return }
-			let screenFrame = screen.frame
+			guard let zeroScreen = NSScreen.screens.first else { return }
 			let viewPoint: CGPoint
 			// the randomOffsets make the mouse movement annoying - unless you back off
 			if leftDistance < bottomDistance {
@@ -200,8 +199,11 @@ class CylonEffect: NotchEffect {
 				viewPoint = CGPoint(x: point.x + randomOffset.x, y: parentView.bounds.maxY + randomOffset.y)
 			}
 			let windowPoint = parentView.convert(viewPoint, to: nil)
-			guard let screenPoint = parentView.window?.convertPoint(toScreen: windowPoint) else { return } // origin in lower-left corner
-			let globalPoint = CGPoint(x: screenPoint.x, y: screenFrame.size.height + screenFrame.origin.y - screenPoint.y) // origin in upper-left corner
+			guard let screenPoint = parentView.window?.convertPoint(toScreen: windowPoint) else { return } // origin in lower-left corner, of main screen
+			let globalPoint = CGPoint(x: screenPoint.x, y: -screenPoint.y + zeroScreen.frame.size.height) // origin in upper-left corner of main screen
+            // to transform the point to inverted global coordinates we:
+                // scale by -1 (invert)
+                // translate the scaled origin to top of main screen
 
 			CGWarpMouseCursorPosition(globalPoint)
 			
