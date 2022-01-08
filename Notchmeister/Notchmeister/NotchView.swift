@@ -69,8 +69,8 @@ class NotchView: NSView {
 	func mouseExited(windowPoint: CGPoint) {
 		//debugLog()
 		let point = notchLocation(with: windowPoint)
-        let underNotch = bounds.contains(point)
-        notchEffect?.mouseMoved(at: point, underNotch: underNotch)
+		let underNotch = bounds.contains(point)
+		notchEffect?.mouseMoved(at: point, underNotch: underNotch)
 		notchEffect?.mouseExited(at: point, underNotch: underNotch)
 	}
 }
