@@ -201,9 +201,9 @@ class CylonEffect: NotchEffect {
 			let windowPoint = parentView.convert(viewPoint, to: nil)
 			guard let screenPoint = parentView.window?.convertPoint(toScreen: windowPoint) else { return } // origin in lower-left corner, of main screen
 			let globalPoint = CGPoint(x: screenPoint.x, y: -screenPoint.y + zeroScreen.frame.size.height) // origin in upper-left corner of main screen
-            // to transform the point to inverted global coordinates we:
-                // scale by -1 (invert)
-                // translate the scaled origin to top of main screen
+			// to transform the point to inverted global coordinates we:
+			// scale by -1 (invert)
+				// translate the scaled origin to top of main screen
 
 			CGWarpMouseCursorPosition(globalPoint)
 			
