@@ -104,7 +104,8 @@ class PlasmaEffect: NotchEffect {
 	}
 	
 	override func mouseExited(at point: CGPoint, underNotch: Bool) {
-		plasmaLayer.emitterCells?.first?.birthRate = 0
+        plasmaLayer.emitterCells?.first?.birthRate = 0
+        plasmaLayer.emitterPosition = point
 	}
 
 }
