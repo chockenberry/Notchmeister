@@ -17,7 +17,10 @@ enum Effects: Int, CaseIterable {
 #if DEBUG
 	case portal
 #endif
-	
+#if DEBUG
+	case expando
+#endif
+
 	func displayName() -> String {
 		switch self {
 		case .glow:
@@ -33,6 +36,10 @@ enum Effects: Int, CaseIterable {
 #if DEBUG
 		case .portal:
 			return "Portal"
+#endif
+#if DEBUG
+		case .expando:
+			return "Expando"
 #endif
 		}
 	}
@@ -53,6 +60,10 @@ enum Effects: Int, CaseIterable {
 		case .portal:
 			return "Activate Macintosh Interdimensional Computation Extension (MICE)."
 #endif
+#if DEBUG
+		case .expando:
+			return "Yadda, Yadda, Yadda."
+#endif
 		}
 	}
 
@@ -71,6 +82,10 @@ enum Effects: Int, CaseIterable {
 #if DEBUG
 		case .portal:
 			return PortalEffect(with: parentLayer, in: parentView)
+#endif
+#if DEBUG
+		case .expando:
+			return ExpandoEffect(with: parentLayer, in: parentView)
 #endif
 		}
 	}

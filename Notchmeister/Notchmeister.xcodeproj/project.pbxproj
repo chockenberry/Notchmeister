@@ -25,6 +25,7 @@
 		011C15B8272F36D3003422E5 /* NSBezierPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011C15B7272F36D3003422E5 /* NSBezierPath.swift */; };
 		012BA33A27363699008AF04E /* CylonEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 012BA33927363699008AF04E /* CylonEffect.swift */; };
 		012BA33C273749A5008AF04E /* NotchExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 012BA33B273749A5008AF04E /* NotchExtensions.swift */; };
+		4407B32D279B92BD00182733 /* ExpandoEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4407B32C279B92BD00182733 /* ExpandoEffect.swift */; };
 		440EAB84275812AD009DBAF5 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 440EAB83275812AD009DBAF5 /* Credits.rtf */; };
 		441BC79E27629D5800BE0F01 /* WindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 441BC79D27629D5800BE0F01 /* WindowController.swift */; };
 		441BC7A02762EEA900BE0F01 /* PortalEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 441BC79F2762EEA900BE0F01 /* PortalEffect.swift */; };
@@ -66,6 +67,7 @@
 		012BA33927363699008AF04E /* CylonEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CylonEffect.swift; sourceTree = "<group>"; };
 		012BA33B273749A5008AF04E /* NotchExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotchExtensions.swift; sourceTree = "<group>"; };
 		012BA33E273865ED008AF04E /* Notch Playground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = "Notch Playground.playground"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		4407B32C279B92BD00182733 /* ExpandoEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandoEffect.swift; sourceTree = "<group>"; };
 		440EAB83275812AD009DBAF5 /* Credits.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
 		441BC79D27629D5800BE0F01 /* WindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowController.swift; sourceTree = "<group>"; };
 		441BC79F2762EEA900BE0F01 /* PortalEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortalEffect.swift; sourceTree = "<group>"; };
@@ -151,6 +153,7 @@
 				44A817B527446C5200731822 /* FestiveEffect.swift */,
 				44E32190274C528200358040 /* RadarEffect.swift */,
 				441BC79F2762EEA900BE0F01 /* PortalEffect.swift */,
+				4407B32C279B92BD00182733 /* ExpandoEffect.swift */,
 				44E42D692756DA0500BDD3DC /* Effects.swift */,
 				011C15B5272E1635003422E5 /* Defaults.swift */,
 				012BA33B273749A5008AF04E /* NotchExtensions.swift */,
@@ -306,6 +309,7 @@
 				447158F12775226200565727 /* ActivationView.swift in Sources */,
 				011C15B8272F36D3003422E5 /* NSBezierPath.swift in Sources */,
 				44E42D6A2756DA0500BDD3DC /* Effects.swift in Sources */,
+				4407B32D279B92BD00182733 /* ExpandoEffect.swift in Sources */,
 				441BC79E27629D5800BE0F01 /* WindowController.swift in Sources */,
 				012BA33C273749A5008AF04E /* NotchExtensions.swift in Sources */,
 				441C5AC7272CB2B00094507E /* CoreAnimation.swift in Sources */,
