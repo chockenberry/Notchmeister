@@ -68,11 +68,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		}
 	}
 	
-	@IBAction func openTwitter(_ sender: Any) {
-		guard let url = URL(string: "https://twitter.com/notchmeister") else { NSSound.beep(); return }
-		NSWorkspace.shared.open(url)
-	}
-
 	@IBAction func openGitHub(_ sender: Any) {
 		guard let url = URL(string: "https://github.com/chockenberry/Notchmeister") else { NSSound.beep(); return }
 		NSWorkspace.shared.open(url)

@@ -101,6 +101,6 @@ enum Defaults : String, CaseIterable
 	static let notchlessHelpIntro = "Side effects of this app include making you want a new MacBook Pro even more than you already do. Sorry."
 	static let notchlessHelpButton = "If you need more assistance, take a look at the Help menu."
 
-	static let notchedHelp = "Congratulations, you have a notch!\n\nIt‘s unlikely that you‘ll need help with Notchmeister, but if you do, get in touch with @Notchmeister on Twitter. If you think the app needs a fix or new feature, take a look at the GitHub project.\n\nLinks for both are in the Help menu."
+	static let notchedHelp = "Congratulations, you have a notch!\n\nIt‘s unlikely that you‘ll need help with Notchmeister, but if you do, get in touch with us on GitHub. If you think the app needs a fix or new feature, this is the place to do it.\n\nThe quickest way to get to the project is with the Help menu."
 	
 }
