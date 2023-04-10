@@ -37,10 +37,8 @@ enum Effects: Int, CaseIterable {
 		case .portal:
 			return "Portal"
 #endif
-#if DEBUG
 		case .expando:
 			return "Expando"
-#endif
 		}
 	}
 	
@@ -51,7 +49,7 @@ enum Effects: Int, CaseIterable {
 		case .cylon:
 			return "By your command.\n\nAnd don‘t get too close."
 		case .plasma:
-			return "WARNING: Your mouse can break down the magnetic containment field that keeps the M1‘s power in check!"
+			return "WARNING: Your mouse can break down the magnetic containment field that keeps Apple Silicon's power in check!"
 		case .festive:
 			return "Let your Mac celebrate the holidays the best way it can—in binary.\n\n01101100 01101111 01101100"
 		case .radar:
@@ -60,10 +58,8 @@ enum Effects: Int, CaseIterable {
 		case .portal:
 			return "Activate Macintosh Interdimensional Computation Extension (MICE)."
 #endif
-#if DEBUG
 		case .expando:
-			return "Yadda, Yadda, Yadda."
-#endif
+			return "Bigger is better, right?"
 		}
 	}
 

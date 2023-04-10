@@ -51,14 +51,24 @@ class ExpandoEffect: NotchEffect {
 			if underNotch {
 				let edgeDistance = edgeDistance(at: point)
 				if edgeDistance > 0 {
-					// NOTE: See note above about how the light is attenuated with exponential falloff.
-					let normalizedEdgeDistance = Float(edgeDistance / maxEdgeDistance())
-					let scale = CGFloat(1.0 + (normalizedEdgeDistance / 4))
-					let horizontalPosition = (point.x - parentLayer.bounds.midX) / 5
-					let scaleTransform = CATransform3DMakeScale(scale, scale, 1)
+					let bounds = parentLayer.bounds
+					let normalizedPoint = CGPoint(x: point.x / bounds.width, y: 1.0 - (point.y / bounds.height))
+					//debugLog("normalizedPoint = \(normalizedPoint)")
+					// x: 0 = left edge, 1 = right edge
+					// y: 0 = bottom edge, 1 = top edge
+						
+					let scale = 1.25
+					let scaledWidth = bounds.width * scale
+					let horizontalPosition = ((bounds.width * normalizedPoint.x) + ((bounds.width * (1.0 - normalizedPoint.x)) * scale)) - scaledWidth
 					let translateTransform = CATransform3DMakeTranslation(horizontalPosition, 0, 1)
-					//let transform = CATransform3DTranslate(scaleTransform, horizontalPosition, 0, 0)
-					let transform = CATransform3DScale(translateTransform, scale, scale, 1)
+					let verticalScale: CGFloat
+					if normalizedPoint.y > 0.5 {
+						verticalScale = 1.0 + (0.5 * (normalizedPoint.y - 0.5))
+					}
+					else {
+						verticalScale = 1.0
+					}
+					let transform = CATransform3DScale(translateTransform, scale, verticalScale, 1)
 					edgeLayer.transform = transform
 				}
 				else {

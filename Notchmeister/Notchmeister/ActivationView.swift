@@ -22,7 +22,6 @@ class ActivationView: NSView {
 		
 		if drawControlPanel {
 			let notchWidth = bounds.width - (NotchWindow.activationPadding * 2)
-			let notchHeight = bounds.height - NotchWindow.activationPadding
 			let smallMinimumWidth: CGFloat = 137 + (.notchLowerRadius * 2)
 			let largeMinimumWidth: CGFloat = 192 + (.notchLowerRadius * 2)
 			if notchWidth > smallMinimumWidth {
@@ -36,7 +35,7 @@ class ActivationView: NSView {
 					imageName = notchWidth < largeMinimumWidth ? "m1-controlpanel-small" : "m1-controlpanel"
 				}
 				if let image = NSImage(named: imageName) {
-					let drawRect = CGRect(origin: CGPoint(x: bounds.midX - image.size.width / 2, y: bounds.minY + notchHeight + 1), size: image.size)
+					let drawRect = CGRect(origin: CGPoint(x: bounds.midX - image.size.width / 2, y: bounds.minY + NotchWindow.activationPadding + 1), size: image.size)
 					image.draw(in: drawRect, from: .zero, operation: .sourceOver, fraction: 1)
 				}
 			}
