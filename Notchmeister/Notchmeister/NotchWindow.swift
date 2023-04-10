@@ -56,6 +56,7 @@ class NotchWindow: NSWindow {
 			childWindow.isOpaque = false
 			childWindow.hasShadow = false
 			
+			debugLog("notchRect.size = \(notchRect.size)")
 			let contentView = ActivationView(frame: notchRect)
 			contentView.wantsLayer = false
 			//contentView.wantsLayer = true;
@@ -63,7 +64,7 @@ class NotchWindow: NSWindow {
 			childWindow.contentView = contentView
 			
 			if Defaults.shouldDebugDrawing {
-				childWindow.backgroundColor = .systemYellow.withAlphaComponent(0.25)
+				childWindow.backgroundColor = .systemBlue.withAlphaComponent(0.5)
 			}
 			else {
 				childWindow.backgroundColor = .clear
@@ -128,6 +129,9 @@ class NotchWindow: NSWindow {
 				debugLog("finished")
 				super.orderOut(sender)
 			}
+		}
+		else {
+			super.orderOut(sender)
 		}
 	}
 

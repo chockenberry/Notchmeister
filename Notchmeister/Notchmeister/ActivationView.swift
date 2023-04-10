@@ -18,22 +18,25 @@ class ActivationView: NSView {
 		}
 		dirtyRect.fill()
 
-		#if DEBUG
-			let drawControlPanel = true
-		#else
-			let drawControlPanel = NSScreen.hasNotchedScreen
-		#endif
+		let drawControlPanel = NSScreen.hasNotchedScreen
 		
 		if drawControlPanel {
-			// TODO: Use machdep.cpu.brand_string to check for "Apple M2" or "Apple M1"
-			debugLog("cpuBrand = \(cpuBrand())")
 			let notchWidth = bounds.width - (NotchWindow.activationPadding * 2)
+			let notchHeight = bounds.height - NotchWindow.activationPadding
 			let smallMinimumWidth: CGFloat = 137 + (.notchLowerRadius * 2)
 			let largeMinimumWidth: CGFloat = 192 + (.notchLowerRadius * 2)
 			if notchWidth > smallMinimumWidth {
-				let imageName = notchWidth < largeMinimumWidth ? "controlpanel-small" : "controlpanel"
+				// NOTE: The machdep.cpu.brand_string sysctl is used to check for "Apple M2" or "Apple M1"
+				// https://cpufun.substack.com/p/more-m1-fun-hardware-information
+				let imageName: String
+				if cpuBrand() == "Apple M2" {
+					imageName = notchWidth < largeMinimumWidth ? "m2-controlpanel-small" : "m2-controlpanel"
+				}
+				else {
+					imageName = notchWidth < largeMinimumWidth ? "m1-controlpanel-small" : "m1-controlpanel"
+				}
 				if let image = NSImage(named: imageName) {
-					let drawRect = CGRect(origin: CGPoint(x: bounds.midX - image.size.width / 2, y: bounds.minY + NotchWindow.activationPadding), size: image.size)
+					let drawRect = CGRect(origin: CGPoint(x: bounds.midX - image.size.width / 2, y: bounds.minY + notchHeight + 1), size: image.size)
 					image.draw(in: drawRect, from: .zero, operation: .sourceOver, fraction: 1)
 				}
 			}

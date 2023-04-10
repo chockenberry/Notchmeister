@@ -27,7 +27,7 @@ class NotchView: NSView {
 			if let layer = layer {
 				layer.masksToBounds = false
 				if Defaults.shouldDebugDrawing {
-					layer.backgroundColor = NSColor.systemRed.withAlphaComponent(0.25).cgColor
+					layer.backgroundColor = NSColor.systemRed.withAlphaComponent(0.5).cgColor
 				}
 				else {
 					layer.backgroundColor = NSColor.clear.cgColor
