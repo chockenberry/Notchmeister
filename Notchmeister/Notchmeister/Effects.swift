@@ -17,9 +17,7 @@ enum Effects: Int, CaseIterable {
 #if DEBUG
 	case portal
 #endif
-#if DEBUG
 	case expando
-#endif
 
 	func displayName() -> String {
 		switch self {
@@ -79,10 +77,8 @@ enum Effects: Int, CaseIterable {
 		case .portal:
 			return PortalEffect(with: parentLayer, in: parentView)
 #endif
-#if DEBUG
 		case .expando:
 			return ExpandoEffect(with: parentLayer, in: parentView)
-#endif
 		}
 	}
 	
