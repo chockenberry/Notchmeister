@@ -25,6 +25,8 @@ class ActivationView: NSView {
 		#endif
 		
 		if drawControlPanel {
+			// TODO: Use machdep.cpu.brand_string to check for "Apple M2" or "Apple M1"
+			debugLog("cpuBrand = \(cpuBrand())")
 			let notchWidth = bounds.width - (NotchWindow.activationPadding * 2)
 			let smallMinimumWidth: CGFloat = 137 + (.notchLowerRadius * 2)
 			let largeMinimumWidth: CGFloat = 192 + (.notchLowerRadius * 2)
@@ -38,4 +40,12 @@ class ActivationView: NSView {
 		}
 	}
 	
+	private func cpuBrand() -> String {
+		var size = 0
+		sysctlbyname("machdep.cpu.brand_string", nil, &size, nil, 0)
+		var brand = [CChar](repeating: 0,  count: size)
+		sysctlbyname("machdep.cpu.brand_string", &brand, &size, nil, 0)
+		return String(cString: brand)
+	}
+
 }
