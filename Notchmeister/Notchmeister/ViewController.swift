@@ -11,6 +11,7 @@ class ViewController: NSViewController {
 
 	var notchWindows: [NotchWindow] = []
 	var screenParametersNotificationObserver: NSObjectProtocol? = nil
+	var applicationActivationNotificationObserver: NSObjectProtocol? = nil
 
 	@IBOutlet weak var effectPopUpButton: NSPopUpButton!
 	@IBOutlet weak var effectDescriptionTextField: NSTextField!
@@ -28,11 +29,21 @@ class ViewController: NSViewController {
         super.viewDidLoad()
         
         configureForDefaults()
-        createNotchWindows()
 
 		self.screenParametersNotificationObserver = NotificationCenter.default.addObserver(forName: NSApplication.didChangeScreenParametersNotification, object: nil, queue: nil) { [weak self] note in
+			debugLog("screen parameters changed, updating configuration...")
 			self?.updateConfiguration()
 		}
+
+		self.applicationActivationNotificationObserver = NotificationCenter.default.addObserver(forName: NSApplication.didBecomeActiveNotification, object: nil, queue: nil) { [weak self] note in
+			// NOTE: The hidesOnDeactivate for the NotchWindow gets into a weird state if the windows are created before the application is active. To mitigate this
+			// we only create the windows after the first activation (when there are no existing windows).
+			if let self, self.notchWindows.count == 0 {
+				debugLog("application activated, creating initial notch windows...")
+				createNotchWindows()
+			}
+		}
+
     }
 
 	override func viewWillDisappear() {

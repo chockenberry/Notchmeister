@@ -104,12 +104,16 @@ class NotchWindow: NSWindow {
 		super.orderFront(sender)
 		
 		if let fakeNotchView = fakeNotchView {
+			debugLog("starting")
+			fakeNotchView.alphaValue = 1.0
 			let destinationFrame = fakeNotchView.frame
 			let sourceFrame = NSRect(origin: CGPoint(x: destinationFrame.origin.x, y: destinationFrame.origin.y + destinationFrame.height), size: destinationFrame.size)
 			fakeNotchView.frame = sourceFrame
 			NSAnimationContext.runAnimationGroup { context in
 				context.duration = 0.5
 				fakeNotchView.animator().frame = destinationFrame
+			} completionHandler: {
+				debugLog("finished")
 			}
 		}
 	}

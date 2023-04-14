@@ -10,13 +10,12 @@ import Cocoa
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
 
+	override init() {
+		super.init()
+		Defaults.register()
+	}
+	
 	func applicationWillFinishLaunching(_ notification: Notification) {
-//		if ([userDefaults boolForKey:hideDockIconKey]) {
-//			[NSApp setActivationPolicy:NSApplicationActivationPolicyAccessory];
-//		}
-//		else {
-//			[NSApp setActivationPolicy:NSApplicationActivationPolicyRegular];
-//		}
 		if Defaults.shouldHideDockIcon {
 			NSApplication.shared.setActivationPolicy(.accessory)
 			NSApplication.shared.activate(ignoringOtherApps: true)
@@ -24,9 +23,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	}
 	
 	func applicationDidFinishLaunching(_ aNotification: Notification) {
-        Defaults.register()
 		
-#if !DEBUG
+//#if !DEBUG
 		if !NSScreen.hasNotchedScreen {
 			let alert = NSAlert()
 			alert.messageText = "Notch Simulation Mode"
@@ -38,7 +36,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		else {
 			Defaults.shouldFakeNotch = false
 		}
-#endif
+//#endif
 	}
 
 	func applicationWillTerminate(_ aNotification: Notification) {
@@ -57,6 +55,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		return false
 	}
 
+	func applicationDidResignActive(_ notification: Notification) {
+		debugLog()
+	}
+	
 	func applicationDidBecomeActive(_ notification: Notification) {
 		if let window = NSApplication.shared.windows.first {
 			// NOTE: The window that triggered this activation could have been the child window underneath the NotchWindow.

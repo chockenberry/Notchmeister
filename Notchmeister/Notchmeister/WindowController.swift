@@ -32,7 +32,8 @@ extension WindowController: NSWindowDelegate {
 
 	func windowWillClose(_ notification: Notification) {
 		debugLog()
-		NSApplication.shared.hide(nil)
+		// NOTE: App Review dinged this with a "Guideline 4.0 - Design" because closing the window didn't give them a way to reopen it.
+		//NSApplication.shared.hide(nil)
 	}
 }
 
