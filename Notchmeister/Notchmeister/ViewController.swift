@@ -40,7 +40,7 @@ class ViewController: NSViewController {
 			// we only create the windows after the first activation (when there are no existing windows).
 			if let self, self.notchWindows.count == 0 {
 				debugLog("application activated, creating initial notch windows...")
-				createNotchWindows()
+				self.createNotchWindows()
 			}
 		}
 
