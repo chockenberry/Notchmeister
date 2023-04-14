@@ -32,8 +32,11 @@ extension WindowController: NSWindowDelegate {
 
 	func windowWillClose(_ notification: Notification) {
 		debugLog()
-		// NOTE: App Review dinged this with a "Guideline 4.0 - Design" because closing the window didn't give them a way to reopen it.
-		//NSApplication.shared.hide(nil)
+		// NOTE: App Review dinged this with a "Guideline 4.0 - Design" because closing the window didn't give them a way to reopen it. So the hide only happens
+		// if the Dock and menu bar are hidden.
+		if Defaults.shouldHideDockIcon {
+			NSApplication.shared.hide(nil)
+		}
 	}
 }
 
