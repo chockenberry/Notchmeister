@@ -8,13 +8,17 @@
 import SceneKit
 import QuartzCore
 
+let length = 3
+
 class GameViewController: NSViewController {
     
+	var scene = SCNScene(named: "art.scnassets/ship.scn")!
+	
     override func viewDidLoad() {
         super.viewDidLoad()
         
         // create a new scene
-        let scene = SCNScene(named: "art.scnassets/ship.scn")!
+        //let scene = SCNScene(named: "art.scnassets/ship.scn")!
         
         // create and add a camera to the scene
         let cameraNode = SCNNode()
@@ -43,31 +47,42 @@ class GameViewController: NSViewController {
 #if false
         let box1 = scene.rootNode.childNode(withName: "box1", recursively: true)!
 		let box2 = scene.rootNode.childNode(withName: "box2", recursively: true)!
-		let anchor = scene.rootNode.childNode(withName: "anchor", recursively: true)!
 
 //		let joint = SCNPhysicsHingeJoint(body: box.physicsBody!, axis: SCNVector3(1, 1, 1), anchor: SCNVector3(0, 5, 0))
 //		let joint = SCNPhysicsSliderJoint(body: box.physicsBody!, axis: SCNVector3(1, 1, 1), anchor: SCNVector3(0, 5, 0))
-		let joint1 = SCNPhysicsBallSocketJoint(body: box1.physicsBody!, anchor: SCNVector3(5, 0, 0))
+		let joint1 = SCNPhysicsBallSocketJoint(body: box1.physicsBody!, anchor: SCNVector3(2, 0, 0))
 		scene.physicsWorld.addBehavior(joint1)
-		let joint2 = SCNPhysicsBallSocketJoint(body: box2.physicsBody!, anchor: SCNVector3(-5, 0, 0))
+		let joint2 = SCNPhysicsBallSocketJoint(body: box2.physicsBody!, anchor: SCNVector3(-2, 0, 0))
 		scene.physicsWorld.addBehavior(joint2)
 
 		box1.position = SCNVector3(0, 5, 0)
 		box2.position = SCNVector3(0, 5, 0)
 #else
+
+		let anchor = scene.rootNode.childNode(withName: "anchor", recursively: true)!
+		anchor.isHidden = false
+		anchor.worldPosition = SCNVector3(0, length, 0)
+		
 		let dieScene1 = scene.rootNode.childNode(withName: "die1", recursively: true)!
 		let die1 = dieScene1.childNode(withName: "D6", recursively: true)!
-		let joint1 = SCNPhysicsBallSocketJoint(body: die1.physicsBody!, anchor: SCNVector3(5, 0, 0))
+		die1.worldPosition = SCNVector3(-length, length, 0)
+		let joint1 = SCNPhysicsBallSocketJoint(body: die1.physicsBody!, anchor: SCNVector3(length, 0, 0))
 		scene.physicsWorld.addBehavior(joint1)
+		let spin1 = CGFloat.random(in: -4.0...4.0)
+		die1.physicsBody?.applyForce(SCNVector3(x: 0, y: 0, z: spin1), at: SCNVector3(x: 0.0, y: 1.0, z: 0.0), asImpulse: true)
 
 //		let box2 = scene.rootNode.childNode(withName: "box2", recursively: true)!
 		let dieScene2 = scene.rootNode.childNode(withName: "die2", recursively: true)!
 		let die2 = dieScene2.childNode(withName: "D6", recursively: true)!
-		let joint2 = SCNPhysicsBallSocketJoint(body: die2.physicsBody!, anchor: SCNVector3(-5, 0, 0))
+		die2.worldPosition = SCNVector3(length, length, 0)
+		let joint2 = SCNPhysicsBallSocketJoint(body: die2.physicsBody!, anchor: SCNVector3(-length, 0, 0))
 		scene.physicsWorld.addBehavior(joint2)
+		let spin2 = CGFloat.random(in: -4.0...4.0)
+		die2.physicsBody?.applyForce(SCNVector3(x: 0, y: 0, z: spin2), at: SCNVector3(x: 0.0, y: 1.0, z: 0.0), asImpulse: true)
+		//die2.physicsBody?.applyForce(SCNVector3(0, 1, 0), at: SCNVector3(x: 0.0, y: -0.25, z: 0.1), asImpulse: true)
 
-		die1.worldPosition = SCNVector3(-5, 5, 0)
-		die2.worldPosition = SCNVector3(5, 5, 0)
+//		die1.worldPosition = SCNVector3(-2, 2, 0)
+//		die2.worldPosition = SCNVector3(2, 2, 0)
 //		box2.position = SCNVector3(0, 5, 0)
 		
 //		dieScene1.runAction(SCNAction.repeatForever(SCNAction.rotateBy(x: 1, y: 0, z: 0, duration: 1)))
@@ -108,13 +123,24 @@ class GameViewController: NSViewController {
         let hitResults = scnView.hitTest(p, options: [:])
         // check that we clicked on at least one object
         if hitResults.count > 0 {
+#if true
+			let dieScene1 = scene.rootNode.childNode(withName: "die1", recursively: true)!
+			let die1 = dieScene1.childNode(withName: "D6", recursively: true)!
+			die1.worldPosition = SCNVector3(-length, length, 0)
+			let spin1 = CGFloat.random(in: -4.0...4.0)
+			die1.physicsBody?.applyForce(SCNVector3(x: 0, y: 0, z: spin1), at: SCNVector3(x: 0.0, y: 1.0, z: 0.0), asImpulse: true)
+
+			let dieScene2 = scene.rootNode.childNode(withName: "die2", recursively: true)!
+			let die2 = dieScene2.childNode(withName: "D6", recursively: true)!
+			die2.worldPosition = SCNVector3(length, length, 0)
+			let spin2 = CGFloat.random(in: -4.0...4.0)
+			die2.physicsBody?.applyForce(SCNVector3(x: 0, y: 0, z: spin2), at: SCNVector3(x: 0.0, y: 1.0, z: 0.0), asImpulse: true)
+#else
             // retrieved the first clicked object
             let result = hitResults[0]
             
 			result.node.physicsBody?.applyForce(SCNVector3(-5, 0, 0), at: SCNVector3(x: 0.5, y: 0.5, z: 0.1), asImpulse: true)
 //			result.node.physicsBody?.applyForce(SCNVector3(-100, 0, 0), at: SCNVector3(0, 0, 0), asImpulse: true)
-
-//			result.node.position = SCNVector3(0, 5, 0)
 
             // get its material
             let material = result.node.geometry!.firstMaterial!
@@ -137,6 +163,7 @@ class GameViewController: NSViewController {
             material.emission.contents = NSColor.red
             
             SCNTransaction.commit()
+#endif
         }
     }
 }
