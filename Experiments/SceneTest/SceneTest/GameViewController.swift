@@ -28,17 +28,19 @@ class GameViewController: NSViewController {
         let lightNode = SCNNode()
         lightNode.light = SCNLight()
         lightNode.light!.type = .omni
-        lightNode.position = SCNVector3(x: 0, y: 10, z: 10)
+		lightNode.light!.color = NSColor.systemOrange
+        lightNode.position = SCNVector3(x: 0, y: 0, z: 15)
         scene.rootNode.addChildNode(lightNode)
         
         // create and add an ambient light to the scene
         let ambientLightNode = SCNNode()
         ambientLightNode.light = SCNLight()
         ambientLightNode.light!.type = .ambient
-        ambientLightNode.light!.color = NSColor.darkGray
+        ambientLightNode.light!.color = NSColor.white
         scene.rootNode.addChildNode(ambientLightNode)
         
         // retrieve the ship node
+#if false
         let box1 = scene.rootNode.childNode(withName: "box1", recursively: true)!
 		let box2 = scene.rootNode.childNode(withName: "box2", recursively: true)!
 		let anchor = scene.rootNode.childNode(withName: "anchor", recursively: true)!
@@ -52,6 +54,24 @@ class GameViewController: NSViewController {
 
 		box1.position = SCNVector3(0, 5, 0)
 		box2.position = SCNVector3(0, 5, 0)
+#else
+		let dieScene1 = scene.rootNode.childNode(withName: "die1", recursively: true)!
+		let die1 = dieScene1.childNode(withName: "D6", recursively: true)!
+		let joint1 = SCNPhysicsBallSocketJoint(body: die1.physicsBody!, anchor: SCNVector3(5, 0, 0))
+		scene.physicsWorld.addBehavior(joint1)
+
+//		let box2 = scene.rootNode.childNode(withName: "box2", recursively: true)!
+		let dieScene2 = scene.rootNode.childNode(withName: "die2", recursively: true)!
+		let die2 = dieScene2.childNode(withName: "D6", recursively: true)!
+		let joint2 = SCNPhysicsBallSocketJoint(body: die2.physicsBody!, anchor: SCNVector3(-5, 0, 0))
+		scene.physicsWorld.addBehavior(joint2)
+
+		die1.worldPosition = SCNVector3(-5, 5, 0)
+		die2.worldPosition = SCNVector3(5, 5, 0)
+//		box2.position = SCNVector3(0, 5, 0)
+		
+//		dieScene1.runAction(SCNAction.repeatForever(SCNAction.rotateBy(x: 1, y: 0, z: 0, duration: 1)))
+#endif
 		
         // animate the 3d object
 		//box.runAction(SCNAction.repeatForever(SCNAction.rotateBy(x: 0, y: 2, z: 0, duration: 1)))
@@ -91,14 +111,15 @@ class GameViewController: NSViewController {
             // retrieved the first clicked object
             let result = hitResults[0]
             
-			result.node.physicsBody?.applyForce(SCNVector3(-2, 0, 0), at: SCNVector3(x: 0.5, y: 0.25, z: 0.1), asImpulse: true)
+			result.node.physicsBody?.applyForce(SCNVector3(-5, 0, 0), at: SCNVector3(x: 0.5, y: 0.5, z: 0.1), asImpulse: true)
 //			result.node.physicsBody?.applyForce(SCNVector3(-100, 0, 0), at: SCNVector3(0, 0, 0), asImpulse: true)
 
 //			result.node.position = SCNVector3(0, 5, 0)
 
             // get its material
             let material = result.node.geometry!.firstMaterial!
-            
+			let originalColor = material.emission.contents
+			
             // highlight it
             SCNTransaction.begin()
             SCNTransaction.animationDuration = 0.5
@@ -108,7 +129,7 @@ class GameViewController: NSViewController {
                 SCNTransaction.begin()
                 SCNTransaction.animationDuration = 0.5
                 
-                material.emission.contents = NSColor.black
+                material.emission.contents = originalColor
                 
                 SCNTransaction.commit()
             }
