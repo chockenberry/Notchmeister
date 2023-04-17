@@ -65,8 +65,14 @@ class GameViewController: NSViewController {
 		
 		let dieScene1 = scene.rootNode.childNode(withName: "die1", recursively: true)!
 		let die1 = dieScene1.childNode(withName: "D6", recursively: true)!
+		//die1.pivot = SCNMatrix4MakeTranslation(0.5, 0.5, 0.0)
+		//die1.rotation = SCNVector4(x: .pi/4, y: .pi/4, z: 0, w: 0)
+		//die1.pivot = SCNMatrix4MakeTranslation(0.5, 0.5, 0)
+		//die1.physicsBody!.centerOfMassOffset = SCNVector3(0.5, 0.5, 0.5)
+		//die1.localTranslate(by: SCNVector3(x: 0.5, y: 0.5, z: 0.5))
 		die1.worldPosition = SCNVector3(-length, length, 0)
-		let joint1 = SCNPhysicsBallSocketJoint(body: die1.physicsBody!, anchor: SCNVector3(length, 0, 0))
+		let joint1 = SCNPhysicsBallSocketJoint(body: die1.physicsBody!, anchor: SCNVector3(x: CGFloat(length), y: 0, z: 0))
+		//let joint1 = SCNPhysicsBallSocketJoint(bodyA: die1.physicsBody!, anchorA: SCNVector3(x: CGFloat(length) + 0.5, y: 0.5, z: 0.5), bodyB: anchor.physicsBody!, anchorB: SCNVector3())
 		scene.physicsWorld.addBehavior(joint1)
 		let spin1 = CGFloat.random(in: -4.0...4.0)
 		die1.physicsBody?.applyForce(SCNVector3(x: 0, y: 0, z: spin1), at: SCNVector3(x: 0.0, y: 1.0, z: 0.0), asImpulse: true)
@@ -74,6 +80,8 @@ class GameViewController: NSViewController {
 //		let box2 = scene.rootNode.childNode(withName: "box2", recursively: true)!
 		let dieScene2 = scene.rootNode.childNode(withName: "die2", recursively: true)!
 		let die2 = dieScene2.childNode(withName: "D6", recursively: true)!
+		//die2.physicsBody!.centerOfMassOffset = SCNVector3(0.5, 0.5, 0.5)
+		//die2.localTranslate(by: SCNVector3(x: 0.5, y: 0.5, z: 0.5))
 		die2.worldPosition = SCNVector3(length, length, 0)
 		let joint2 = SCNPhysicsBallSocketJoint(body: die2.physicsBody!, anchor: SCNVector3(-length, 0, 0))
 		scene.physicsWorld.addBehavior(joint2)
