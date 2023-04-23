@@ -8,117 +8,25 @@
 import SceneKit
 import QuartzCore
 
-let length = 3
-
 class GameViewController: NSViewController {
     
 	var scene = SCNScene(named: "art.scnassets/ship.scn")!
 	
+	// Apple's silicon expertise is not only on the die, but also on the dice.
+	
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // create a new scene
-        //let scene = SCNScene(named: "art.scnassets/ship.scn")!
-        
-        // create and add a camera to the scene
-        let cameraNode = SCNNode()
-        cameraNode.camera = SCNCamera()
-        scene.rootNode.addChildNode(cameraNode)
-        
-        // place the camera
-        cameraNode.position = SCNVector3(x: 0, y: 0, z: 15)
+		// create and position a camera for the scene
+		setupCamera()
         
         // create and add a light to the scene
-        let lightNode = SCNNode()
-        lightNode.light = SCNLight()
-        lightNode.light!.type = .omni
-		lightNode.light!.color = NSColor.systemOrange
-        lightNode.position = SCNVector3(x: 0, y: 0, z: 15)
-        scene.rootNode.addChildNode(lightNode)
-        
-        // create and add an ambient light to the scene
-        let ambientLightNode = SCNNode()
-        ambientLightNode.light = SCNLight()
-        ambientLightNode.light!.type = .ambient
-        ambientLightNode.light!.color = NSColor.white
-        scene.rootNode.addChildNode(ambientLightNode)
-        
-        // retrieve the ship node
-#if false
-        let box1 = scene.rootNode.childNode(withName: "box1", recursively: true)!
-		let box2 = scene.rootNode.childNode(withName: "box2", recursively: true)!
-
-//		let joint = SCNPhysicsHingeJoint(body: box.physicsBody!, axis: SCNVector3(1, 1, 1), anchor: SCNVector3(0, 5, 0))
-//		let joint = SCNPhysicsSliderJoint(body: box.physicsBody!, axis: SCNVector3(1, 1, 1), anchor: SCNVector3(0, 5, 0))
-		let joint1 = SCNPhysicsBallSocketJoint(body: box1.physicsBody!, anchor: SCNVector3(2, 0, 0))
-		scene.physicsWorld.addBehavior(joint1)
-		let joint2 = SCNPhysicsBallSocketJoint(body: box2.physicsBody!, anchor: SCNVector3(-2, 0, 0))
-		scene.physicsWorld.addBehavior(joint2)
-
-		box1.position = SCNVector3(0, 5, 0)
-		box2.position = SCNVector3(0, 5, 0)
-#else
-
-		let anchor = scene.rootNode.childNode(withName: "anchor", recursively: true)!
-		anchor.isHidden = false
-		anchor.worldPosition = SCNVector3(0, length, 0)
+		setupLights()
 		
-		let dieScene1 = scene.rootNode.childNode(withName: "die1", recursively: true)!
-		let die1 = dieScene1.childNode(withName: "D6", recursively: true)!
-		//die1.pivot = SCNMatrix4MakeTranslation(0.5, 0.5, 0.0)
-		//die1.rotation = SCNVector4(x: .pi/4, y: .pi/4, z: 0, w: 0)
-		//die1.pivot = SCNMatrix4MakeTranslation(0.5, 0.5, 0)
-		//die1.physicsBody!.centerOfMassOffset = SCNVector3(0.5, 0.5, 0.5)
-		//die1.localTranslate(by: SCNVector3(x: 0.5, y: 0.5, z: 0.5))
-		die1.worldPosition = SCNVector3(-length, length, 0)
-		let joint1 = SCNPhysicsBallSocketJoint(body: die1.physicsBody!, anchor: SCNVector3(x: CGFloat(length), y: 0, z: 0))
-		//let joint1 = SCNPhysicsBallSocketJoint(bodyA: die1.physicsBody!, anchorA: SCNVector3(x: CGFloat(length) + 0.5, y: 0.5, z: 0.5), bodyB: anchor.physicsBody!, anchorB: SCNVector3())
-		scene.physicsWorld.addBehavior(joint1)
-		let spin1 = CGFloat.random(in: -4.0...4.0)
-		die1.physicsBody?.applyForce(SCNVector3(x: 0, y: 0, z: spin1), at: SCNVector3(x: 0.0, y: 1.0, z: 0.0), asImpulse: true)
-
-//		let box2 = scene.rootNode.childNode(withName: "box2", recursively: true)!
-		let dieScene2 = scene.rootNode.childNode(withName: "die2", recursively: true)!
-		let die2 = dieScene2.childNode(withName: "D6", recursively: true)!
-		//die2.physicsBody!.centerOfMassOffset = SCNVector3(0.5, 0.5, 0.5)
-		//die2.localTranslate(by: SCNVector3(x: 0.5, y: 0.5, z: 0.5))
-		die2.worldPosition = SCNVector3(length, length, 0)
-		let joint2 = SCNPhysicsBallSocketJoint(body: die2.physicsBody!, anchor: SCNVector3(-length, 0, 0))
-		scene.physicsWorld.addBehavior(joint2)
-		let spin2 = CGFloat.random(in: -4.0...4.0)
-		die2.physicsBody?.applyForce(SCNVector3(x: 0, y: 0, z: spin2), at: SCNVector3(x: 0.0, y: 1.0, z: 0.0), asImpulse: true)
-		//die2.physicsBody?.applyForce(SCNVector3(0, 1, 0), at: SCNVector3(x: 0.0, y: -0.25, z: 0.1), asImpulse: true)
-
-//		die1.worldPosition = SCNVector3(-2, 2, 0)
-//		die2.worldPosition = SCNVector3(2, 2, 0)
-//		box2.position = SCNVector3(0, 5, 0)
+		// setup the scene objects
+		setupObjects()
 		
-//		dieScene1.runAction(SCNAction.repeatForever(SCNAction.rotateBy(x: 1, y: 0, z: 0, duration: 1)))
-#endif
-		
-        // animate the 3d object
-		//box.runAction(SCNAction.repeatForever(SCNAction.rotateBy(x: 0, y: 2, z: 0, duration: 1)))
-        
-        // retrieve the SCNView
-        let scnView = self.view as! SCNView
-        
-        // set the scene to the view
-        scnView.scene = scene
-        
-        // allows the user to manipulate the camera
-        scnView.allowsCameraControl = true
-        
-        // show statistics such as fps and timing information
-        scnView.showsStatistics = true
-        
-        // configure the view
-        scnView.backgroundColor = NSColor.black
-        
-        // Add a click gesture recognizer
-        let clickGesture = NSClickGestureRecognizer(target: self, action: #selector(handleClick(_:)))
-        var gestureRecognizers = scnView.gestureRecognizers
-        gestureRecognizers.insert(clickGesture, at: 0)
-        scnView.gestureRecognizers = gestureRecognizers
+		setupViewScene()
     }
     
     @objc
@@ -131,18 +39,23 @@ class GameViewController: NSViewController {
         let hitResults = scnView.hitTest(p, options: [:])
         // check that we clicked on at least one object
         if hitResults.count > 0 {
+			let node = hitResults.first!.node
 #if true
 			let dieScene1 = scene.rootNode.childNode(withName: "die1", recursively: true)!
 			let die1 = dieScene1.childNode(withName: "D6", recursively: true)!
-			die1.worldPosition = SCNVector3(-length, length, 0)
-			let spin1 = CGFloat.random(in: -4.0...4.0)
-			die1.physicsBody?.applyForce(SCNVector3(x: 0, y: 0, z: spin1), at: SCNVector3(x: 0.0, y: 1.0, z: 0.0), asImpulse: true)
-
+			//die1.worldPosition = SCNVector3(-length, length, 0)
+			if node == die1 {
+				let spin1 = CGFloat.random(in: 4.0 ... 8.0)
+				die1.physicsBody?.applyForce(SCNVector3(x: 0, y: 0, z: spin1), at: SCNVector3(x: 1.0, y: 1.0, z: 0.0), asImpulse: true)
+			}
+			
 			let dieScene2 = scene.rootNode.childNode(withName: "die2", recursively: true)!
 			let die2 = dieScene2.childNode(withName: "D6", recursively: true)!
-			die2.worldPosition = SCNVector3(length, length, 0)
-			let spin2 = CGFloat.random(in: -4.0...4.0)
-			die2.physicsBody?.applyForce(SCNVector3(x: 0, y: 0, z: spin2), at: SCNVector3(x: 0.0, y: 1.0, z: 0.0), asImpulse: true)
+			//die2.worldPosition = SCNVector3(length, length, 0)
+			if node == die2 {
+				let spin2 = CGFloat.random(in: -8.0 ... -4.0)
+				die2.physicsBody?.applyForce(SCNVector3(x: 0, y: 0, z: spin2), at: SCNVector3(x: 1.0, y: 1.0, z: 0.0), asImpulse: true)
+			}
 #else
             // retrieved the first clicked object
             let result = hitResults[0]
@@ -174,4 +87,170 @@ class GameViewController: NSViewController {
 #endif
         }
     }
+	
+	var scnView: SCNView!
+	var scnScene: SCNScene!
+	var theRing: SCNNode!
+
+	func setupCamera() {
+		let cameraNode = SCNNode()
+		cameraNode.camera = SCNCamera()
+		scene.rootNode.addChildNode(cameraNode)
+		
+		cameraNode.position = SCNVector3(x: 0, y: 0, z: 15)
+	}
+
+	func setupLights() {
+		let lightNode = SCNNode()
+		lightNode.light = SCNLight()
+		lightNode.light!.type = .omni
+		lightNode.light!.color = NSColor.systemOrange
+		lightNode.position = SCNVector3(x: 0, y: 0, z: 15)
+		scene.rootNode.addChildNode(lightNode)
+		
+		// create and add an ambient light to the scene
+		let ambientLightNode = SCNNode()
+		ambientLightNode.light = SCNLight()
+		ambientLightNode.light!.type = .ambient
+		ambientLightNode.light!.color = NSColor.white
+		scene.rootNode.addChildNode(ambientLightNode)
+	}
+	
+	let length = 3
+
+	func setupObjects() {
+		let anchor = scene.rootNode.childNode(withName: "anchor", recursively: true)!
+		anchor.physicsBody = SCNPhysicsBody(type: .static, shape: nil)
+		//anchor.physicsBody?.mass = 5.0
+		anchor.physicsBody?.categoryBitMask = 1
+		anchor.physicsBody?.collisionBitMask = 0
+		anchor.isHidden = false
+		anchor.worldPosition = SCNVector3(0, length, 0)
+		anchor.physicsBody?.isAffectedByGravity = false
+
+		let dieScene1 = scene.rootNode.childNode(withName: "die1", recursively: true)!
+		let die1 = dieScene1.childNode(withName: "D6", recursively: true)!
+		die1.worldPosition = SCNVector3(-length, length, 0)
+		/*
+		let joint1 = SCNPhysicsBallSocketJoint(body: die1.physicsBody!, anchor: SCNVector3(x: CGFloat(length), y: 0, z: 0))
+		scene.physicsWorld.addBehavior(joint1)
+		let spin1 = CGFloat.random(in: -4.0...4.0)
+		die1.physicsBody?.applyForce(SCNVector3(x: 0, y: 0, z: spin1), at: SCNVector3(x: 0.0, y: 1.0, z: 0.0), asImpulse: true)
+		 */
+		setupCord(anchor: anchor, linkCount: 14, die: die1)
+		
+		let dieScene2 = scene.rootNode.childNode(withName: "die2", recursively: true)!
+		let die2 = dieScene2.childNode(withName: "D6", recursively: true)!
+		die2.worldPosition = SCNVector3(length, length, 0)
+		/*
+		let joint2 = SCNPhysicsBallSocketJoint(body: die2.physicsBody!, anchor: SCNVector3(-length, 0, 0))
+		scene.physicsWorld.addBehavior(joint2)
+		let spin2 = CGFloat.random(in: -4.0...4.0)
+		die2.physicsBody?.applyForce(SCNVector3(x: 0, y: 0, z: spin2), at: SCNVector3(x: 0.0, y: 1.0, z: 0.0), asImpulse: true)
+		 */
+		setupCord(anchor: anchor, linkCount: 16, die: die2)
+	}
+
+	var links: [SCNNode] = []
+	
+	func setupCord(anchor: SCNNode, linkCount: Int, die: SCNNode) {
+		
+		func createLink(position: CGFloat) -> SCNNode {
+			//var geometry:SCNGeometry
+			//var link:SCNNode
+			
+			//let geometry = SCNSphere(radius: 1)
+			let geometry = SCNCylinder(radius: 0.025, height: 0.15)
+			//geometry.materials.first?.diffuse.contents = NSColor.red
+			
+			let link = SCNNode(geometry: geometry)
+			link.physicsBody = SCNPhysicsBody(type: .dynamic, shape: nil)
+			link.physicsBody?.mass = 0.5
+			link.physicsBody?.restitution = 0
+			link.physicsBody?.damping = 0.5
+			link.physicsBody?.categoryBitMask = 1
+			link.physicsBody?.collisionBitMask = 0
+			link.physicsBody?.friction = 1.0
+			link.physicsBody?.velocityFactor = SCNVector3Make(1, 1, 1)
+
+			let cycleDuration: TimeInterval = 0.5
+			let changeColor = SCNAction.customAction(duration: cycleDuration) { node, elapsedTime in
+				let offset = (cycleDuration * position)
+				let normalized = sin((.pi * 4) * ((elapsedTime / cycleDuration) - offset))
+				//debugLog("\(elapsedTime) -> \(normalized)")
+//				let color = NSColor(red: normalized / 2, green: normalized / 4, blue: normalized, alpha: 1) // purple
+				let color = NSColor(red: normalized / 2 + 0.5, green: normalized / 4 + 0.25, blue: 0.5, alpha: 1)
+				node.geometry?.firstMaterial?.diffuse.contents = color
+			}
+			link.runAction(SCNAction.repeatForever(changeColor))
+			
+			return link
+		}
+
+		var previousLink = anchor
+		var linkIndex = 0
+		while linkIndex < linkCount {
+			let link = createLink(position: CGFloat(linkIndex) / CGFloat(linkCount))
+			links.append(link)
+			if linkIndex == 0 {
+				let joint = SCNPhysicsBallSocketJoint(
+					bodyA: anchor.physicsBody!,
+					anchorA: SCNVector3Make(0, 0, 0),
+					bodyB: link.physicsBody!,
+					anchorB: SCNVector3Make(0, -0.05, 0)
+				)
+				scene.physicsWorld.addBehavior(joint)
+			}
+			else {
+				let joint = SCNPhysicsHingeJoint(
+					bodyA: link.physicsBody!,
+					axisA: SCNVector3Make(0, 1, 0),
+					anchorA: SCNVector3Make(0, -0.05, 0),
+					bodyB: previousLink.physicsBody!,
+					axisB: SCNVector3Make(0, 1, 0),
+					anchorB: SCNVector3Make(0, 0.05, 0)
+				)
+				scene.physicsWorld.addBehavior(joint)
+			}
+			previousLink = link
+			linkIndex += 1
+		}
+
+		let joint = SCNPhysicsBallSocketJoint(
+			bodyA: die.physicsBody!,
+			anchorA: SCNVector3Make(0.45, 0.45, 0.45),
+			bodyB: previousLink.physicsBody!,
+			anchorB: SCNVector3Make(0, 0.1, 0)
+		)
+		scene.physicsWorld.addBehavior(joint)
+		
+		for link in links {
+			anchor.addChildNode(link)
+		}
+	}
+	
+	func setupViewScene() {
+		// retrieve the SCNView
+		let scnView = self.view as! SCNView
+		
+		// set the scene to the view
+		scnView.scene = scene
+		
+		// allows the user to manipulate the camera
+		scnView.allowsCameraControl = true
+		
+		// show statistics such as fps and timing information
+		scnView.showsStatistics = true
+		
+		// configure the view
+		scnView.backgroundColor = NSColor.black
+		
+		// Add a click gesture recognizer
+		let clickGesture = NSClickGestureRecognizer(target: self, action: #selector(handleClick(_:)))
+		var gestureRecognizers = scnView.gestureRecognizers
+		gestureRecognizers.insert(clickGesture, at: 0)
+		scnView.gestureRecognizers = gestureRecognizers
+
+	}
+
 }
