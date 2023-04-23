@@ -26,26 +26,27 @@ class DiceEffect: NotchEffect {
 		let contentRect = CGRect(x: 0, y: 0, width: 400, height: 300)
 
 		let childWindow = NSWindow(contentRect: contentRect, styleMask: .borderless, backing: .buffered, defer: false)
-		childWindow.ignoresMouseEvents = false
+		childWindow.ignoresMouseEvents = true
 		childWindow.canHide = false
 		childWindow.isMovable = false
 		childWindow.isOpaque = false
 		childWindow.hasShadow = false
-		
+		//childWindow.hasShadow = true
+
 		let viewRect = CGRect(x: 0, y: 0, width: 400, height: 300)
 #if true
 		//let contentView = SceneView(frame: viewRect)
 		let scene = SCNScene(named: "dice.scn")!
 		//scene.background.contents = NSColor.systemYellow.withAlphaComponent(0.5)
-		let contentView = SCNView(frame: viewRect)
+		let contentView = SceneView(frame: viewRect)
 		contentView.backgroundColor = NSColor.clear
 		contentView.scene = scene
-		contentView.wantsLayer = false
+		contentView.wantsLayer = true
 
-		let clickGesture = NSClickGestureRecognizer(target: self, action: #selector(handleClick(_:)))
-		var gestureRecognizers = contentView.gestureRecognizers
-		gestureRecognizers.insert(clickGesture, at: 0)
-		contentView.gestureRecognizers = gestureRecognizers
+//		let clickGesture = NSClickGestureRecognizer(target: self, action: #selector(handleClick(_:)))
+//		var gestureRecognizers = contentView.gestureRecognizers
+//		gestureRecognizers.insert(clickGesture, at: 0)
+//		contentView.gestureRecognizers = gestureRecognizers
 
 #else
 		let contentView = NSImageView(frame: viewRect)
