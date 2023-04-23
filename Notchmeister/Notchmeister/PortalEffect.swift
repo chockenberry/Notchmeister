@@ -19,14 +19,14 @@ class PortalEffect: NotchEffect {
 	let edgeWidth = 1.0
 	let offset = 0
 	
-	required init (with parentLayer: CALayer, in parentView: NSView) {
+	required init (with parentLayer: CALayer, in parentView: NSView, of parentWindow: NSWindow) {
 		self.inGlowLayer = CAGradientLayer()
 		self.outGlowLayer = CAGradientLayer()
 
 		if Defaults.shouldDebugDrawing {
 		}
 		
-		super.init(with: parentLayer, in: parentView)
+		super.init(with: parentLayer, in: parentView, of: parentWindow)
 
 		configureSublayers()
 	}

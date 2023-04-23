@@ -11,10 +11,11 @@ class ExpandoEffect: NotchEffect {
 	
 	var edgeLayer: CAShapeLayer
 
-	required init (with parentLayer: CALayer, in parentView: NSView) {
+	required init (with parentLayer: CALayer, in parentView: NSView, of parentWindow: NSWindow) {
 		self.edgeLayer = CAShapeLayer.notchOutlineLayer(for: parentLayer.bounds.size, flipped: true)
-		
-		super.init(with: parentLayer, in: parentView)
+
+		super.init(with: parentLayer, in: parentView, of: parentWindow)
+
 
 		configureSublayers()
 	}

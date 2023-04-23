@@ -36,7 +36,7 @@ class NotchView: NSView {
 				guard let parentLayer = self.layer else { return }
 
 				let effect = Effects(rawValue: Defaults.selectedEffect)
-				notchEffect = effect?.notchEffect(with: parentLayer, in: self)
+				notchEffect = effect?.notchEffect(with: parentLayer, in: self, of: self.superview!.window!)
  
 				notchEffect?.start()
 			}

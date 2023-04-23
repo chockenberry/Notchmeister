@@ -11,7 +11,7 @@ class ActivationView: NSView {
 
 	override func draw(_ dirtyRect: NSRect) {
 		if Defaults.shouldDebugDrawing {
-			NSColor.systemGreen.set()
+			NSColor.systemGreen.withAlphaComponent(0.5).set()
 		}
 		else {
 			NSColor.clear.set()

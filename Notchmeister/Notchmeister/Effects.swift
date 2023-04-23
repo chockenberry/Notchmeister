@@ -16,6 +16,9 @@ enum Effects: Int, CaseIterable {
 	case radar
 	case expando
 #if DEBUG
+	case dice
+#endif
+#if DEBUG
 	case portal
 #endif
 
@@ -33,6 +36,10 @@ enum Effects: Int, CaseIterable {
 			return "Nano Radar"
 		case .expando:
 			return "Expando"
+#if DEBUG
+		case .dice:
+			return "Fusion Dice"
+#endif
 #if DEBUG
 		case .portal:
 			return "Portal"
@@ -55,29 +62,37 @@ enum Effects: Int, CaseIterable {
 		case .expando:
 			return "Bigger is better, right?\n\n⚠️ Works best in Light appearance."
 #if DEBUG
+		case .dice:
+			return "Apple's silicon expertise is not only on the die, but also on the dice.\n\n☢️ Avoid prolonged exposure."
+#endif
+#if DEBUG
 		case .portal:
 			return "Activate Macintosh Interdimensional Computation Extension (MICE)."
 #endif
 		}
 	}
 
-	func notchEffect(with parentLayer: CALayer, in parentView: NSView) -> NotchEffect {
+	func notchEffect(with parentLayer: CALayer, in parentView: NSView, of parentWindow: NSWindow) -> NotchEffect {
 		switch self {
 		case .glow:
-			return GlowEffect(with: parentLayer, in: parentView)
+			return GlowEffect(with: parentLayer, in: parentView, of: parentWindow)
 		case .cylon:
-			return CylonEffect(with: parentLayer, in: parentView)
+			return CylonEffect(with: parentLayer, in: parentView, of: parentWindow)
 		case .plasma:
-			return PlasmaEffect(with: parentLayer, in: parentView)
+			return PlasmaEffect(with: parentLayer, in: parentView, of: parentWindow)
 		case .festive:
-			return FestiveEffect(with: parentLayer, in: parentView)
+			return FestiveEffect(with: parentLayer, in: parentView, of: parentWindow)
 		case .radar:
-			return RadarEffect(with: parentLayer, in: parentView)
+			return RadarEffect(with: parentLayer, in: parentView, of: parentWindow)
 		case .expando:
-			return ExpandoEffect(with: parentLayer, in: parentView)
+			return ExpandoEffect(with: parentLayer, in: parentView, of: parentWindow)
+#if DEBUG
+		case .dice:
+			return DiceEffect(with: parentLayer, in: parentView, of: parentWindow)
+#endif
 #if DEBUG
 		case .portal:
-			return PortalEffect(with: parentLayer, in: parentView)
+			return PortalEffect(with: parentLayer, in: parentView, of: parentWindow)
 #endif
 		}
 	}

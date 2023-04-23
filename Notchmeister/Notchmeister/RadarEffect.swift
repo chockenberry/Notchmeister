@@ -156,13 +156,13 @@ class RadarEffect: NotchEffect {
 
 	var context: CIContext
 
-	required init (with parentLayer: CALayer, in parentView: NSView) {
+	required init (with parentLayer: CALayer, in parentView: NSView, of parentWindow: NSWindow) {
 		self.radarLayer = CATransformLayer()
 		self.frameLayer = CALayer()
 		self.screenLayer = CALayer()
 		self.context = CIContext(options: [.outputColorSpace: NSNull(), .workingColorSpace: NSNull()])
 		
-		super.init(with: parentLayer, in: parentView)
+		super.init(with: parentLayer, in: parentView, of: parentWindow)
 
 		configureSublayers()
 	}

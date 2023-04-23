@@ -23,8 +23,8 @@ class CylonEffect: NotchEffect {
     
 	var redEyeAnimation: CAKeyframeAnimation?
 	
-	required init (with parentLayer: CALayer, in parentView: NSView) {
-		super.init(with: parentLayer, in: parentView)
+	required init (with parentLayer: CALayer, in parentView: NSView, of parentWindow: NSWindow) {
+		super.init(with: parentLayer, in: parentView, of: parentWindow)
 
 		configureSublayers()
     }

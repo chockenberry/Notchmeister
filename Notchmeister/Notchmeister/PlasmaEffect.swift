@@ -12,12 +12,12 @@ class PlasmaEffect: NotchEffect {
 	var plasmaLayer: CAEmitterLayer
 	var lifetimeScale: Float
 	
-	required init (with parentLayer: CALayer, in parentView: NSView) {
+	required init (with parentLayer: CALayer, in parentView: NSView, of parentWindow: NSWindow) {
 		self.plasmaLayer = CAEmitterLayer()
 
 		self.lifetimeScale = (NSScreen.hasNotchedScreen || Defaults.shouldLargeFakeNotch) ? 0.1 : 0.075
 		
-		super.init(with: parentLayer, in: parentView)
+		super.init(with: parentLayer, in: parentView, of: parentWindow)
 
 		configureSublayers()
 	}
