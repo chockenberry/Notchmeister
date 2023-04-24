@@ -24,7 +24,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	
 	func applicationDidFinishLaunching(_ aNotification: Notification) {
 		
-//#if !DEBUG
+#if !DEBUG
 		if !NSScreen.hasNotchedScreen {
 			let alert = NSAlert()
 			alert.messageText = "Notch Simulation Mode"
@@ -36,7 +36,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		else {
 			Defaults.shouldFakeNotch = false
 		}
-//#endif
+#endif
 	}
 
 	func applicationWillTerminate(_ aNotification: Notification) {
