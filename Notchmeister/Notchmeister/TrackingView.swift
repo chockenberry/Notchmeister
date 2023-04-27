@@ -72,7 +72,7 @@ class TrackingView: NSView {
 	// To mitigate this, the event monitors are created when entering the tracking area and destroyed when leaving.
 	
 	private func addEventMonitors() {
-		debugLog()
+		//debugLog()
 		globalMonitor = NSEvent.addGlobalMonitorForEvents(matching: [.mouseMoved]) { event in
 			//debugLog("global event = \(String(describing: event))")
 			if let window = self.window {
@@ -112,7 +112,7 @@ class TrackingView: NSView {
 	}
 	
 	private func removeEventMonitors() {
-		debugLog()
+		//debugLog()
 		if let globalMonitor = globalMonitor {
 			NSEvent.removeMonitor(globalMonitor)
 			self.globalMonitor = nil
@@ -124,7 +124,7 @@ class TrackingView: NSView {
 	}
 	
 	override func mouseEntered(with event: NSEvent) {
-		debugLog()
+		//debugLog()
 		super.mouseEntered(with: event)
 		
 		removeEventMonitors()
@@ -132,7 +132,7 @@ class TrackingView: NSView {
 	}
 	
 	override func mouseExited(with event: NSEvent) {
-		debugLog()
+		//debugLog()
 		super.mouseExited(with: event)
 		
 		removeEventMonitors()
