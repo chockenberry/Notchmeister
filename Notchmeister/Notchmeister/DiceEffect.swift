@@ -12,6 +12,8 @@ class DiceEffect: NotchEffect {
 	
 	//var edgeLayer: CAShapeLayer
 
+	var diceWindow: NSWindow!
+	
 	required init (with parentLayer: CALayer, in parentView: NSView, of parentWindow: NSWindow) {
 		//self.edgeLayer = CAShapeLayer.notchOutlineLayer(for: parentLayer.bounds.size, flipped: true)
 
@@ -19,70 +21,28 @@ class DiceEffect: NotchEffect {
 		
 
 		//configureSublayers()
-		configureChildWindow()
-	}
-	
-	private func configureChildWindow() {
-		let contentRect = CGRect(x: 0, y: 0, width: 400, height: 300)
-
-		let childWindow = NSWindow(contentRect: contentRect, styleMask: .borderless, backing: .buffered, defer: false)
-		childWindow.ignoresMouseEvents = true
-		childWindow.canHide = false
-		childWindow.isMovable = false
-		childWindow.isOpaque = false
-		childWindow.hasShadow = false
-		//childWindow.hasShadow = true
-
-		let viewRect = CGRect(x: 0, y: 0, width: 400, height: 300)
-#if true
-		//let contentView = SceneView(frame: viewRect)
-		let scene = SCNScene(named: "dice.scn")!
-		//scene.background.contents = NSColor.systemYellow.withAlphaComponent(0.5)
-		let contentView = SceneView(frame: viewRect)
-		contentView.backgroundColor = NSColor.clear
-		contentView.scene = scene
-		contentView.wantsLayer = true
-
-//		let clickGesture = NSClickGestureRecognizer(target: self, action: #selector(handleClick(_:)))
-//		var gestureRecognizers = contentView.gestureRecognizers
-//		gestureRecognizers.insert(clickGesture, at: 0)
-//		contentView.gestureRecognizers = gestureRecognizers
-
-#else
-		let contentView = NSImageView(frame: viewRect)
-		contentView.imageAlignment = .alignCenter
-		contentView.image = NSImage(named: "xray")
-		contentView.wantsLayer = false
-		//contentView.wantsLayer = true;
-#endif
-		childWindow.contentView = contentView
-
-#if false
-		if Defaults.shouldDebugDrawing {
-			childWindow.backgroundColor = .systemYellow.withAlphaComponent(0.5)
-		}
-		else {
-			childWindow.backgroundColor = .clear
-		}
-#else
-		childWindow.backgroundColor = .clear
-#endif
+		//self.perform(#selector(configureChildWindow), with: nil, afterDelay: 2.0)
+		//configureChildWindow()
 		
-		if let window = parentWindow {
-			window.addChildWindow(childWindow, ordered: .below)
-		}
+		diceWindow = configureDiceWindow()
+		diceWindow.orderFront(self)
+
 	}
 	
+	deinit {
+		diceWindow.orderOut(self)
+	}
+		
 	override func mouseEntered(at point: CGPoint, underNotch: Bool) {
 		debugLog()
 	}
 
 	override func mouseMoved(at point: CGPoint, underNotch: Bool) {
-		guard let parentLayer = parentLayer else { return }
+		//guard let parentLayer = parentLayer else { return }
 
 		do {
 			if underNotch {
-				debugLog()
+				//debugLog()
 			}
 			else {
 			}
@@ -113,5 +73,34 @@ class DiceEffect: NotchEffect {
 #endif
 	}
 	
+	private func configureDiceWindow() -> NSWindow? {
+		guard let screen = NSScreen.screens.first else { return nil }
+		
+//		let contentRect = CGRect(x: screen.frame.midX - 400, y: screen.frame.midY - 150, width: 400, height: 300)
+		let contentRect = CGRect(x: 0, y: 0, width: 400, height: 300)
+
+		let window = NSWindow(contentRect: contentRect, styleMask: .borderless, backing: .buffered, defer: false)
+		window.canHide = false
+		window.isMovable = false
+		window.isOpaque = false
+		window.hasShadow = false
+		window.level = .popUpMenu
+		
+		let viewRect = CGRect(x: 0, y: 0, width: 400, height: 300)
+		let contentView = DiceView(frame: viewRect)
+		contentView.imageAlignment = .alignCenter
+		contentView.image = NSImage(named: "xray")
+		contentView.wantsLayer = false
+
+		window.title = "Dice Window"
+		window.contentView = contentView
+
+		window.backgroundColor = .clear
+//		window.alphaValue = 0.25
+		window.alphaValue = 0.05
+
+		return window
+	}
+
 }
 

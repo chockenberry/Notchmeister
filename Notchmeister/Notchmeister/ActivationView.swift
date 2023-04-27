@@ -50,4 +50,19 @@ class ActivationView: NSView {
 		return String(cString: brand)
 	}
 
+	override func acceptsFirstMouse(for event: NSEvent?) -> Bool {
+		debugLog()
+		return true
+	}
+	
+	override func mouseDown(with event: NSEvent) {
+		debugLog()
+	}
+	
+	override func hitTest(_ point: NSPoint) -> NSView? {
+		debugLog("point = \(point)")
+		return super.hitTest(point)
+	}
+	
+
 }

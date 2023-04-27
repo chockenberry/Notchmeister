@@ -49,6 +49,7 @@
 		44B724AA29F5A681002E03E6 /* DiceEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B724A929F5A681002E03E6 /* DiceEffect.swift */; };
 		44B724AC29F5B010002E03E6 /* SceneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B724AB29F5B010002E03E6 /* SceneView.swift */; };
 		44B724AE29F5B0F4002E03E6 /* dice.scn in Resources */ = {isa = PBXBuildFile; fileRef = 44B724AD29F5B0F4002E03E6 /* dice.scn */; };
+		44B724B029FAF128002E03E6 /* DiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B724AF29FAF128002E03E6 /* DiceView.swift */; };
 		44E32191274C528200358040 /* RadarEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44E32190274C528200358040 /* RadarEffect.swift */; };
 		44E42D6A2756DA0500BDD3DC /* Effects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44E42D692756DA0500BDD3DC /* Effects.swift */; };
 		44E42D6C27570B2500BDD3DC /* DebugViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44E42D6B27570B2500BDD3DC /* DebugViewController.swift */; };
@@ -97,6 +98,7 @@
 		44B724A929F5A681002E03E6 /* DiceEffect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiceEffect.swift; sourceTree = "<group>"; };
 		44B724AB29F5B010002E03E6 /* SceneView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneView.swift; sourceTree = "<group>"; };
 		44B724AD29F5B0F4002E03E6 /* dice.scn */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = dice.scn; sourceTree = "<group>"; };
+		44B724AF29FAF128002E03E6 /* DiceView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiceView.swift; sourceTree = "<group>"; };
 		44E32190274C528200358040 /* RadarEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadarEffect.swift; sourceTree = "<group>"; };
 		44E42D692756DA0500BDD3DC /* Effects.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Effects.swift; sourceTree = "<group>"; };
 		44E42D6B27570B2500BDD3DC /* DebugViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DebugViewController.swift; sourceTree = "<group>"; };
@@ -162,6 +164,7 @@
 				441BC79F2762EEA900BE0F01 /* PortalEffect.swift */,
 				4407B32C279B92BD00182733 /* ExpandoEffect.swift */,
 				44B724A929F5A681002E03E6 /* DiceEffect.swift */,
+				44B724AF29FAF128002E03E6 /* DiceView.swift */,
 				44E42D692756DA0500BDD3DC /* Effects.swift */,
 				011C15B5272E1635003422E5 /* Defaults.swift */,
 				012BA33B273749A5008AF04E /* NotchExtensions.swift */,
@@ -328,6 +331,7 @@
 				44961D7E27372F4D004E1A0B /* NotchEffect.swift in Sources */,
 				44B724AC29F5B010002E03E6 /* SceneView.swift in Sources */,
 				44A68CED273E18C900CCBCF4 /* CoreGraphics.swift in Sources */,
+				44B724B029FAF128002E03E6 /* DiceView.swift in Sources */,
 				441C5AB4272C9FD10094507E /* ViewController.swift in Sources */,
 				44E42D6C27570B2500BDD3DC /* DebugViewController.swift in Sources */,
 				44A817B0274322A300731822 /* FakeNotchView.swift in Sources */,

@@ -25,6 +25,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		return true
 	}
 
+	func applicationDidBecomeActive(_ notification: Notification) {
+		debugLog()
+	}
 
 }
 

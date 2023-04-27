@@ -60,6 +60,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	}
 	
 	func applicationDidBecomeActive(_ notification: Notification) {
+		debugLog()
 		if let window = NSApplication.shared.windows.first {
 			// NOTE: The window that triggered this activation could have been the child window underneath the NotchWindow.
 			// Since that window is borderless and we could be running with the .accessory activation policy, we need to ensure

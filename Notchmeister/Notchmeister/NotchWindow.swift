@@ -61,6 +61,7 @@ class NotchWindow: NSWindow {
 			contentView.wantsLayer = false
 			//contentView.wantsLayer = true;
 			
+			childWindow.title = "NotchWindow Child (Activation)"
 			childWindow.contentView = contentView
 			
 			if Defaults.shouldDebugDrawing {
@@ -71,6 +72,7 @@ class NotchWindow: NSWindow {
 			}
 			
 			self.addChildWindow(childWindow, ordered: .below)
+			childWindow.order(.above, relativeTo: self.windowNumber)
 		}
 		
         if Defaults.shouldDebugDrawing {
@@ -90,6 +92,7 @@ class NotchWindow: NSWindow {
 		contentView.wantsLayer = false
         //contentView.wantsLayer = true;
 
+		self.title = "NotchWindow"
         self.contentView = contentView
         createNotchView(size: notchRect.size)
 		
@@ -100,6 +103,13 @@ class NotchWindow: NSWindow {
 //		self.delegate = self
 	}
 
+	deinit {
+		if let childWindow = self.childWindows?.first {
+			self.removeChildWindow(childWindow)
+			childWindow.orderOut(self)
+		}
+	}
+	
 	override func orderFront(_ sender: Any?) {
 		super.orderFront(sender)
 		

@@ -62,8 +62,8 @@ class ViewController: NSViewController {
 		window.isMovable = false
 		window.isOpaque = false
 		window.hasShadow = false
-		//window.level = .popUpMenu
-		window.level = .normal
+		window.level = .popUpMenu
+		//window.level = .normal
 		//window.alphaValue = 0
 		//window.hasShadow = true
 
@@ -127,8 +127,8 @@ class ViewController: NSViewController {
 		window.isMovable = false
 		window.isOpaque = false
 		window.hasShadow = false
-		//window.level = .popUpMenu
-		window.level = .normal
+		window.level = .popUpMenu
+		//window.level = .normal
 		//window.alphaValue = 0
 		//window.hasShadow = true
 		
