@@ -25,6 +25,12 @@ class ViewController: NSViewController {
 		sceneWindow.addChildWindow(imageWindow, ordered: .above)
 		
 		normalWindow = configureWindow(forScene: false)
+		
+		NSWorkspace.shared.notificationCenter.addObserver(forName: NSWorkspace.activeSpaceDidChangeNotification, object: nil, queue: nil) { notification in
+			if let window = NSApplication.shared.windows.first, let screen = window.screen {
+				debugLog("space changed: screen = \(screen.frame)")
+			}
+		}
 	}
 
 	override func viewWillLayout() {
