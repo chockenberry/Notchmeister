@@ -16,7 +16,9 @@ class NotchWindow: NSWindow {
 
 	required init?(screen: NSScreen) {
 		guard let notchRect = screen.notchRect else { return nil }
-        
+  
+		let index = (NSScreen.screens.firstIndex(of: screen) ?? Int.min) + 1
+
 		let contentRect = CGRect(x: notchRect.origin.x - Self.padding, y: notchRect.origin.y - Self.padding, width: notchRect.width + (Self.padding * 2), height: notchRect.height + Self.padding)
         super.init(contentRect: contentRect, styleMask: .borderless, backing: .buffered, defer: false)
         
@@ -61,7 +63,7 @@ class NotchWindow: NSWindow {
 			contentView.wantsLayer = false
 			//contentView.wantsLayer = true;
 			
-			childWindow.title = "NotchWindow Child (Activation)"
+			childWindow.title = "NotchWindow \(index) - Child (Activation)"
 			childWindow.contentView = contentView
 			
 			if Defaults.shouldDebugDrawing {
@@ -92,7 +94,7 @@ class NotchWindow: NSWindow {
 		contentView.wantsLayer = false
         //contentView.wantsLayer = true;
 
-		self.title = "NotchWindow"
+		self.title = "NotchWindow \(index)"
         self.contentView = contentView
         createNotchView(size: notchRect.size)
 		

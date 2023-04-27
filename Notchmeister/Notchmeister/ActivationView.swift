@@ -10,6 +10,7 @@ import AppKit
 class ActivationView: NSView {
 
 	override func draw(_ dirtyRect: NSRect) {
+		debugLog()
 		if Defaults.shouldDebugDrawing {
 			NSColor.systemGreen.withAlphaComponent(0.5).set()
 		}
@@ -57,12 +58,12 @@ class ActivationView: NSView {
 	
 	override func mouseDown(with event: NSEvent) {
 		debugLog()
+		super.mouseDown(with: event)
 	}
 	
 	override func hitTest(_ point: NSPoint) -> NSView? {
 		debugLog("point = \(point)")
 		return super.hitTest(point)
 	}
-	
 
 }

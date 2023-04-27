@@ -74,10 +74,12 @@ class DiceEffect: NotchEffect {
 	}
 	
 	private func configureDiceWindow() -> NSWindow? {
-		guard let screen = NSScreen.screens.first else { return nil }
-		
-//		let contentRect = CGRect(x: screen.frame.midX - 400, y: screen.frame.midY - 150, width: 400, height: 300)
-		let contentRect = CGRect(x: 0, y: 0, width: 400, height: 300)
+		guard let screen = parentWindow?.screen else { return nil }
+
+		let index = (NSScreen.screens.firstIndex(of: screen) ?? Int.min) + 1
+
+		let contentRect = CGRect(x: screen.frame.minX, y: screen.frame.minY, width: 400, height: 300)
+//		let contentRect = CGRect(x: 0, y: 0, width: 400, height: 300)
 
 		let window = NSWindow(contentRect: contentRect, styleMask: .borderless, backing: .buffered, defer: false)
 		window.canHide = false
@@ -92,12 +94,12 @@ class DiceEffect: NotchEffect {
 		contentView.image = NSImage(named: "xray")
 		contentView.wantsLayer = false
 
-		window.title = "Dice Window"
+		window.title = "Dice Window \(index)"
 		window.contentView = contentView
 
 		window.backgroundColor = .clear
-//		window.alphaValue = 0.25
-		window.alphaValue = 0.05
+		window.alphaValue = 0.25
+//		window.alphaValue = 0.05
 
 		return window
 	}

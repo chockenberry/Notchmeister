@@ -18,8 +18,6 @@ class ViewController: NSViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 
-		// Do any additional setup after loading the view.
-		
 		sceneWindow = configureWindow(forScene: true)
 		sceneWindow.ignoresMouseEvents = true
 
@@ -34,7 +32,6 @@ class ViewController: NSViewController {
 
 		sceneWindow.orderFront(self)
 		imageWindow.order(.above, relativeTo: sceneWindow.windowNumber)
-		//imageWindow.orderFront(self)
 		normalWindow.orderFront(self)
 	}
 	
@@ -57,15 +54,11 @@ class ViewController: NSViewController {
 		}
 
 		let window = NSWindow(contentRect: contentRect, styleMask: .borderless, backing: .buffered, defer: false)
-		//window.ignoresMouseEvents = false
 		window.canHide = false
 		window.isMovable = false
 		window.isOpaque = false
 		window.hasShadow = false
 		window.level = .popUpMenu
-		//window.level = .normal
-		//window.alphaValue = 0
-		//window.hasShadow = true
 
 		let viewRect = CGRect(x: 0, y: 0, width: 400, height: 300)
 		let contentView: NSView
@@ -93,16 +86,6 @@ class ViewController: NSViewController {
 		}
 
 		contentView.wantsLayer = false
-//		if forScene {
-//			if let layer = contentView.layer {
-//				let mask = CALayer()
-//				mask.bounds = layer.bounds
-//				mask.anchorPoint = layer.anchorPoint
-//				mask.position = layer.position
-//				layer.masksToBounds = true
-//				layer.mask = mask
-//			}
-//		}
 
 		window.contentView = contentView
 
@@ -115,22 +98,17 @@ class ViewController: NSViewController {
 		return window
 	}
 
-
 	private func configureImageWindow() -> NSWindow? {
 		guard let screen = NSScreen.screens.first else { return nil }
 		
 		let contentRect = CGRect(x: screen.frame.midX - 400, y: screen.frame.midY - 150, width: 400, height: 300)
 		
 		let window = NSWindow(contentRect: contentRect, styleMask: .borderless, backing: .buffered, defer: false)
-		//window.ignoresMouseEvents = false
 		window.canHide = false
 		window.isMovable = false
 		window.isOpaque = false
 		window.hasShadow = false
 		window.level = .popUpMenu
-		//window.level = .normal
-		//window.alphaValue = 0
-		//window.hasShadow = true
 		
 		let viewRect = CGRect(x: 0, y: 0, width: 400, height: 300)
 		let contentView = ImageView(frame: viewRect)
@@ -138,21 +116,11 @@ class ViewController: NSViewController {
 		contentView.image = NSImage(named: "xray")
 		contentView.wantsLayer = false
 
-//		if let layer = contentView.layer {
-//			let mask = CALayer()
-//			mask.bounds = layer.bounds
-//			mask.anchorPoint = layer.anchorPoint
-//			mask.position = layer.position
-//			mask.contents = contentView.image
-//			layer.masksToBounds = true
-//			layer.mask = mask
-//		}
-
 		window.contentView = contentView
 
 		window.backgroundColor = .clear
-//		window.alphaValue = 0.25
-		window.alphaValue = 0.05
+		window.alphaValue = 0.25
+//		window.alphaValue = 0.05
 
 		return window
 	}
@@ -173,10 +141,6 @@ extension ViewController: SCNSceneRendererDelegate {
 					if let imageView = self.imageWindow.contentView as? ImageView {
 						imageView.image = image
 					}
-//					CATransaction.begin()
-//					CATransaction.setDisableActions(true)
-//					sceneView.layer?.mask?.contents = image
-//					CATransaction.commit()
 				}
 			}
 			lastTime = time
