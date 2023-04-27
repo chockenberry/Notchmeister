@@ -63,7 +63,7 @@ enum Effects: Int, CaseIterable {
 			return "Bigger is better, right?\n\n⚠️ Works best in Light appearance."
 #if DEBUG
 		case .dice:
-			return "Apple's silicon expertise is not only on the die, but also on the dice.\n\n☢️ Avoid prolonged exposure."
+			return "Apple's expertise with silicon is not only on the die, but also on the dice.\n\n☢️ Avoid prolonged exposure."
 #endif
 #if DEBUG
 		case .portal:
