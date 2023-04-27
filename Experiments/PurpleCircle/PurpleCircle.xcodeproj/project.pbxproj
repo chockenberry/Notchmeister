@@ -15,6 +15,7 @@
 		442A037B29F6F0E000544FE0 /* NormalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 442A037A29F6F0E000544FE0 /* NormalView.swift */; };
 		442A037D29F6F0E800544FE0 /* SceneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 442A037C29F6F0E800544FE0 /* SceneView.swift */; };
 		442A037F29F6F21100544FE0 /* Debug.swift in Sources */ = {isa = PBXBuildFile; fileRef = 442A037E29F6F21100544FE0 /* Debug.swift */; };
+		44F5C5E129F9F7B8000331C2 /* ImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44F5C5E029F9F7B8000331C2 /* ImageView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 		442A037A29F6F0E000544FE0 /* NormalView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NormalView.swift; sourceTree = "<group>"; };
 		442A037C29F6F0E800544FE0 /* SceneView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneView.swift; sourceTree = "<group>"; };
 		442A037E29F6F21100544FE0 /* Debug.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Debug.swift; sourceTree = "<group>"; };
+		44F5C5E029F9F7B8000331C2 /* ImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,6 +66,7 @@
 				442A036B29F6EE4A00544FE0 /* ViewController.swift */,
 				442A037C29F6F0E800544FE0 /* SceneView.swift */,
 				442A037A29F6F0E000544FE0 /* NormalView.swift */,
+				44F5C5E029F9F7B8000331C2 /* ImageView.swift */,
 				442A037E29F6F21100544FE0 /* Debug.swift */,
 				442A036D29F6EE4B00544FE0 /* Assets.xcassets */,
 				442A036F29F6EE4B00544FE0 /* Main.storyboard */,
@@ -144,6 +147,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				44F5C5E129F9F7B8000331C2 /* ImageView.swift in Sources */,
 				442A037B29F6F0E000544FE0 /* NormalView.swift in Sources */,
 				442A037F29F6F21100544FE0 /* Debug.swift in Sources */,
 				442A036C29F6EE4A00544FE0 /* ViewController.swift in Sources */,
