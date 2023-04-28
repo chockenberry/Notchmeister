@@ -136,7 +136,8 @@ class ViewController: NSViewController {
 		window.contentView = contentView
 
 		window.backgroundColor = .clear
-		window.alphaValue = 1.0
+//		window.alphaValue = 1.0
+		window.alphaValue = 0.5
 //		window.alphaValue = 0.05
 
 		return window
@@ -149,52 +150,65 @@ var lastTime: TimeInterval = 0
 extension ViewController: SCNSceneRendererDelegate {
 	
 	func renderer(_ renderer: SCNSceneRenderer, didRenderScene scene: SCNScene, atTime time: TimeInterval) {
-		if time - lastTime > 0.25 {
+		if time - lastTime > 0.1 {
 			let rootNode = scene.rootNode
 			let sphere = scene.rootNode.childNode(withName: "sphere", recursively: true)!
-			let camera = scene.rootNode.childNode(withName: "camera", recursively: true)!
-#if false
-			let (center, radius) = sphere.boundingSphere
 
-			let destination = rootNode
-			
-			let worldCenter = sphere.convertPosition(center, to: destination)
-			debugLog("worldCenter = \(worldCenter), radius = \(radius)")
-#else
 			let (min, max) = sphere.boundingBox
 
-	
-			let bottomLeft = SCNVector3(min.x, min.y, 0)
-			let topRight = SCNVector3(max.x, max.y, 0)
-			let topLeft = SCNVector3(min.x, max.y, 0)
-			let bottomRight = SCNVector3(max.x, min.y, 0)
-	
-			let destination = rootNode
-			
-			let worldBottomLeft = sphere.convertPosition(bottomLeft, to: destination)
-			let worldTopRight = sphere.convertPosition(topRight, to: destination)
+			let bottomLeftBack = SCNVector3(min.x, min.y, max.z)
+			let topRightBack = SCNVector3(max.x, max.y, max.z)
+			let topLeftBack = SCNVector3(min.x, max.y, max.z)
+			let bottomRightBack = SCNVector3(max.x, min.y, max.z)
 
-			let worldTopLeft = sphere.convertPosition(topLeft, to: destination)
-			let worldBottomRight = sphere.convertPosition(bottomRight, to: destination)
+			let bottomLeftFront = SCNVector3(min.x, min.y, min.z)
+			let topRightFront = SCNVector3(max.x, max.y, min.z)
+			let topLeftFront = SCNVector3(min.x, max.y, min.z)
+			let bottomRightFront = SCNVector3(max.x, min.y, min.z)
+
+			let destination = rootNode
+
+			var paths: [NSBezierPath] = []
 			
-			//debugLog("worldTopRight = \(worldTopRight), projected = \(renderer.projectPoint(worldTopRight))")
-			let projectedPoint = renderer.projectPoint(worldTopRight)
-			let point = CGPoint(x: projectedPoint.x, y: projectedPoint.y)
-#endif
+			paths.append(pathForBoundingPoints([bottomLeftFront, bottomRightFront, topRightFront, topLeftFront], of: sphere, with: destination, in: renderer))
+			paths.append(pathForBoundingPoints([bottomLeftBack, bottomRightBack, topRightBack, topLeftBack], of: sphere, with: destination, in: renderer))
+			paths.append(pathForBoundingPoints([bottomLeftBack, bottomLeftFront, topLeftFront, topLeftBack], of: sphere, with: destination, in: renderer))
+			paths.append(pathForBoundingPoints([bottomRightBack, bottomRightFront, topRightFront, topRightBack], of: sphere, with: destination, in: renderer))
+			paths.append(pathForBoundingPoints([topLeftBack, topLeftFront, topRightFront, topRightBack], of: sphere, with: destination, in: renderer))
+			paths.append(pathForBoundingPoints([bottomLeftBack, bottomLeftFront, bottomRightFront, bottomRightBack], of: sphere, with: destination, in: renderer))
+					
 			DispatchQueue.main.async {
-				if let sceneView = self.sceneWindow.contentView as? SceneView {
+				//if let sceneView = self.sceneWindow.contentView as? SceneView {
 					//debugLog("creating image...")
-					let image = sceneView.snapshot() //.cgImage(forProposedRect: nil, context: nil, hints: nil)
-					//debugLog("updating window...")
+					//let image = sceneView.snapshot() //.cgImage(forProposedRect: nil, context: nil, hints: nil)
 					if let imageView = self.imageWindow.contentView as? ImageView {
-						imageView.image = image
-						imageView.boundingRect = NSRect(origin: point, size: CGSize(width: 20, height: 20))
-//						imageView.layer?.opacity = 0.01
+						imageView.paths = paths
 					}
-				}
+				//}
 			}
 			lastTime = time
 		}
+	}
+
+	func pathForBoundingPoints(_ boundingPoints: [SCNVector3], of node: SCNNode, with destination: SCNNode, in renderer: SCNSceneRenderer) -> NSBezierPath {
+		let path = NSBezierPath()
+
+		var firstPoint = true
+		for boundingPoint in boundingPoints {
+			let worldPoint = node.convertPosition(boundingPoint, to: destination)
+			let projectedPoint = renderer.projectPoint(worldPoint)
+			let point = CGPoint(x: projectedPoint.x, y: projectedPoint.y)
+			if firstPoint {
+				path.move(to: point)
+			}
+			else {
+				path.line(to: point)
+			}
+			firstPoint = false
+		}
+		path.close()
+		
+		return path
 	}
 
 }

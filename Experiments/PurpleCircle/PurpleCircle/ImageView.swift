@@ -9,7 +9,7 @@ import AppKit
 
 class ImageView: NSImageView {
 
-	var boundingRect: NSRect {
+	var paths: [NSBezierPath] {
 		didSet {
 			needsDisplay = true
 		}
@@ -31,10 +31,12 @@ class ImageView: NSImageView {
 //		super.draw(dirtyRect)
 //		let rect = NSRect(origin: CGPoint.zero, size: CGSize(width: bounds.width, height: 50))
 //		image?.draw(in: rect)
-		let rect = boundingRect
+//		let rect = boundingRect
 		
 		NSColor.systemRed.setFill()
-		rect.fill()
+		for path in paths {
+			path.fill()
+		}
 	}
 #endif
 	
@@ -45,7 +47,8 @@ class ImageView: NSImageView {
 	
 	override init(frame frameRect: NSRect) {
 		debugLog()
-		boundingRect = .zero
+		//boundingRect = .zero
+		paths = []
 		super.init(frame: frameRect)
 	}
 	
