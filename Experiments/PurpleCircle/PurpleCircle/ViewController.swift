@@ -86,6 +86,17 @@ class ViewController: NSViewController {
 			sphere.runAction(SCNAction.repeatForever(SCNAction.rotateBy(x: 0, y: -1, z: 0, duration: 1)))
 			
 			contentView = sceneView
+
+//			let shapeLayer = CAShapeLayer()
+//			shapeLayer.frame = contentView.frame
+//
+//			let path = CGMutablePath()
+//			path.addEllipse(in: CGRect(x: shapeLayer.frame.midX - 110, y: shapeLayer.frame.midY - 110, width: 220, height: 220))
+//
+//			shapeLayer.path = path
+//			shapeLayer.fillColor = NSColor.white.cgColor
+//
+//			contentView.layer?.mask = shapeLayer
 		}
 		else {
 			contentView = NormalView(frame: viewRect)
@@ -125,7 +136,7 @@ class ViewController: NSViewController {
 		window.contentView = contentView
 
 		window.backgroundColor = .clear
-		window.alphaValue = 0.25
+		window.alphaValue = 1.0
 //		window.alphaValue = 0.05
 
 		return window
@@ -139,6 +150,37 @@ extension ViewController: SCNSceneRendererDelegate {
 	
 	func renderer(_ renderer: SCNSceneRenderer, didRenderScene scene: SCNScene, atTime time: TimeInterval) {
 		if time - lastTime > 0.25 {
+			let rootNode = scene.rootNode
+			let sphere = scene.rootNode.childNode(withName: "sphere", recursively: true)!
+			let camera = scene.rootNode.childNode(withName: "camera", recursively: true)!
+#if false
+			let (center, radius) = sphere.boundingSphere
+
+			let destination = rootNode
+			
+			let worldCenter = sphere.convertPosition(center, to: destination)
+			debugLog("worldCenter = \(worldCenter), radius = \(radius)")
+#else
+			let (min, max) = sphere.boundingBox
+
+	
+			let bottomLeft = SCNVector3(min.x, min.y, 0)
+			let topRight = SCNVector3(max.x, max.y, 0)
+			let topLeft = SCNVector3(min.x, max.y, 0)
+			let bottomRight = SCNVector3(max.x, min.y, 0)
+	
+			let destination = rootNode
+			
+			let worldBottomLeft = sphere.convertPosition(bottomLeft, to: destination)
+			let worldTopRight = sphere.convertPosition(topRight, to: destination)
+
+			let worldTopLeft = sphere.convertPosition(topLeft, to: destination)
+			let worldBottomRight = sphere.convertPosition(bottomRight, to: destination)
+			
+			//debugLog("worldTopRight = \(worldTopRight), projected = \(renderer.projectPoint(worldTopRight))")
+			let projectedPoint = renderer.projectPoint(worldTopRight)
+			let point = CGPoint(x: projectedPoint.x, y: projectedPoint.y)
+#endif
 			DispatchQueue.main.async {
 				if let sceneView = self.sceneWindow.contentView as? SceneView {
 					//debugLog("creating image...")
@@ -146,6 +188,8 @@ extension ViewController: SCNSceneRendererDelegate {
 					//debugLog("updating window...")
 					if let imageView = self.imageWindow.contentView as? ImageView {
 						imageView.image = image
+						imageView.boundingRect = NSRect(origin: point, size: CGSize(width: 20, height: 20))
+//						imageView.layer?.opacity = 0.01
 					}
 				}
 			}

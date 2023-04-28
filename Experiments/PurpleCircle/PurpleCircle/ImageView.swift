@@ -9,8 +9,14 @@ import AppKit
 
 class ImageView: NSImageView {
 
-#if false
-	var image: NSImage?
+	var boundingRect: NSRect {
+		didSet {
+			needsDisplay = true
+		}
+	}
+	
+#if true
+	//var image: NSImage?
 	
 	override func draw(_ dirtyRect: NSRect) {
 		//debugLog()
@@ -23,8 +29,10 @@ class ImageView: NSImageView {
 //		path.fill()
 		
 //		super.draw(dirtyRect)
-		let rect = NSRect(origin: CGPoint.zero, size: CGSize(width: bounds.width, height: 50))
+//		let rect = NSRect(origin: CGPoint.zero, size: CGSize(width: bounds.width, height: 50))
 //		image?.draw(in: rect)
+		let rect = boundingRect
+		
 		NSColor.systemRed.setFill()
 		rect.fill()
 	}
@@ -37,6 +45,7 @@ class ImageView: NSImageView {
 	
 	override init(frame frameRect: NSRect) {
 		debugLog()
+		boundingRect = .zero
 		super.init(frame: frameRect)
 	}
 	
