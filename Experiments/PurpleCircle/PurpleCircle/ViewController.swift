@@ -82,8 +82,8 @@ class ViewController: NSViewController {
 			
 			sceneView.delegate = self
 			
-			let sphere = scene.rootNode.childNode(withName: "sphere", recursively: true)!
-			sphere.runAction(SCNAction.repeatForever(SCNAction.rotateBy(x: 0, y: -1, z: 0, duration: 1)))
+			let node = scene.rootNode.childNode(withName: "box", recursively: true)!
+			node.runAction(SCNAction.repeatForever(SCNAction.rotateBy(x: 0, y: -1, z: 0, duration: 1)))
 			
 			contentView = sceneView
 
@@ -150,11 +150,11 @@ var lastTime: TimeInterval = 0
 extension ViewController: SCNSceneRendererDelegate {
 	
 	func renderer(_ renderer: SCNSceneRenderer, didRenderScene scene: SCNScene, atTime time: TimeInterval) {
-		if time - lastTime > 0.1 {
+		if time - lastTime > 0.01 {
 			let rootNode = scene.rootNode
-			let sphere = scene.rootNode.childNode(withName: "sphere", recursively: true)!
+			let node = scene.rootNode.childNode(withName: "box", recursively: true)!
 
-			let (min, max) = sphere.boundingBox
+			let (min, max) = node.boundingBox
 
 			let bottomLeftBack = SCNVector3(min.x, min.y, max.z)
 			let topRightBack = SCNVector3(max.x, max.y, max.z)
@@ -170,12 +170,12 @@ extension ViewController: SCNSceneRendererDelegate {
 
 			var paths: [NSBezierPath] = []
 			
-			paths.append(pathForBoundingPoints([bottomLeftFront, bottomRightFront, topRightFront, topLeftFront], of: sphere, with: destination, in: renderer))
-			paths.append(pathForBoundingPoints([bottomLeftBack, bottomRightBack, topRightBack, topLeftBack], of: sphere, with: destination, in: renderer))
-			paths.append(pathForBoundingPoints([bottomLeftBack, bottomLeftFront, topLeftFront, topLeftBack], of: sphere, with: destination, in: renderer))
-			paths.append(pathForBoundingPoints([bottomRightBack, bottomRightFront, topRightFront, topRightBack], of: sphere, with: destination, in: renderer))
-			paths.append(pathForBoundingPoints([topLeftBack, topLeftFront, topRightFront, topRightBack], of: sphere, with: destination, in: renderer))
-			paths.append(pathForBoundingPoints([bottomLeftBack, bottomLeftFront, bottomRightFront, bottomRightBack], of: sphere, with: destination, in: renderer))
+			paths.append(pathForBoundingPoints([bottomLeftFront, bottomRightFront, topRightFront, topLeftFront], of: node, with: destination, in: renderer))
+			paths.append(pathForBoundingPoints([bottomLeftBack, bottomRightBack, topRightBack, topLeftBack], of: node, with: destination, in: renderer))
+			paths.append(pathForBoundingPoints([bottomLeftBack, bottomLeftFront, topLeftFront, topLeftBack], of: node, with: destination, in: renderer))
+			paths.append(pathForBoundingPoints([bottomRightBack, bottomRightFront, topRightFront, topRightBack], of: node, with: destination, in: renderer))
+			paths.append(pathForBoundingPoints([topLeftBack, topLeftFront, topRightFront, topRightBack], of: node, with: destination, in: renderer))
+			paths.append(pathForBoundingPoints([bottomLeftBack, bottomLeftFront, bottomRightFront, bottomRightBack], of: node, with: destination, in: renderer))
 					
 			DispatchQueue.main.async {
 				//if let sceneView = self.sceneWindow.contentView as? SceneView {
