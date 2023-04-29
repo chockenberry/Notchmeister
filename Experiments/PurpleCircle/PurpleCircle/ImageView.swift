@@ -63,14 +63,13 @@ class ImageView: NSImageView {
 	
 	override func hitTest(_ point: NSPoint) -> NSView? {
 		debugLog("point = \(point)")
+		if let window {
+			var origin = window.frame.origin
+			origin.x += 10
+			origin.y += 10
+			window.setFrameOrigin(origin)
+		}
 		return super.hitTest(point)
-//		let rect = NSRect(origin: CGPoint.zero, size: CGSize(width: bounds.width, height: 50))
-//		if rect.contains(point) {
-//			return self
-//		}
-//		else {
-//			return nil
-//		}
 	}
 	
 }

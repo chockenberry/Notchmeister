@@ -22,7 +22,7 @@ class ViewController: NSViewController {
 		sceneWindow.ignoresMouseEvents = true
 
 		imageWindow = configureImageWindow()
-		sceneWindow.addChildWindow(imageWindow, ordered: .above)
+		imageWindow.addChildWindow(sceneWindow, ordered: .below)
 		
 		normalWindow = configureWindow(forScene: false)
 		
@@ -36,8 +36,9 @@ class ViewController: NSViewController {
 	override func viewWillLayout() {
 		super.viewWillLayout()
 
-		sceneWindow.orderFront(self)
-		imageWindow.order(.above, relativeTo: sceneWindow.windowNumber)
+//		sceneWindow.orderFront(self)
+//		imageWindow.order(.above, relativeTo: sceneWindow.windowNumber)
+		imageWindow.orderFront(self)
 		normalWindow.orderFront(self)
 	}
 	
@@ -152,8 +153,9 @@ extension ViewController: SCNSceneRendererDelegate {
 	func renderer(_ renderer: SCNSceneRenderer, didRenderScene scene: SCNScene, atTime time: TimeInterval) {
 		if time - lastTime > 0.01 {
 			let rootNode = scene.rootNode
-			let node = scene.rootNode.childNode(withName: "box", recursively: true)!
-
+			let boxNode = scene.rootNode.childNode(withName: "box", recursively: true)!
+			let node = boxNode.childNode(withName: "cylinder", recursively: true)!
+			
 			let (min, max) = node.boundingBox
 
 			let bottomLeftBack = SCNVector3(min.x, min.y, max.z)

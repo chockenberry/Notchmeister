@@ -12,7 +12,7 @@ class DiceEffect: NotchEffect {
 	
 	//var edgeLayer: CAShapeLayer
 
-	var diceWindow: NSWindow!
+	var hitWindow: NSWindow!
 	
 	required init (with parentLayer: CALayer, in parentView: NSView, of parentWindow: NSWindow) {
 		//self.edgeLayer = CAShapeLayer.notchOutlineLayer(for: parentLayer.bounds.size, flipped: true)
@@ -24,13 +24,18 @@ class DiceEffect: NotchEffect {
 		//self.perform(#selector(configureChildWindow), with: nil, afterDelay: 2.0)
 		//configureChildWindow()
 		
-		diceWindow = configureDiceWindow()
-		diceWindow.orderFront(self)
+		hitWindow = configureSceneHitWindow()
+		let sceneHitView = hitWindow.contentView as! SceneHitView
+		let scene = configureScene()
+		if let animationWindow = configureSceneAnimationWindow(using: sceneHitView, scene: scene) {
+			hitWindow.addChildWindow(animationWindow, ordered: .below)
+		}
+		hitWindow.orderFront(self)
 
 	}
 	
 	deinit {
-		diceWindow.orderOut(self)
+		hitWindow.orderOut(self)
 	}
 		
 	override func mouseEntered(at point: CGPoint, underNotch: Bool) {
@@ -73,12 +78,17 @@ class DiceEffect: NotchEffect {
 #endif
 	}
 	
-	private func configureDiceWindow() -> NSWindow? {
+	private let size = CGSize(width: 600, height: 400)
+
+	private func configureSceneHitWindow() -> NSWindow? {
 		guard let screen = parentWindow?.screen else { return nil }
 
 		let index = (NSScreen.screens.firstIndex(of: screen) ?? Int.min) + 1
 
-		let contentRect = CGRect(x: screen.frame.minX, y: screen.frame.minY, width: 400, height: 300)
+		let origin = CGPoint(x: screen.frame.midX - (size.width / 2), y: screen.frame.maxY - size.height)
+		
+		let contentRect = CGRect(origin: origin, size: size)
+//		let contentRect = CGRect(x: screen.frame.minX, y: screen.frame.minY, width: 400, height: 300)
 //		let contentRect = CGRect(x: 0, y: 0, width: 400, height: 300)
 
 		let window = NSWindow(contentRect: contentRect, styleMask: .borderless, backing: .buffered, defer: false)
@@ -88,21 +98,224 @@ class DiceEffect: NotchEffect {
 		window.hasShadow = false
 		window.level = .popUpMenu
 		
-		let viewRect = CGRect(x: 0, y: 0, width: 400, height: 300)
-		let contentView = DiceView(frame: viewRect)
-		contentView.imageAlignment = .alignCenter
-		contentView.image = NSImage(named: "xray")
-		contentView.wantsLayer = false
+		let viewRect = CGRect(origin: .zero, size: size)
+		let contentView = SceneHitView(frame: viewRect)
+		//contentView.imageAlignment = .alignCenter
+		//contentView.image = NSImage(named: "xray")
+		contentView.wantsLayer = true
+		contentView.layerContentsRedrawPolicy = .onSetNeedsDisplay
 
-		window.title = "Dice Window \(index)"
+		
+		window.title = "Dice Hit Window \(index)"
 		window.contentView = contentView
 
+#if false
+		if Defaults.shouldDebugDrawing {
+			window.backgroundColor = NSColor.systemYellow
+		}
+		else {
+			window.backgroundColor = .clear
+		}
+#else
 		window.backgroundColor = .clear
-		window.alphaValue = 0.25
+#endif
+		
+		window.alphaValue = 1.0
 //		window.alphaValue = 0.05
 
 		return window
 	}
 
+	private func configureSceneAnimationWindow(using sceneHitView: SceneHitView, scene: SCNScene) -> NSWindow? {
+		guard let screen = parentWindow?.screen else { return nil }
+
+		let index = (NSScreen.screens.firstIndex(of: screen) ?? Int.min) + 1
+
+		let origin = CGPoint(x: screen.frame.midX - (size.width / 2), y: screen.frame.maxY - size.height)
+		
+		let contentRect = CGRect(origin: origin, size: size)
+
+		let window = NSWindow(contentRect: contentRect, styleMask: .borderless, backing: .buffered, defer: false)
+		window.ignoresMouseEvents = true
+		window.canHide = false
+		window.isMovable = false
+		window.isOpaque = false
+		window.hasShadow = false
+		window.level = .popUpMenu
+
+		let viewRect = CGRect(x: 0, y: 0, width: 400, height: 300)
+		let contentView = SceneView(frame: viewRect)
+		contentView.backgroundColor = .clear
+
+		contentView.scene = scene
+			
+		contentView.delegate = sceneHitView
+			
+		contentView.wantsLayer = false
+
+		window.title = "Dice Animation Window \(index)"
+		window.contentView = contentView
+
+#if true
+		if Defaults.shouldDebugDrawing {
+			window.backgroundColor = NSColor.systemYellow
+		}
+		else {
+			window.backgroundColor = .clear
+		}
+#else
+		window.backgroundColor = .clear
+#endif
+
+		return window
+	}
+	
+	func configureScene() -> SCNScene {
+		
+		func setupCamera() {
+			let cameraNode = SCNNode()
+			cameraNode.camera = SCNCamera()
+			scene.rootNode.addChildNode(cameraNode)
+			
+			cameraNode.position = SCNVector3(x: 0, y: 0, z: 15)
+		}
+
+		func setupLights() {
+			let lightNode = SCNNode()
+			lightNode.light = SCNLight()
+			lightNode.light!.type = .omni
+			lightNode.light!.color = NSColor.systemOrange
+			lightNode.position = SCNVector3(x: 0, y: 0, z: 15)
+			scene.rootNode.addChildNode(lightNode)
+			
+			// create and add an ambient light to the scene
+			let ambientLightNode = SCNNode()
+			ambientLightNode.light = SCNLight()
+			ambientLightNode.light!.type = .ambient
+			ambientLightNode.light!.color = NSColor.white
+			scene.rootNode.addChildNode(ambientLightNode)
+		}
+
+		let length = 3
+
+		func setupObjects() {
+			let anchor = scene.rootNode.childNode(withName: "anchor", recursively: true)!
+			anchor.physicsBody = SCNPhysicsBody(type: .static, shape: nil)
+			//anchor.physicsBody?.mass = 5.0
+			anchor.physicsBody?.categoryBitMask = 1
+			anchor.physicsBody?.collisionBitMask = 0
+			anchor.isHidden = false
+			anchor.worldPosition = SCNVector3(0, length, 0)
+			anchor.physicsBody?.isAffectedByGravity = false
+
+			let dieReference1 = scene.rootNode.childNode(withName: "die1", recursively: true)!
+			let die1 = dieReference1.childNode(withName: "D6", recursively: true)!
+			die1.worldPosition = SCNVector3(-length, length, 0)
+			/*
+			let joint1 = SCNPhysicsBallSocketJoint(body: die1.physicsBody!, anchor: SCNVector3(x: CGFloat(length), y: 0, z: 0))
+			scene.physicsWorld.addBehavior(joint1)
+			let spin1 = CGFloat.random(in: -4.0...4.0)
+			die1.physicsBody?.applyForce(SCNVector3(x: 0, y: 0, z: spin1), at: SCNVector3(x: 0.0, y: 1.0, z: 0.0), asImpulse: true)
+			 */
+			setupCord(anchor: anchor, linkCount: 14, die: die1)
+			
+			let dieReference2 = scene.rootNode.childNode(withName: "die2", recursively: true)!
+			let die2 = dieReference2.childNode(withName: "D6", recursively: true)!
+			die2.worldPosition = SCNVector3(length, length, 0)
+			/*
+			let joint2 = SCNPhysicsBallSocketJoint(body: die2.physicsBody!, anchor: SCNVector3(-length, 0, 0))
+			scene.physicsWorld.addBehavior(joint2)
+			let spin2 = CGFloat.random(in: -4.0...4.0)
+			die2.physicsBody?.applyForce(SCNVector3(x: 0, y: 0, z: spin2), at: SCNVector3(x: 0.0, y: 1.0, z: 0.0), asImpulse: true)
+			 */
+			setupCord(anchor: anchor, linkCount: 16, die: die2)
+		}
+
+		var links: [SCNNode] = []
+		
+		func setupCord(anchor: SCNNode, linkCount: Int, die: SCNNode) {
+			
+			func createLink(position: CGFloat) -> SCNNode {
+				//var geometry:SCNGeometry
+				//var link:SCNNode
+				
+				//let geometry = SCNSphere(radius: 1)
+				let geometry = SCNCylinder(radius: 0.025, height: 0.15)
+				//geometry.materials.first?.diffuse.contents = NSColor.red
+				
+				let link = SCNNode(geometry: geometry)
+				link.physicsBody = SCNPhysicsBody(type: .dynamic, shape: nil)
+				link.physicsBody?.mass = 0.5
+				link.physicsBody?.restitution = 0
+				link.physicsBody?.damping = 0.5
+				link.physicsBody?.categoryBitMask = 1
+				link.physicsBody?.collisionBitMask = 0
+				link.physicsBody?.friction = 1.0
+				link.physicsBody?.velocityFactor = SCNVector3Make(1, 1, 1)
+
+				let cycleDuration: TimeInterval = 0.5
+				let changeColor = SCNAction.customAction(duration: cycleDuration) { node, elapsedTime in
+					let offset = (cycleDuration * position)
+					let normalized = sin((.pi * 4) * ((elapsedTime / cycleDuration) - offset))
+					//debugLog("\(elapsedTime) -> \(normalized)")
+	//				let color = NSColor(red: normalized / 2, green: normalized / 4, blue: normalized, alpha: 1) // purple
+					let color = NSColor(red: normalized / 2 + 0.5, green: normalized / 4 + 0.25, blue: 0.5, alpha: 1)
+					node.geometry?.firstMaterial?.diffuse.contents = color
+				}
+				link.runAction(SCNAction.repeatForever(changeColor))
+				
+				return link
+			}
+
+			var previousLink = anchor
+			var linkIndex = 0
+			while linkIndex < linkCount {
+				let link = createLink(position: CGFloat(linkIndex) / CGFloat(linkCount))
+				links.append(link)
+				if linkIndex == 0 {
+					let joint = SCNPhysicsBallSocketJoint(
+						bodyA: anchor.physicsBody!,
+						anchorA: SCNVector3Make(0, 0, 0),
+						bodyB: link.physicsBody!,
+						anchorB: SCNVector3Make(0, -0.05, 0)
+					)
+					scene.physicsWorld.addBehavior(joint)
+				}
+				else {
+					let joint = SCNPhysicsHingeJoint(
+						bodyA: link.physicsBody!,
+						axisA: SCNVector3Make(0, 1, 0),
+						anchorA: SCNVector3Make(0, -0.05, 0),
+						bodyB: previousLink.physicsBody!,
+						axisB: SCNVector3Make(0, 1, 0),
+						anchorB: SCNVector3Make(0, 0.05, 0)
+					)
+					scene.physicsWorld.addBehavior(joint)
+				}
+				previousLink = link
+				linkIndex += 1
+			}
+
+			let joint = SCNPhysicsBallSocketJoint(
+				bodyA: die.physicsBody!,
+				anchorA: SCNVector3Make(0.45, 0.45, 0.45),
+				bodyB: previousLink.physicsBody!,
+				anchorB: SCNVector3Make(0, 0.1, 0)
+			)
+			scene.physicsWorld.addBehavior(joint)
+			
+			for link in links {
+				anchor.addChildNode(link)
+			}
+		}
+
+		let scene = SCNScene(named: "dice.scnassets/notch.scn")!
+
+		setupCamera()
+		setupLights()
+		setupObjects()
+
+		return scene
+	}
 }
 
