@@ -14,7 +14,7 @@ class SceneHitView: NSView {
 	var paths: [NSBezierPath] {
 		didSet {
 			needsDisplay = true
-			layer?.needsDisplay()
+			//layer?.needsDisplay()
 		}
 	}
 
@@ -29,7 +29,7 @@ class SceneHitView: NSView {
 	}
 	
 	override func draw(_ dirtyRect: NSRect) {
-		debugLog()
+		//debugLog()
 		NSColor.clear.set()
 		dirtyRect.fill()
 
@@ -38,7 +38,12 @@ class SceneHitView: NSView {
 			path.fill()
 		}
 		
-		layer?.opacity = 0.5
+		if Defaults.shouldDebugDrawing {
+			layer?.opacity = 0.5
+		}
+		else {
+			layer?.opacity = 0.01
+		}
 	}
 	
 	override func acceptsFirstMouse(for event: NSEvent?) -> Bool {
@@ -62,39 +67,39 @@ var lastTime: TimeInterval = 0
 extension SceneHitView: SCNSceneRendererDelegate {
 	
 	func renderer(_ renderer: SCNSceneRenderer, didRenderScene scene: SCNScene, atTime time: TimeInterval) {
-		if time - lastTime > 0.25 {
+		if time - lastTime > 0.2 {
 			//debugLog()
-			
-			let rootNode = scene.rootNode
-			let dieScene1 = rootNode.childNode(withName: "die1", recursively: true)!
-			let node = dieScene1.childNode(withName: "D6", recursively: true)!
-
-			node.transform = node.presentation.transform
-			
-			let (min, max) = node.boundingBox
-
-			let bottomLeftBack = SCNVector3(min.x, min.y, max.z)
-			let topRightBack = SCNVector3(max.x, max.y, max.z)
-			let topLeftBack = SCNVector3(min.x, max.y, max.z)
-			let bottomRightBack = SCNVector3(max.x, min.y, max.z)
-
-			let bottomLeftFront = SCNVector3(min.x, min.y, min.z)
-			let topRightFront = SCNVector3(max.x, max.y, min.z)
-			let topLeftFront = SCNVector3(min.x, max.y, min.z)
-			let bottomRightFront = SCNVector3(max.x, min.y, min.z)
-
-			let destination: SCNNode? = rootNode
-
-			var newPaths: [NSBezierPath] = []
-
-			newPaths.append(pathForBoundingPoints([bottomLeftFront, bottomRightFront, topRightFront, topLeftFront], of: node, with: destination, in: renderer))
-			newPaths.append(pathForBoundingPoints([bottomLeftBack, bottomRightBack, topRightBack, topLeftBack], of: node, with: destination, in: renderer))
-			newPaths.append(pathForBoundingPoints([bottomLeftBack, bottomLeftFront, topLeftFront, topLeftBack], of: node, with: destination, in: renderer))
-			newPaths.append(pathForBoundingPoints([bottomRightBack, bottomRightFront, topRightFront, topRightBack], of: node, with: destination, in: renderer))
-			newPaths.append(pathForBoundingPoints([topLeftBack, topLeftFront, topRightFront, topRightBack], of: node, with: destination, in: renderer))
-			newPaths.append(pathForBoundingPoints([bottomLeftBack, bottomLeftFront, bottomRightFront, bottomRightBack], of: node, with: destination, in: renderer))
-					
-			DispatchQueue.main.async {
+			DispatchQueue.main.async { [self] in
+				
+				let rootNode = scene.rootNode
+				let dieScene1 = rootNode.childNode(withName: "die1", recursively: true)!
+				let node = dieScene1.childNode(withName: "D6", recursively: true)!
+				
+				node.transform = node.presentation.transform
+				
+				let (min, max) = node.boundingBox
+				
+				let bottomLeftBack = SCNVector3(min.x, min.y, max.z)
+				let topRightBack = SCNVector3(max.x, max.y, max.z)
+				let topLeftBack = SCNVector3(min.x, max.y, max.z)
+				let bottomRightBack = SCNVector3(max.x, min.y, max.z)
+				
+				let bottomLeftFront = SCNVector3(min.x, min.y, min.z)
+				let topRightFront = SCNVector3(max.x, max.y, min.z)
+				let topLeftFront = SCNVector3(min.x, max.y, min.z)
+				let bottomRightFront = SCNVector3(max.x, min.y, min.z)
+				
+				let destination: SCNNode? = rootNode
+				
+				var newPaths: [NSBezierPath] = []
+				
+				newPaths.append(pathForBoundingPoints([bottomLeftFront, bottomRightFront, topRightFront, topLeftFront], of: node, with: destination, in: renderer))
+				newPaths.append(pathForBoundingPoints([bottomLeftBack, bottomRightBack, topRightBack, topLeftBack], of: node, with: destination, in: renderer))
+				newPaths.append(pathForBoundingPoints([bottomLeftBack, bottomLeftFront, topLeftFront, topLeftBack], of: node, with: destination, in: renderer))
+				newPaths.append(pathForBoundingPoints([bottomRightBack, bottomRightFront, topRightFront, topRightBack], of: node, with: destination, in: renderer))
+				newPaths.append(pathForBoundingPoints([topLeftBack, topLeftFront, topRightFront, topRightBack], of: node, with: destination, in: renderer))
+				newPaths.append(pathForBoundingPoints([bottomLeftBack, bottomLeftFront, bottomRightFront, bottomRightBack], of: node, with: destination, in: renderer))
+				
 				self.paths = newPaths
 			}
 			

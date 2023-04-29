@@ -78,7 +78,7 @@ class DiceEffect: NotchEffect {
 #endif
 	}
 	
-	private let size = CGSize(width: 600, height: 400)
+	private let size = CGSize(width: 300, height: 100)
 
 	private func configureSceneHitWindow() -> NSWindow? {
 		guard let screen = parentWindow?.screen else { return nil }
@@ -97,13 +97,14 @@ class DiceEffect: NotchEffect {
 		window.isOpaque = false
 		window.hasShadow = false
 		window.level = .popUpMenu
-		
+		window.collectionBehavior = [.transient, .canJoinAllSpaces]
+
 		let viewRect = CGRect(origin: .zero, size: size)
 		let contentView = SceneHitView(frame: viewRect)
 		//contentView.imageAlignment = .alignCenter
 		//contentView.image = NSImage(named: "xray")
-		contentView.wantsLayer = true
-		contentView.layerContentsRedrawPolicy = .onSetNeedsDisplay
+		contentView.wantsLayer = false
+		//contentView.layerContentsRedrawPolicy = .onSetNeedsDisplay
 
 		
 		window.title = "Dice Hit Window \(index)"
@@ -158,7 +159,7 @@ class DiceEffect: NotchEffect {
 
 #if true
 		if Defaults.shouldDebugDrawing {
-			window.backgroundColor = NSColor.systemYellow
+			window.backgroundColor = NSColor.systemYellow.withAlphaComponent(0.25)
 		}
 		else {
 			window.backgroundColor = .clear
@@ -177,7 +178,7 @@ class DiceEffect: NotchEffect {
 			cameraNode.camera = SCNCamera()
 			scene.rootNode.addChildNode(cameraNode)
 			
-			cameraNode.position = SCNVector3(x: 0, y: 0, z: 15)
+			cameraNode.position = SCNVector3(x: 0, y: 0, z: 4)
 		}
 
 		func setupLights() {
@@ -196,7 +197,7 @@ class DiceEffect: NotchEffect {
 			scene.rootNode.addChildNode(ambientLightNode)
 		}
 
-		let length = 3
+		let length = 1
 
 		func setupObjects() {
 			let anchor = scene.rootNode.childNode(withName: "anchor", recursively: true)!
@@ -205,12 +206,12 @@ class DiceEffect: NotchEffect {
 			anchor.physicsBody?.categoryBitMask = 1
 			anchor.physicsBody?.collisionBitMask = 0
 			anchor.isHidden = false
-			anchor.worldPosition = SCNVector3(0, length, 0)
+			anchor.worldPosition = SCNVector3(0, length + 1, 0)
 			anchor.physicsBody?.isAffectedByGravity = false
 
 			let dieReference1 = scene.rootNode.childNode(withName: "die1", recursively: true)!
 			let die1 = dieReference1.childNode(withName: "D6", recursively: true)!
-			die1.worldPosition = SCNVector3(-length, length, 0)
+			die1.worldPosition = SCNVector3(-length, length + 1, 0)
 			/*
 			let joint1 = SCNPhysicsBallSocketJoint(body: die1.physicsBody!, anchor: SCNVector3(x: CGFloat(length), y: 0, z: 0))
 			scene.physicsWorld.addBehavior(joint1)
@@ -221,7 +222,7 @@ class DiceEffect: NotchEffect {
 			
 			let dieReference2 = scene.rootNode.childNode(withName: "die2", recursively: true)!
 			let die2 = dieReference2.childNode(withName: "D6", recursively: true)!
-			die2.worldPosition = SCNVector3(length, length, 0)
+			die2.worldPosition = SCNVector3(length, length + 1, 0)
 			/*
 			let joint2 = SCNPhysicsBallSocketJoint(body: die2.physicsBody!, anchor: SCNVector3(-length, 0, 0))
 			scene.physicsWorld.addBehavior(joint2)
