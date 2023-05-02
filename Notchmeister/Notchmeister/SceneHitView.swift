@@ -37,13 +37,17 @@ class SceneHitView: NSView {
 		for path in paths {
 			path.fill()
 		}
-		
+	
+#if true
 		if Defaults.shouldDebugDrawing {
 			layer?.opacity = 0.5
 		}
 		else {
 			layer?.opacity = 0.01
 		}
+#else
+		layer?.opacity = 0.5
+#endif
 	}
 	
 	override func acceptsFirstMouse(for event: NSEvent?) -> Bool {

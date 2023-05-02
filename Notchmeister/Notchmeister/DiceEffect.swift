@@ -79,7 +79,8 @@ class DiceEffect: NotchEffect {
 	}
 	
 	private let size = CGSize(width: 300, height: 100)
-
+	private let viewScale: CGFloat = 1
+	
 	private func configureSceneHitWindow() -> NSWindow? {
 		guard let screen = parentWindow?.screen else { return nil }
 
@@ -104,6 +105,7 @@ class DiceEffect: NotchEffect {
 		//contentView.imageAlignment = .alignCenter
 		//contentView.image = NSImage(named: "xray")
 		contentView.wantsLayer = false
+		contentView.bounds = CGRect(origin: CGPoint(x: 0, y: 0), size: CGSize(width: size.width / viewScale, height: size.height / viewScale))
 		//contentView.layerContentsRedrawPolicy = .onSetNeedsDisplay
 
 		
@@ -144,7 +146,8 @@ class DiceEffect: NotchEffect {
 		window.hasShadow = false
 		window.level = .popUpMenu
 
-		let viewRect = CGRect(x: 0, y: 0, width: 400, height: 300)
+		//let viewRect = CGRect(x: 0, y: 0, width: 400, height: 300)
+		let viewRect = CGRect(origin: .zero, size: size)
 		let contentView = SceneView(frame: viewRect)
 		contentView.backgroundColor = .clear
 
@@ -153,6 +156,7 @@ class DiceEffect: NotchEffect {
 		contentView.delegate = sceneHitView
 			
 		contentView.wantsLayer = false
+		contentView.bounds = CGRect(origin: CGPoint(x: 0, y: 0), size: CGSize(width: size.width / viewScale, height: size.height / viewScale))
 
 		window.title = "Dice Animation Window \(index)"
 		window.contentView = contentView
@@ -178,7 +182,9 @@ class DiceEffect: NotchEffect {
 			cameraNode.camera = SCNCamera()
 			scene.rootNode.addChildNode(cameraNode)
 			
-			cameraNode.position = SCNVector3(x: 0, y: 0, z: 4)
+			cameraNode.position = SCNVector3(x: 0, y: 0, z: 30)
+			cameraNode.camera?.projectionDirection = .horizontal
+			cameraNode.camera?.fieldOfView = 20
 		}
 
 		func setupLights() {
@@ -197,21 +203,32 @@ class DiceEffect: NotchEffect {
 			scene.rootNode.addChildNode(ambientLightNode)
 		}
 
+		let anchorY: CGFloat = 2
 		let length = 1
-
+		let scale: CGFloat = 1
+		
 		func setupObjects() {
+			//scene.rootNode.scale = SCNVector3Make(0.5, 0.5, 0.5)
+			
 			let anchor = scene.rootNode.childNode(withName: "anchor", recursively: true)!
 			anchor.physicsBody = SCNPhysicsBody(type: .static, shape: nil)
 			//anchor.physicsBody?.mass = 5.0
 			anchor.physicsBody?.categoryBitMask = 1
 			anchor.physicsBody?.collisionBitMask = 0
 			anchor.isHidden = false
-			anchor.worldPosition = SCNVector3(0, length + 1, 0)
+			anchor.worldPosition = SCNVector3Make(0, anchorY, 0)
 			anchor.physicsBody?.isAffectedByGravity = false
 
 			let dieReference1 = scene.rootNode.childNode(withName: "die1", recursively: true)!
 			let die1 = dieReference1.childNode(withName: "D6", recursively: true)!
-			die1.worldPosition = SCNVector3(-length, length + 1, 0)
+			die1.scale = SCNVector3Make(scale, scale, scale)
+			if var options = die1.physicsBody?.physicsShape?.options {
+				options[.scale] = scale
+				let physicsShape = SCNPhysicsShape(node: die1, options: options)
+				//let physicsShape = SCNPhysicsBody(type: .dynamic, shape: .none)
+				die1.physicsBody?.physicsShape = physicsShape
+			}
+			die1.worldPosition = SCNVector3Make(-1, anchorY + 1, 0)
 			/*
 			let joint1 = SCNPhysicsBallSocketJoint(body: die1.physicsBody!, anchor: SCNVector3(x: CGFloat(length), y: 0, z: 0))
 			scene.physicsWorld.addBehavior(joint1)
@@ -222,7 +239,14 @@ class DiceEffect: NotchEffect {
 			
 			let dieReference2 = scene.rootNode.childNode(withName: "die2", recursively: true)!
 			let die2 = dieReference2.childNode(withName: "D6", recursively: true)!
-			die2.worldPosition = SCNVector3(length, length + 1, 0)
+			die2.scale = SCNVector3Make(scale, scale, scale)
+			if var options = die2.physicsBody?.physicsShape?.options {
+				options[.scale] = scale
+				let physicsShape = SCNPhysicsShape(node: die2, options: options)
+				//let physicsShape = SCNPhysicsBody(type: .dynamic, shape: .none)
+				die2.physicsBody?.physicsShape = physicsShape
+			}
+			die2.worldPosition = SCNVector3(1, anchorY + 1, 0)
 			/*
 			let joint2 = SCNPhysicsBallSocketJoint(body: die2.physicsBody!, anchor: SCNVector3(-length, 0, 0))
 			scene.physicsWorld.addBehavior(joint2)
@@ -253,7 +277,8 @@ class DiceEffect: NotchEffect {
 				link.physicsBody?.collisionBitMask = 0
 				link.physicsBody?.friction = 1.0
 				link.physicsBody?.velocityFactor = SCNVector3Make(1, 1, 1)
-
+				link.scale = SCNVector3Make(scale, scale, scale)
+				
 				let cycleDuration: TimeInterval = 0.5
 				let changeColor = SCNAction.customAction(duration: cycleDuration) { node, elapsedTime in
 					let offset = (cycleDuration * position)
@@ -278,7 +303,7 @@ class DiceEffect: NotchEffect {
 						bodyA: anchor.physicsBody!,
 						anchorA: SCNVector3Make(0, 0, 0),
 						bodyB: link.physicsBody!,
-						anchorB: SCNVector3Make(0, -0.05, 0)
+						anchorB: SCNVector3Make(0, -(0.05 * scale), 0)
 					)
 					scene.physicsWorld.addBehavior(joint)
 				}
@@ -286,10 +311,10 @@ class DiceEffect: NotchEffect {
 					let joint = SCNPhysicsHingeJoint(
 						bodyA: link.physicsBody!,
 						axisA: SCNVector3Make(0, 1, 0),
-						anchorA: SCNVector3Make(0, -0.05, 0),
+						anchorA: SCNVector3Make(0, -(0.05 * scale), 0),
 						bodyB: previousLink.physicsBody!,
 						axisB: SCNVector3Make(0, 1, 0),
-						anchorB: SCNVector3Make(0, 0.05, 0)
+						anchorB: SCNVector3Make(0, (0.05 * scale), 0)
 					)
 					scene.physicsWorld.addBehavior(joint)
 				}
@@ -299,9 +324,9 @@ class DiceEffect: NotchEffect {
 
 			let joint = SCNPhysicsBallSocketJoint(
 				bodyA: die.physicsBody!,
-				anchorA: SCNVector3Make(0.45, 0.45, 0.45),
+				anchorA: SCNVector3Make(0.45 * scale, 0.45 * scale, 0.45 * scale),
 				bodyB: previousLink.physicsBody!,
-				anchorB: SCNVector3Make(0, 0.1, 0)
+				anchorB: SCNVector3Make(0, (0.05 * scale), 0)
 			)
 			scene.physicsWorld.addBehavior(joint)
 			
@@ -311,6 +336,7 @@ class DiceEffect: NotchEffect {
 		}
 
 		let scene = SCNScene(named: "dice.scnassets/notch.scn")!
+		//scene.rootNode.scale = SCNVector3Make(0.5, 0.5, 0.5)
 
 		setupCamera()
 		setupLights()
