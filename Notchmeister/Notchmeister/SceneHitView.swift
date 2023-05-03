@@ -9,14 +9,48 @@ import AppKit
 
 import SceneKit
 
+struct SceneHitTarget {
+	let center: CGPoint
+	let radius: CGFloat
+}
+
 class SceneHitView: NSView {
 	
-	var paths: [NSBezierPath] {
+	var targetLayers: [CAShapeLayer] = []
+	
+	var targets: [SceneHitTarget] {
 		didSet {
+			if targets.count != targetLayers.count {
+				for targetLayer in targetLayers {
+					targetLayer.removeFromSuperlayer()
+				}
+
+				let fillColor: NSColor
+				if Defaults.shouldDebugDrawing {
+					fillColor = NSColor.systemPurple.withAlphaComponent(0.5)
+				}
+				else {
+					fillColor = NSColor.systemPurple.withAlphaComponent(0.01)
+				}
+
+				for target in targets {
+					let path = CGMutablePath()
+					path.addArc(center: .zero, radius: target.radius, startAngle: 0, endAngle: (.pi * 2), clockwise: true)
+					let shapeLayer = CAShapeLayer()
+					shapeLayer.path = path
+					shapeLayer.fillColor = fillColor.cgColor
+					layer?.addSublayer(shapeLayer)
+					targetLayers.append(shapeLayer)
+				}
+			}
 			needsDisplay = true
-			//layer?.needsDisplay()
 		}
 	}
+
+	var lastTime: TimeInterval = 0
+
+	var lastTargetCenter1: CGPoint = .zero
+	var lastTargetCenter2: CGPoint = .zero
 
 	required init?(coder: NSCoder) {
 		fatalError("not implemented")
@@ -24,31 +58,10 @@ class SceneHitView: NSView {
 		
 	override init(frame frameRect: NSRect) {
 		debugLog()
-		paths = []
+		targets = []
 		super.init(frame: frameRect)
 	}
 	
-	override func draw(_ dirtyRect: NSRect) {
-		//debugLog()
-		NSColor.clear.set()
-		dirtyRect.fill()
-
-		NSColor.systemPurple.setFill()
-		for path in paths {
-			path.fill()
-		}
-	
-#if true
-		if Defaults.shouldDebugDrawing {
-			layer?.opacity = 0.5
-		}
-		else {
-			layer?.opacity = 0.01
-		}
-#else
-		layer?.opacity = 0.5
-#endif
-	}
 	
 	override func acceptsFirstMouse(for event: NSEvent?) -> Bool {
 		debugLog()
@@ -68,9 +81,22 @@ class SceneHitView: NSView {
 		}
 	}
 	
+	override var wantsUpdateLayer: Bool {
+		return true
+	}
+	
+	override func updateLayer() {
+		for (index, targetLayer) in self.targetLayers.enumerated() {
+			let target = self.targets[index]
+			CATransaction.withActionsDisabled {
+				targetLayer.position = target.center
+			}
+		}
+	}
+	
 	override var wantsLayer: Bool {
 		get {
-			return false
+			return true
 		}
 		set {
 			// ignored
@@ -84,18 +110,13 @@ class SceneHitView: NSView {
 	
 }
 
-var lastTime: TimeInterval = 0
+extension CGPoint {
 
-var lastWorld: SCNVector3 = SCNVector3Zero
-
-extension SCNVector3 {
-
-	public func moved(from: SCNVector3, delta: CGFloat = 0.01) -> Bool {
+	public func moved(from: CGPoint, delta: CGFloat = 1.0) -> Bool {
 		let deltaX = abs(x - from.x)
 		let deltaY = abs(y - from.y)
-		let deltaZ = abs(z - from.z)
 
-		return (deltaX > delta) || (deltaY > delta) || (deltaZ > delta)
+		return (deltaX > delta) || (deltaY > delta)
 	}
 
 }
@@ -103,80 +124,50 @@ extension SCNVector3 {
 extension SceneHitView: SCNSceneRendererDelegate {
 	
 	func renderer(_ renderer: SCNSceneRenderer, didRenderScene scene: SCNScene, atTime time: TimeInterval) {
-		if time - lastTime > 0.2 {
-			//debugLog()
+		if time - lastTime > 0.25 {
+			lastTime = time
+
 			DispatchQueue.main.async { [self] in
 				let rootNode = scene.rootNode
+				
 				let dieScene1 = rootNode.childNode(withName: "die1", recursively: true)!
-				let node = dieScene1.childNode(withName: "D6", recursively: true)!
-
+				let node1 = dieScene1.childNode(withName: "D6", recursively: true)!
+				
+				let dieScene2 = rootNode.childNode(withName: "die2", recursively: true)!
+				let node2 = dieScene2.childNode(withName: "D6", recursively: true)!
+				
 				let destination: SCNNode? = rootNode
 				
-				node.transform = node.presentation.transform
-
-				let world = node.convertPosition(SCNVector3Zero, to: destination)
-				if !world.moved(from: lastWorld, delta: 0.01) {
-					debugLog("no change")
-					return
+				let target1 = targetForNode(node1, with: destination, in: renderer)
+				let target2 = targetForNode(node2, with: destination, in: renderer)
+				
+				if target1.center.moved(from: lastTargetCenter1) || target2.center.moved(from: lastTargetCenter2) {
+					self.targets = [target1, target2]
+					lastTargetCenter1 = target1.center
+					lastTargetCenter2 = target2.center
 				}
-				lastWorld = world
-				let projectedWorldPoint = renderer.projectPoint(world)
-				let worldPoint = CGPoint(x: projectedWorldPoint.x, y: projectedWorldPoint.y)
-				debugLog("worldPoint = \(worldPoint)")
-
-				let (min, max) = node.boundingBox
-				let projectedMinPoint = renderer.projectPoint(min)
-				let minPoint = CGPoint(x: projectedMinPoint.x, y: projectedMinPoint.y)
-				let projectedMaxPoint = renderer.projectPoint(max)
-				let maxPoint = CGPoint(x: projectedMaxPoint.x, y: projectedMaxPoint.y)
-				debugLog("minPoint = \(minPoint), maxPoint = \(maxPoint), width = \(maxPoint.x - minPoint.x), height = \(maxPoint.y - minPoint.y)")
-
-				let bottomLeftBack = SCNVector3(min.x, min.y, max.z)
-				let topRightBack = SCNVector3(max.x, max.y, max.z)
-				let topLeftBack = SCNVector3(min.x, max.y, max.z)
-				let bottomRightBack = SCNVector3(max.x, min.y, max.z)
-				
-				let bottomLeftFront = SCNVector3(min.x, min.y, min.z)
-				let topRightFront = SCNVector3(max.x, max.y, min.z)
-				let topLeftFront = SCNVector3(min.x, max.y, min.z)
-				let bottomRightFront = SCNVector3(max.x, min.y, min.z)
-				
-				
-				var newPaths: [NSBezierPath] = []
-				
-				newPaths.append(pathForBoundingPoints([bottomLeftFront, bottomRightFront, topRightFront, topLeftFront], of: node, with: destination, in: renderer))
-				newPaths.append(pathForBoundingPoints([bottomLeftBack, bottomRightBack, topRightBack, topLeftBack], of: node, with: destination, in: renderer))
-				newPaths.append(pathForBoundingPoints([bottomLeftBack, bottomLeftFront, topLeftFront, topLeftBack], of: node, with: destination, in: renderer))
-				newPaths.append(pathForBoundingPoints([bottomRightBack, bottomRightFront, topRightFront, topRightBack], of: node, with: destination, in: renderer))
-				newPaths.append(pathForBoundingPoints([topLeftBack, topLeftFront, topRightFront, topRightBack], of: node, with: destination, in: renderer))
-				newPaths.append(pathForBoundingPoints([bottomLeftBack, bottomLeftFront, bottomRightFront, bottomRightBack], of: node, with: destination, in: renderer))
-				
-				self.paths = newPaths
+				else {
+					//debugLog("no change")
+				}
 			}
-			
-			lastTime = time
 		}
 	}
-	
-	func pathForBoundingPoints(_ boundingPoints: [SCNVector3], of node: SCNNode, with destination: SCNNode?, in renderer: SCNSceneRenderer) -> NSBezierPath {
-		let path = NSBezierPath()
 
-		var firstPoint = true
-		for boundingPoint in boundingPoints {
-			let worldPoint = node.convertPosition(boundingPoint, to: destination)
-			let projectedPoint = renderer.projectPoint(worldPoint)
-			let point = CGPoint(x: projectedPoint.x, y: projectedPoint.y)
-			if firstPoint {
-				path.move(to: point)
-			}
-			else {
-				path.line(to: point)
-			}
-			firstPoint = false
-		}
-		path.close()
+	func targetForNode(_ node: SCNNode, with destination: SCNNode?, in renderer: SCNSceneRenderer) -> SceneHitTarget {
+		node.transform = node.presentation.transform
+
+		let world = node.convertPosition(SCNVector3Zero, to: destination)
+		let projectedWorldPoint = renderer.projectPoint(world)
+		let worldPoint = CGPoint(x: projectedWorldPoint.x, y: projectedWorldPoint.y)
+		//debugLog("worldPoint = \(worldPoint)")
+
+		let (min, max) = node.boundingBox
+		let projectedMinPoint = renderer.projectPoint(min)
+		let minPoint = CGPoint(x: projectedMinPoint.x, y: projectedMinPoint.y)
+		let projectedMaxPoint = renderer.projectPoint(max)
+		let maxPoint = CGPoint(x: projectedMaxPoint.x, y: projectedMaxPoint.y)
 		
-		return path
+		return SceneHitTarget(center: worldPoint, radius: (maxPoint.x - minPoint.x) * 0.9)
 	}
-	
+
 }
