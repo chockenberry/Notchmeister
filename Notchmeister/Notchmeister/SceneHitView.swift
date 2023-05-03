@@ -68,19 +68,41 @@ class SceneHitView: NSView {
 
 var lastTime: TimeInterval = 0
 
+var lastWorld: SCNVector3 = SCNVector3Zero
+
+extension SCNVector3 {
+
+	public func moved(from: SCNVector3, delta: CGFloat = 0.01) -> Bool {
+		let deltaX = abs(x - from.x)
+		let deltaY = abs(y - from.y)
+		let deltaZ = abs(z - from.z)
+
+		return (deltaX > delta) || (deltaY > delta) || (deltaZ > delta)
+	}
+
+}
+
 extension SceneHitView: SCNSceneRendererDelegate {
 	
 	func renderer(_ renderer: SCNSceneRenderer, didRenderScene scene: SCNScene, atTime time: TimeInterval) {
 		if time - lastTime > 0.2 {
 			//debugLog()
 			DispatchQueue.main.async { [self] in
-				
 				let rootNode = scene.rootNode
 				let dieScene1 = rootNode.childNode(withName: "die1", recursively: true)!
 				let node = dieScene1.childNode(withName: "D6", recursively: true)!
+
+				let destination: SCNNode? = rootNode
 				
 				node.transform = node.presentation.transform
-				
+
+				let world = node.convertPosition(SCNVector3Zero, to: destination)
+				if !world.moved(from: lastWorld, delta: 0.01) {
+					debugLog("no change")
+					return
+				}
+				lastWorld = world
+
 				let (min, max) = node.boundingBox
 				
 				let bottomLeftBack = SCNVector3(min.x, min.y, max.z)
@@ -93,7 +115,6 @@ extension SceneHitView: SCNSceneRendererDelegate {
 				let topLeftFront = SCNVector3(min.x, max.y, min.z)
 				let bottomRightFront = SCNVector3(max.x, min.y, min.z)
 				
-				let destination: SCNNode? = rootNode
 				
 				var newPaths: [NSBezierPath] = []
 				

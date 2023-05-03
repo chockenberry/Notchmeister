@@ -74,7 +74,7 @@ extension NSScreen {
 			// NOTE: The notch size changes depending on the screen scaling. At the lowest setting ("Large Text") the height is 22 pt.
 			// At the highest setting ("More Space"), it is 38 pt. The default size is 32 pt.
 //			fakeNotchSize = NSSize(width:185, height:32) // default
-//			fakeNotchSize = NSSize(width:127, height:22) // large text
+//			fakeNotchSize = NSSize(width:127, height:22) // larger text
 			fakeNotchSize = NSSize(width:220, height:38) // more space
 		}
 		else {
@@ -110,6 +110,40 @@ extension NSScreen {
         }
     }
 }
+
+
+//MARK: - NSRect Extensions
+
+extension NSRect {
+	
+	enum NotchSetting {
+		case unknown
+		case largerText
+		case large
+		case `default`
+		case moreSpace
+	}
+	
+	// NOTE: The notch size changes depending on the screen scaling. At the lowest setting ("Larger Text") the height is 22 pt. At the highest setting ("More Space") the height is 38 pt.
+
+	var notchSetting: NotchSetting {
+		get {
+			switch height {
+			case 22:
+				return .largerText
+			case 28:
+				return .large
+			case 32:
+				return .default
+			case 38:
+				return .moreSpace
+			default:
+				return .unknown
+			}
+		}
+	}
+}
+
 
 //MARK: - CAShapeLayer Extensions
 

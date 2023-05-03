@@ -19,7 +19,9 @@ class DiceEffect: NotchEffect {
 
 		super.init(with: parentLayer, in: parentView, of: parentWindow)
 		
-
+		debugLog("frame = \(parentView.frame)")
+		debugLog("backingScaleFactor = \(parentWindow.screen?.backingScaleFactor)")
+		
 		//configureSublayers()
 		//self.perform(#selector(configureChildWindow), with: nil, afterDelay: 2.0)
 		//configureChildWindow()
@@ -78,7 +80,7 @@ class DiceEffect: NotchEffect {
 #endif
 	}
 	
-	private let size = CGSize(width: 300, height: 100)
+	private let size = CGSize(width: 300, height: 120)
 	private let viewScale: CGFloat = 1
 	
 	private func configureSceneHitWindow() -> NSWindow? {
@@ -203,11 +205,26 @@ class DiceEffect: NotchEffect {
 			scene.rootNode.addChildNode(ambientLightNode)
 		}
 
-		let anchorY: CGFloat = 2
+		let anchorY: CGFloat = 2.25
 		let length = 1
 		let scale: CGFloat = 1
 		
 		func setupObjects() {
+			guard let parentView else { return }
+			
+			let linkCount: Int
+			switch parentView.frame.notchSetting {
+			case .largerText:
+				linkCount = 13
+			case .large:
+				linkCount = 14
+			case .default:
+				linkCount = 15
+			case .moreSpace:
+				linkCount = 16
+			default:
+				linkCount = 15
+			}
 			//scene.rootNode.scale = SCNVector3Make(0.5, 0.5, 0.5)
 			
 			let anchor = scene.rootNode.childNode(withName: "anchor", recursively: true)!
@@ -235,7 +252,7 @@ class DiceEffect: NotchEffect {
 			let spin1 = CGFloat.random(in: -4.0...4.0)
 			die1.physicsBody?.applyForce(SCNVector3(x: 0, y: 0, z: spin1), at: SCNVector3(x: 0.0, y: 1.0, z: 0.0), asImpulse: true)
 			 */
-			setupCord(anchor: anchor, linkCount: 14, die: die1)
+			setupCord(anchor: anchor, linkCount: linkCount, die: die1)
 			
 			let dieReference2 = scene.rootNode.childNode(withName: "die2", recursively: true)!
 			let die2 = dieReference2.childNode(withName: "D6", recursively: true)!
@@ -253,7 +270,7 @@ class DiceEffect: NotchEffect {
 			let spin2 = CGFloat.random(in: -4.0...4.0)
 			die2.physicsBody?.applyForce(SCNVector3(x: 0, y: 0, z: spin2), at: SCNVector3(x: 0.0, y: 1.0, z: 0.0), asImpulse: true)
 			 */
-			setupCord(anchor: anchor, linkCount: 16, die: die2)
+			setupCord(anchor: anchor, linkCount: linkCount + 2, die: die2)
 		}
 
 		var links: [SCNNode] = []
