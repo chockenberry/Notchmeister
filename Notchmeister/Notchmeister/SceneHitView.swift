@@ -59,6 +59,24 @@ class SceneHitView: NSView {
 		debugLog()
 	}
 	
+	override var layerContentsRedrawPolicy: NSView.LayerContentsRedrawPolicy {
+		get {
+			return .onSetNeedsDisplay
+		}
+		set {
+			// ignored
+		}
+	}
+	
+	override var wantsLayer: Bool {
+		get {
+			return false
+		}
+		set {
+			// ignored
+		}
+	}
+	
 	override func hitTest(_ point: NSPoint) -> NSView? {
 		debugLog("point = \(point)")
 		return super.hitTest(point)
@@ -102,9 +120,17 @@ extension SceneHitView: SCNSceneRendererDelegate {
 					return
 				}
 				lastWorld = world
+				let projectedWorldPoint = renderer.projectPoint(world)
+				let worldPoint = CGPoint(x: projectedWorldPoint.x, y: projectedWorldPoint.y)
+				debugLog("worldPoint = \(worldPoint)")
 
 				let (min, max) = node.boundingBox
-				
+				let projectedMinPoint = renderer.projectPoint(min)
+				let minPoint = CGPoint(x: projectedMinPoint.x, y: projectedMinPoint.y)
+				let projectedMaxPoint = renderer.projectPoint(max)
+				let maxPoint = CGPoint(x: projectedMaxPoint.x, y: projectedMaxPoint.y)
+				debugLog("minPoint = \(minPoint), maxPoint = \(maxPoint), width = \(maxPoint.x - minPoint.x), height = \(maxPoint.y - minPoint.y)")
+
 				let bottomLeftBack = SCNVector3(min.x, min.y, max.z)
 				let topRightBack = SCNVector3(max.x, max.y, max.z)
 				let topLeftBack = SCNVector3(min.x, max.y, max.z)
