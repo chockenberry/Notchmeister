@@ -25,13 +25,15 @@ class DiceEffect: NotchEffect {
 	override func mouseEntered(at point: CGPoint, underNotch: Bool) {
 		debugLog()
 		
-		hitWindow = configureSceneHitWindow()
-		let sceneHitView = hitWindow!.contentView as! SceneHitView
-		let scene = configureScene()
-		if let animationWindow = configureSceneAnimationWindow(using: sceneHitView, scene: scene) {
-			hitWindow!.addChildWindow(animationWindow, ordered: .below)
+		if hitWindow == nil {
+			hitWindow = configureSceneHitWindow()
+			let sceneHitView = hitWindow!.contentView as! SceneHitView
+			let scene = configureScene()
+			if let animationWindow = configureSceneAnimationWindow(using: sceneHitView, scene: scene) {
+				hitWindow!.addChildWindow(animationWindow, ordered: .below)
+			}
+			hitWindow!.orderFront(self)
 		}
-		hitWindow!.orderFront(self)
 	}
 
 	override func mouseMoved(at point: CGPoint, underNotch: Bool) {
@@ -47,10 +49,22 @@ class DiceEffect: NotchEffect {
 	}
 
 	override func mouseExited(at point: CGPoint, underNotch: Bool) {
-		debugLog()
+		debugLog("point = \(point), underNotch = \(underNotch)")
 
-		hitWindow?.orderOut(self)
-		hitWindow = nil
+		if let windowPoint = parentView?.convert(point, to: nil) {
+			if let animationWindow = hitWindow?.childWindows?.first {
+				if let contentView = animationWindow.contentView {
+					let animationPoint = contentView.convert(windowPoint, to: nil)
+					let contained = contentView.bounds.contains(animationPoint)
+					debugLog("animationPoint = \(animationPoint), contained = \(contained)")
+					if !contained {
+						hitWindow?.orderOut(self)
+						hitWindow = nil
+					}
+				}
+			}
+		}
+		
 	}
 
 	@objc
