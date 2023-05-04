@@ -10,38 +10,28 @@ import SceneKit
 
 class DiceEffect: NotchEffect {
 	
-	//var edgeLayer: CAShapeLayer
-
-	var hitWindow: NSWindow!
+	var hitWindow: NSWindow?
 	
 	required init (with parentLayer: CALayer, in parentView: NSView, of parentWindow: NSWindow) {
-		//self.edgeLayer = CAShapeLayer.notchOutlineLayer(for: parentLayer.bounds.size, flipped: true)
-
+		debugLog()
 		super.init(with: parentLayer, in: parentView, of: parentWindow)
-		
-		debugLog("frame = \(parentView.frame)")
-		debugLog("backingScaleFactor = \(parentWindow.screen?.backingScaleFactor)")
-		
-		//configureSublayers()
-		//self.perform(#selector(configureChildWindow), with: nil, afterDelay: 2.0)
-		//configureChildWindow()
-		
-		hitWindow = configureSceneHitWindow()
-		let sceneHitView = hitWindow.contentView as! SceneHitView
-		let scene = configureScene()
-		if let animationWindow = configureSceneAnimationWindow(using: sceneHitView, scene: scene) {
-			hitWindow.addChildWindow(animationWindow, ordered: .below)
-		}
-		hitWindow.orderFront(self)
-
 	}
 	
 	deinit {
-		hitWindow.orderOut(self)
+		debugLog()
+		hitWindow?.orderOut(self)
 	}
 		
 	override func mouseEntered(at point: CGPoint, underNotch: Bool) {
 		debugLog()
+		
+		hitWindow = configureSceneHitWindow()
+		let sceneHitView = hitWindow!.contentView as! SceneHitView
+		let scene = configureScene()
+		if let animationWindow = configureSceneAnimationWindow(using: sceneHitView, scene: scene) {
+			hitWindow!.addChildWindow(animationWindow, ordered: .below)
+		}
+		hitWindow!.orderFront(self)
 	}
 
 	override func mouseMoved(at point: CGPoint, underNotch: Bool) {
@@ -49,7 +39,6 @@ class DiceEffect: NotchEffect {
 
 		do {
 			if underNotch {
-				//debugLog()
 			}
 			else {
 			}
@@ -59,6 +48,9 @@ class DiceEffect: NotchEffect {
 
 	override func mouseExited(at point: CGPoint, underNotch: Bool) {
 		debugLog()
+
+		hitWindow?.orderOut(self)
+		hitWindow = nil
 	}
 
 	@objc
@@ -81,7 +73,6 @@ class DiceEffect: NotchEffect {
 	}
 	
 	private let size = CGSize(width: 300, height: 120)
-	private let viewScale: CGFloat = 1
 	
 	private func configureSceneHitWindow() -> NSWindow? {
 		guard let screen = parentWindow?.screen else { return nil }
@@ -91,8 +82,6 @@ class DiceEffect: NotchEffect {
 		let origin = CGPoint(x: screen.frame.midX - (size.width / 2), y: screen.frame.maxY - size.height)
 		
 		let contentRect = CGRect(origin: origin, size: size)
-//		let contentRect = CGRect(x: screen.frame.minX, y: screen.frame.minY, width: 400, height: 300)
-//		let contentRect = CGRect(x: 0, y: 0, width: 400, height: 300)
 
 		let window = NSWindow(contentRect: contentRect, styleMask: .borderless, backing: .buffered, defer: false)
 		window.canHide = false
@@ -104,12 +93,6 @@ class DiceEffect: NotchEffect {
 
 		let viewRect = CGRect(origin: .zero, size: size)
 		let contentView = SceneHitView(frame: viewRect)
-		//contentView.imageAlignment = .alignCenter
-		//contentView.image = NSImage(named: "xray")
-		contentView.wantsLayer = false
-		contentView.bounds = CGRect(origin: CGPoint(x: 0, y: 0), size: CGSize(width: size.width / viewScale, height: size.height / viewScale))
-		//contentView.layerContentsRedrawPolicy = .onSetNeedsDisplay
-
 		
 		window.title = "Dice Hit Window \(index)"
 		window.contentView = contentView
@@ -148,9 +131,8 @@ class DiceEffect: NotchEffect {
 		window.hasShadow = false
 		window.level = .popUpMenu
 
-		//let viewRect = CGRect(x: 0, y: 0, width: 400, height: 300)
 		let viewRect = CGRect(origin: .zero, size: size)
-		let contentView = SceneView(frame: viewRect)
+		let contentView = SceneAnimationView(frame: viewRect)
 		contentView.backgroundColor = .clear
 
 		contentView.scene = scene
@@ -158,7 +140,7 @@ class DiceEffect: NotchEffect {
 		contentView.delegate = sceneHitView
 			
 		contentView.wantsLayer = false
-		contentView.bounds = CGRect(origin: CGPoint(x: 0, y: 0), size: CGSize(width: size.width / viewScale, height: size.height / viewScale))
+		contentView.bounds = CGRect(origin: CGPoint(x: 0, y: 0), size: CGSize(width: size.width, height: size.height))
 
 		window.title = "Dice Animation Window \(index)"
 		window.contentView = contentView
@@ -197,7 +179,6 @@ class DiceEffect: NotchEffect {
 			lightNode.position = SCNVector3(x: 0, y: 0, z: 15)
 			scene.rootNode.addChildNode(lightNode)
 			
-			// create and add an ambient light to the scene
 			let ambientLightNode = SCNNode()
 			ambientLightNode.light = SCNLight()
 			ambientLightNode.light!.type = .ambient
@@ -206,8 +187,6 @@ class DiceEffect: NotchEffect {
 		}
 
 		let anchorY: CGFloat = 2.25
-		let length = 1
-		let scale: CGFloat = 1
 		
 		func setupObjects() {
 			guard let parentView else { return }
@@ -238,38 +217,14 @@ class DiceEffect: NotchEffect {
 
 			let dieReference1 = scene.rootNode.childNode(withName: "die1", recursively: true)!
 			let die1 = dieReference1.childNode(withName: "D6", recursively: true)!
-			die1.scale = SCNVector3Make(scale, scale, scale)
-			if var options = die1.physicsBody?.physicsShape?.options {
-				options[.scale] = scale
-				let physicsShape = SCNPhysicsShape(node: die1, options: options)
-				//let physicsShape = SCNPhysicsBody(type: .dynamic, shape: .none)
-				die1.physicsBody?.physicsShape = physicsShape
-			}
+			die1.physicsBody?.isAffectedByGravity = true
 			die1.worldPosition = SCNVector3Make(-1, anchorY + 1, 0)
-			/*
-			let joint1 = SCNPhysicsBallSocketJoint(body: die1.physicsBody!, anchor: SCNVector3(x: CGFloat(length), y: 0, z: 0))
-			scene.physicsWorld.addBehavior(joint1)
-			let spin1 = CGFloat.random(in: -4.0...4.0)
-			die1.physicsBody?.applyForce(SCNVector3(x: 0, y: 0, z: spin1), at: SCNVector3(x: 0.0, y: 1.0, z: 0.0), asImpulse: true)
-			 */
 			setupCord(anchor: anchor, linkCount: linkCount, die: die1)
 			
 			let dieReference2 = scene.rootNode.childNode(withName: "die2", recursively: true)!
 			let die2 = dieReference2.childNode(withName: "D6", recursively: true)!
-			die2.scale = SCNVector3Make(scale, scale, scale)
-			if var options = die2.physicsBody?.physicsShape?.options {
-				options[.scale] = scale
-				let physicsShape = SCNPhysicsShape(node: die2, options: options)
-				//let physicsShape = SCNPhysicsBody(type: .dynamic, shape: .none)
-				die2.physicsBody?.physicsShape = physicsShape
-			}
+			die2.physicsBody?.isAffectedByGravity = true
 			die2.worldPosition = SCNVector3(1, anchorY + 1, 0)
-			/*
-			let joint2 = SCNPhysicsBallSocketJoint(body: die2.physicsBody!, anchor: SCNVector3(-length, 0, 0))
-			scene.physicsWorld.addBehavior(joint2)
-			let spin2 = CGFloat.random(in: -4.0...4.0)
-			die2.physicsBody?.applyForce(SCNVector3(x: 0, y: 0, z: spin2), at: SCNVector3(x: 0.0, y: 1.0, z: 0.0), asImpulse: true)
-			 */
 			setupCord(anchor: anchor, linkCount: linkCount + 2, die: die2)
 		}
 
@@ -278,12 +233,7 @@ class DiceEffect: NotchEffect {
 		func setupCord(anchor: SCNNode, linkCount: Int, die: SCNNode) {
 			
 			func createLink(position: CGFloat) -> SCNNode {
-				//var geometry:SCNGeometry
-				//var link:SCNNode
-				
-				//let geometry = SCNSphere(radius: 1)
 				let geometry = SCNCylinder(radius: 0.025, height: 0.15)
-				//geometry.materials.first?.diffuse.contents = NSColor.red
 				
 				let link = SCNNode(geometry: geometry)
 				link.physicsBody = SCNPhysicsBody(type: .dynamic, shape: nil)
@@ -294,7 +244,7 @@ class DiceEffect: NotchEffect {
 				link.physicsBody?.collisionBitMask = 0
 				link.physicsBody?.friction = 1.0
 				link.physicsBody?.velocityFactor = SCNVector3Make(1, 1, 1)
-				link.scale = SCNVector3Make(scale, scale, scale)
+				link.physicsBody?.isAffectedByGravity = true
 				
 				let cycleDuration: TimeInterval = 0.5
 				let changeColor = SCNAction.customAction(duration: cycleDuration) { node, elapsedTime in
@@ -320,7 +270,7 @@ class DiceEffect: NotchEffect {
 						bodyA: anchor.physicsBody!,
 						anchorA: SCNVector3Make(0, 0, 0),
 						bodyB: link.physicsBody!,
-						anchorB: SCNVector3Make(0, -(0.05 * scale), 0)
+						anchorB: SCNVector3Make(0, -0.05, 0)
 					)
 					scene.physicsWorld.addBehavior(joint)
 				}
@@ -328,10 +278,10 @@ class DiceEffect: NotchEffect {
 					let joint = SCNPhysicsHingeJoint(
 						bodyA: link.physicsBody!,
 						axisA: SCNVector3Make(0, 1, 0),
-						anchorA: SCNVector3Make(0, -(0.05 * scale), 0),
+						anchorA: SCNVector3Make(0, -0.05, 0),
 						bodyB: previousLink.physicsBody!,
 						axisB: SCNVector3Make(0, 1, 0),
-						anchorB: SCNVector3Make(0, (0.05 * scale), 0)
+						anchorB: SCNVector3Make(0, +0.05, 0)
 					)
 					scene.physicsWorld.addBehavior(joint)
 				}
@@ -341,9 +291,9 @@ class DiceEffect: NotchEffect {
 
 			let joint = SCNPhysicsBallSocketJoint(
 				bodyA: die.physicsBody!,
-				anchorA: SCNVector3Make(0.45 * scale, 0.45 * scale, 0.45 * scale),
+				anchorA: SCNVector3Make(0.45, 0.45, 0.45),
 				bodyB: previousLink.physicsBody!,
-				anchorB: SCNVector3Make(0, (0.05 * scale), 0)
+				anchorB: SCNVector3Make(0, +0.05, 0)
 			)
 			scene.physicsWorld.addBehavior(joint)
 			
@@ -353,7 +303,6 @@ class DiceEffect: NotchEffect {
 		}
 
 		let scene = SCNScene(named: "dice.scnassets/notch.scn")!
-		//scene.rootNode.scale = SCNVector3Make(0.5, 0.5, 0.5)
 
 		setupCamera()
 		setupLights()
