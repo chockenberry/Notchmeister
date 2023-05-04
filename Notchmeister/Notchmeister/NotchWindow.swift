@@ -19,7 +19,11 @@ class NotchWindow: NSWindow {
   
 		let index = (NSScreen.screens.firstIndex(of: screen) ?? Int.min) + 1
 
-		let contentRect = CGRect(x: notchRect.origin.x - Self.padding, y: notchRect.origin.y - Self.padding, width: notchRect.width + (Self.padding * 2), height: notchRect.height + Self.padding)
+		// NOTE: Fusion Dice need a little more height than the other effects. Easiest way to deal with this (because of TrackingView) is to extend the height of
+		// the window.
+		let height = Self.padding * 1.5
+		
+		let contentRect = CGRect(x: notchRect.origin.x - Self.padding, y: notchRect.origin.y - height, width: notchRect.width + (Self.padding * 2), height: notchRect.height + height)
         super.init(contentRect: contentRect, styleMask: .borderless, backing: .buffered, defer: false)
         
 		// NOTE: In theory, we should be able to create a window above the cursor. In practice, this doesn't work.

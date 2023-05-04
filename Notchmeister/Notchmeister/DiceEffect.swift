@@ -23,8 +23,10 @@ class DiceEffect: NotchEffect {
 	}
 		
 	override func mouseEntered(at point: CGPoint, underNotch: Bool) {
-		debugLog()
-		
+		guard let parentWindow else { return }
+
+		debugLog("point = \(point), underNotch = \(underNotch)")
+
 		if hitWindow == nil {
 			hitWindow = configureSceneHitWindow()
 			let sceneHitView = hitWindow!.contentView as! SceneHitView
@@ -32,7 +34,9 @@ class DiceEffect: NotchEffect {
 			if let animationWindow = configureSceneAnimationWindow(using: sceneHitView, scene: scene) {
 				hitWindow!.addChildWindow(animationWindow, ordered: .below)
 			}
-			hitWindow!.orderFront(self)
+			//hitWindow!.orderFront(self)
+			//hitWindow!.orderFrontRegardless()
+			hitWindow!.order(.below, relativeTo: parentWindow.windowNumber)
 		}
 	}
 
@@ -49,22 +53,33 @@ class DiceEffect: NotchEffect {
 	}
 
 	override func mouseExited(at point: CGPoint, underNotch: Bool) {
+		guard let parentView else { return }
+		guard let parentWindow else { return }
+		guard let hitWindow else { return }
+		
 		debugLog("point = \(point), underNotch = \(underNotch)")
 
-		if let windowPoint = parentView?.convert(point, to: nil) {
-			if let animationWindow = hitWindow?.childWindows?.first {
+#if true
+		hitWindow.orderOut(self)
+		self.hitWindow = nil
+#else
+		//if let windowPoint = parentView?.convert(point, to: nil) {
+			if let animationWindow = hitWindow.childWindows?.first {
+				let screenPoint = parentWindow.convertPoint(toScreen: point)
+				let hitPoint = hitWindow.convertPoint(fromScreen: screenPoint)
 				if let contentView = animationWindow.contentView {
-					let animationPoint = contentView.convert(windowPoint, to: nil)
+					let animationPoint = contentView.convert(hitPoint, from: nil)
 					let contained = contentView.bounds.contains(animationPoint)
 					debugLog("animationPoint = \(animationPoint), contained = \(contained)")
 					if !contained {
-						hitWindow?.orderOut(self)
-						hitWindow = nil
+						hitWindow.orderOut(self)
+						self.hitWindow = nil
 					}
 				}
 			}
-		}
-		
+		//}
+#endif
+
 	}
 
 	@objc
@@ -89,8 +104,11 @@ class DiceEffect: NotchEffect {
 	private let size = CGSize(width: 300, height: 120)
 	
 	private func configureSceneHitWindow() -> NSWindow? {
-		guard let screen = parentWindow?.screen else { return nil }
+		guard let parentWindow else { return nil }
+		guard let screen = parentWindow.screen else { return nil }
 
+		//let size = parentWindow.frame.size
+		
 		let index = (NSScreen.screens.firstIndex(of: screen) ?? Int.min) + 1
 
 		let origin = CGPoint(x: screen.frame.midX - (size.width / 2), y: screen.frame.maxY - size.height)
@@ -129,7 +147,10 @@ class DiceEffect: NotchEffect {
 	}
 
 	private func configureSceneAnimationWindow(using sceneHitView: SceneHitView, scene: SCNScene) -> NSWindow? {
-		guard let screen = parentWindow?.screen else { return nil }
+		guard let parentWindow else { return nil }
+		guard let screen = parentWindow.screen else { return nil }
+
+		//let size = parentWindow.frame.size
 
 		let index = (NSScreen.screens.firstIndex(of: screen) ?? Int.min) + 1
 
