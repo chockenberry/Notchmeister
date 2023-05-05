@@ -63,7 +63,21 @@ class ActivationView: NSView {
 	
 	override func hitTest(_ point: NSPoint) -> NSView? {
 		debugLog("point = \(point)")
-		return super.hitTest(point)
+		let result = super.hitTest(point)
+		if result != nil {
+			if NSApplication.shared.isActive {
+				if let window = NSApplication.shared.windows.first {
+					window.makeKeyAndOrderFront(self)
+					debugLog("activated window")
+				}
+			}
+			else {
+				if let appDelegate = NSApplication.shared.delegate as? AppDelegate {
+					appDelegate.needsActivation = true
+				}
+			}
+		}
+		return result
 	}
 
 }

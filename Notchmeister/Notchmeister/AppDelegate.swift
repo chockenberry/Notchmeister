@@ -10,6 +10,12 @@ import Cocoa
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
 
+	var needsActivation = false {
+		didSet {
+			debugLog("needsActivation = \(needsActivation)")
+		}
+	}
+	
 	override init() {
 		super.init()
 		Defaults.register()
@@ -61,13 +67,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	
 	func applicationDidBecomeActive(_ notification: Notification) {
 		debugLog()
-		if let window = NSApplication.shared.windows.first {
-			// NOTE: The window that triggered this activation could have been the child window underneath the NotchWindow.
-			// Since that window is borderless and we could be running with the .accessory activation policy, we need to ensure
-			// that the app is frontmost before ordering the window.
-			NSApplication.shared.activate(ignoringOtherApps: true)
-			
-			window.makeKeyAndOrderFront(self)
+		if needsActivation {
+			if let window = NSApplication.shared.windows.first {
+				// NOTE: The window that triggered this activation could have been the child window underneath the NotchWindow.
+				// Since that window is borderless and we could be running with the .accessory activation policy, we need to ensure
+				// that the app is frontmost before ordering the window.
+				NSApplication.shared.activate(ignoringOtherApps: true)
+				
+				window.makeKeyAndOrderFront(self)
+				debugLog("activated window")
+			}
+			needsActivation = false
 		}
 	}
 	

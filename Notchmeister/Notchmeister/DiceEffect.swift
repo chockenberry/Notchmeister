@@ -60,8 +60,15 @@ class DiceEffect: NotchEffect {
 		debugLog("point = \(point), underNotch = \(underNotch)")
 
 #if true
-		hitWindow.orderOut(self)
-		self.hitWindow = nil
+		if let trackingView = parentView.superview {
+			let trackingPoint = parentView.convert(point, to: trackingView)
+			let contained = trackingView.bounds.contains(trackingPoint)
+			debugLog("trackingPoint = \(trackingPoint), contained = \(contained)")
+			if !contained {
+				hitWindow.orderOut(self)
+				self.hitWindow = nil
+			}
+		}
 #else
 		//if let windowPoint = parentView?.convert(point, to: nil) {
 			if let animationWindow = hitWindow.childWindows?.first {

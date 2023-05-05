@@ -124,7 +124,7 @@ class TrackingView: NSView {
 	}
 	
 	override func mouseEntered(with event: NSEvent) {
-		//debugLog()
+		debugLog()
 		super.mouseEntered(with: event)
 		
 		removeEventMonitors()
@@ -132,7 +132,7 @@ class TrackingView: NSView {
 	}
 	
 	override func mouseExited(with event: NSEvent) {
-		//debugLog()
+		debugLog()
 		super.mouseExited(with: event)
 		
 		removeEventMonitors()
