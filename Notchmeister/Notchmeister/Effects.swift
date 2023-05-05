@@ -50,7 +50,7 @@ enum Effects: Int, CaseIterable {
 		case .cylon:
 			return "By your command.\n\nAnd don‘t get too close."
 		case .plasma:
-			return "WARNING: A mouse can break down the magnetic containment field that keeps Apple Silicon's power in check!"
+			return "WARNING: A mouse can break down the magnetic containment field that keeps Apple Silicon’s power in check!"
 		case .festive:
 			return "Let your Mac celebrate the holidays the best way it can—in binary.\n\n01101100 01101111 01101100"
 		case .radar:
@@ -58,7 +58,7 @@ enum Effects: Int, CaseIterable {
 		case .expando:
 			return "Bigger is better, right?\n\n⚠️ Works best in Light appearance."
 		case .dice:
-			return "Apple's expertise with silicon is not only with the die, but also the dice.\n\n☢️ AVOID EYE OR SKIN EXPOSURE"
+			return "Apple’s expertise with silicon is not only with the die, but also the dice.\n\n☢️ AVOID EYE OR SKIN EXPOSURE"
 #if DEBUG
 		case .portal:
 			return "Activate Macintosh Interdimensional Computation Extension (MICE)."
