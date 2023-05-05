@@ -57,7 +57,7 @@ class DiceEffect: NotchEffect {
 		guard let parentWindow else { return }
 		guard let hitWindow else { return }
 		
-		//debugLog("point = \(point), underNotch = \(underNotch)")
+		debugLog("point = \(point), underNotch = \(underNotch)")
 
 		if let trackingView = parentView.superview {
 			let trackingPoint = parentView.convert(point, to: trackingView)
