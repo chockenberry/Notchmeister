@@ -15,9 +15,7 @@ enum Effects: Int, CaseIterable {
 	case festive
 	case radar
 	case expando
-#if DEBUG
 	case dice
-#endif
 #if DEBUG
 	case portal
 #endif
@@ -36,10 +34,8 @@ enum Effects: Int, CaseIterable {
 			return "Nano Radar"
 		case .expando:
 			return "Expando"
-#if DEBUG
 		case .dice:
 			return "Fusion Dice"
-#endif
 #if DEBUG
 		case .portal:
 			return "Portal"
@@ -61,10 +57,8 @@ enum Effects: Int, CaseIterable {
 			return "Notchmeister’s patented Nano Radar lets you know exactly where your mouse has gone."
 		case .expando:
 			return "Bigger is better, right?\n\n⚠️ Works best in Light appearance."
-#if DEBUG
 		case .dice:
 			return "Apple's expertise with silicon is not only with the die, but also the dice.\n\n☢️ AVOID EYE OR SKIN EXPOSURE"
-#endif
 #if DEBUG
 		case .portal:
 			return "Activate Macintosh Interdimensional Computation Extension (MICE)."
@@ -86,10 +80,8 @@ enum Effects: Int, CaseIterable {
 			return RadarEffect(with: parentLayer, in: parentView, of: parentWindow)
 		case .expando:
 			return ExpandoEffect(with: parentLayer, in: parentView, of: parentWindow)
-#if DEBUG
 		case .dice:
 			return DiceEffect(with: parentLayer, in: parentView, of: parentWindow)
-#endif
 #if DEBUG
 		case .portal:
 			return PortalEffect(with: parentLayer, in: parentView, of: parentWindow)
