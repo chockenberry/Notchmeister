@@ -2,7 +2,7 @@ Keywords: notch,glow,plasma,cylon,nano,radar,festive,macbook,pro
 
 Description:
 
-If you have a new MacBook Pro, you also have a new notch. Congratulations!
+If you have a new MacBook, you also have a new notch. Congratulations!
 
 Have you ever wondered what happens to your mouse while it‘s traveling underneath the notch? Notchmeister answers that question with exciting effects that take your Mac to a whole new dimension:
 
@@ -10,13 +10,23 @@ Have you ever wondered what happens to your mouse while it‘s traveling underne
 
 ⁕ Cylon - By your command.
 
-⁕ Plasma Leak - Your mouse can break down the magnetic containment field that keeps the M1‘s power in check!
+⁕ Plasma Leak - A mouse can break down the magnetic containment field that keeps Apple Silicon’s power in check!
 
 ⁕ Festive - Let your Mac celebrate the holidays the best way it can—in binary.
 
 ⁕ Nano Radar - Our patented invention lets you know exactly where your mouse has gone.
 
-Notchmeister is also small and unobtrusive, both visually and with system resources. It's fun, but doesn't get in your way while you work.
+⁕ Expando - Bigger is better, right?
 
-And for those of you without a new MacBook Pro, Notchmeister also includes a genuine replacement notch. Be warned that side effects of this feature include making you want this new Mac even more than you already do. Sorry.
+⁕ Fusion Dice - Apple’s expertise with silicon is not only with the die, but also the dice.
+
+
+Notchmeister is also small and unobtrusive, both visually and with system resources. It’s fun, but doesn’t get in your way while you work.
+
+And for those of you without a new MacBook, Notchmeister also includes a genuine replacement notch. Be warned that side effects of this feature include making you want a new Mac even more than you already do. Sorry.
+
+
+What‘s New:
+
+Fusion Dice: a revolutionary new enhancement for your notch. Yeah, it spins.
 
