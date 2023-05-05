@@ -87,6 +87,15 @@ class SceneHitView: NSView {
 			perform(#selector(reorderWindow), with: nil, afterDelay: 0.0)
 		}
 #endif
+		
+		if let sceneAnimationView = window?.childWindows?.last?.contentView as? SceneAnimationView {
+			let point = self.convert(event.locationInWindow, from: nil)
+			let hitResults = sceneAnimationView.hitTest(point, options: [:])
+			if let hitResult = hitResults.first {
+				let amount = CGFloat.random(in: -2...2) * 10
+				hitResult.node.physicsBody?.applyForce(SCNVector3(amount, 0, 0), at: SCNVector3(x: 0.5, y: 0.5, z: 0.5), asImpulse: true)
+			}
+		}
 	}
 	
 	override var layerContentsRedrawPolicy: NSView.LayerContentsRedrawPolicy {
