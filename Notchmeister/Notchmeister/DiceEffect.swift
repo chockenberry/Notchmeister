@@ -119,7 +119,8 @@ class DiceEffect: NotchEffect {
 		window.hasShadow = false
 		window.level = .popUpMenu
 		window.collectionBehavior = [.transient, .canJoinAllSpaces]
-
+		window.animationBehavior = .none
+		
 		let viewRect = CGRect(origin: .zero, size: size)
 		let contentView = SceneHitView(frame: viewRect)
 		
