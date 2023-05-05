@@ -57,7 +57,7 @@ class DiceEffect: NotchEffect {
 		guard let parentWindow else { return }
 		guard let hitWindow else { return }
 		
-		debugLog("point = \(point), underNotch = \(underNotch)")
+		//debugLog("point = \(point), underNotch = \(underNotch)")
 
 		if let trackingView = parentView.superview {
 			let trackingPoint = parentView.convert(point, to: trackingView)
@@ -71,9 +71,11 @@ class DiceEffect: NotchEffect {
 					let currentFrame = hitWindow.frame
 					let newFrame = NSRect(origin: CGPoint(x: currentFrame.origin.x, y: currentFrame.origin.y + currentFrame.height), size: currentFrame.size)
 					hitWindow.animator().setFrame(newFrame, display: true)
+					debugLog("hiding hitWindow...")
 				} completionHandler: {
 					hitWindow.orderOut(self)
 					self.hitWindow = nil
+					debugLog("hitWindow hidden")
 				}
 			}
 		}
@@ -123,6 +125,7 @@ class DiceEffect: NotchEffect {
 		
 		let viewRect = CGRect(origin: .zero, size: size)
 		let contentView = SceneHitView(frame: viewRect)
+		contentView.parentWindow = parentWindow
 		
 		window.title = "Dice Hit Window \(index)"
 		window.contentView = contentView

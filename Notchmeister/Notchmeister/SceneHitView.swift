@@ -47,6 +47,8 @@ class SceneHitView: NSView {
 		}
 	}
 
+	weak var parentWindow: NSWindow?
+	
 	var lastTime: TimeInterval = 0
 
 	var lastTargetCenter1: CGPoint = .zero
@@ -103,9 +105,26 @@ class SceneHitView: NSView {
 		}
 	}
 	
+	@objc
+	private func reorderWindow() {
+		if let parentWindow {
+			window?.order(.below, relativeTo: parentWindow.windowNumber)
+			debugLog("reordered hitWindow")
+		}
+	}
+	
 	override func hitTest(_ point: NSPoint) -> NSView? {
-		debugLog("point = \(point)")
-		return super.hitTest(point)
+		let result = super.hitTest(point)
+		debugLog("point = \(point), result = \(String(describing: result))")
+		if parentWindow != nil {
+			// NOTE: This reordering keeps the NotchWindow, and its TrackingView, above the hitWindow (and this view).
+			// This is needed to keep the mouseExited events consistent and makes hiding the hitWindow more reliable.
+			// A nice side-effect is that it keeps the SceneKit animation view below the fake notch or the
+			// ActivationView with the NCP.
+			debugLog("reordering hitWindow")
+			perform(#selector(reorderWindow), with: nil, afterDelay: 0.0)
+		}
+		return result
 	}
 	
 }
