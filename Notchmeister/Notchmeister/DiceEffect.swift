@@ -59,34 +59,24 @@ class DiceEffect: NotchEffect {
 		
 		debugLog("point = \(point), underNotch = \(underNotch)")
 
-#if true
 		if let trackingView = parentView.superview {
 			let trackingPoint = parentView.convert(point, to: trackingView)
 			let contained = trackingView.bounds.contains(trackingPoint)
 			debugLog("trackingPoint = \(trackingPoint), contained = \(contained)")
 			if !contained {
-				hitWindow.orderOut(self)
-				self.hitWindow = nil
-			}
-		}
-#else
-		//if let windowPoint = parentView?.convert(point, to: nil) {
-			if let animationWindow = hitWindow.childWindows?.first {
-				let screenPoint = parentWindow.convertPoint(toScreen: point)
-				let hitPoint = hitWindow.convertPoint(fromScreen: screenPoint)
-				if let contentView = animationWindow.contentView {
-					let animationPoint = contentView.convert(hitPoint, from: nil)
-					let contained = contentView.bounds.contains(animationPoint)
-					debugLog("animationPoint = \(animationPoint), contained = \(contained)")
-					if !contained {
-						hitWindow.orderOut(self)
-						self.hitWindow = nil
-					}
+				NSAnimationContext.runAnimationGroup { context in
+					context.duration = 0.5
+					context.timingFunction = CAMediaTimingFunction.init(name: .easeIn)
+					
+					let currentFrame = hitWindow.frame
+					let newFrame = NSRect(origin: CGPoint(x: currentFrame.origin.x, y: currentFrame.origin.y + currentFrame.height), size: currentFrame.size)
+					hitWindow.animator().setFrame(newFrame, display: true)
+				} completionHandler: {
+					hitWindow.orderOut(self)
+					self.hitWindow = nil
 				}
 			}
-		//}
-#endif
-
+		}
 	}
 
 	@objc

@@ -65,16 +65,10 @@ class ActivationView: NSView {
 		debugLog("point = \(point)")
 		let result = super.hitTest(point)
 		if result != nil {
-			if NSApplication.shared.isActive {
-				if let window = NSApplication.shared.windows.first {
-					window.makeKeyAndOrderFront(self)
-					debugLog("activated window")
-				}
-			}
-			else {
-				if let appDelegate = NSApplication.shared.delegate as? AppDelegate {
-					appDelegate.needsActivation = true
-				}
+			NSApplication.shared.activate(ignoringOtherApps: true)
+			if let window = NSApplication.shared.windows.first {
+				window.makeKeyAndOrderFront(self)
+				debugLog("activated main window")
 			}
 		}
 		return result
