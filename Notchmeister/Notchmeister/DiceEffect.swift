@@ -26,30 +26,25 @@ class DiceEffect: NotchEffect {
 		guard let parentWindow else { return }
 
 		debugLog("point = \(point), underNotch = \(underNotch)")
-
-		if hitWindow == nil {
-			hitWindow = configureSceneHitWindow()
-			let sceneHitView = hitWindow!.contentView as! SceneHitView
-			let scene = configureScene()
-			if let animationWindow = configureSceneAnimationWindow(using: sceneHitView, scene: scene) {
-				hitWindow!.addChildWindow(animationWindow, ordered: .below)
-			}
-			//hitWindow!.orderFront(self)
-			//hitWindow!.orderFrontRegardless()
-			hitWindow!.order(.below, relativeTo: parentWindow.windowNumber)
-		}
 	}
 
 	override func mouseMoved(at point: CGPoint, underNotch: Bool) {
 		//guard let parentLayer = parentLayer else { return }
-
-		do {
-			if underNotch {
-			}
-			else {
+		guard let parentWindow else { return }
+		
+		if underNotch {
+			if hitWindow == nil {
+				hitWindow = configureSceneHitWindow()
+				let sceneHitView = hitWindow!.contentView as! SceneHitView
+				let scene = configureScene()
+				if let animationWindow = configureSceneAnimationWindow(using: sceneHitView, scene: scene) {
+					hitWindow!.addChildWindow(animationWindow, ordered: .below)
+				}
+				//hitWindow!.orderFront(self)
+				//hitWindow!.orderFrontRegardless()
+				hitWindow!.order(.below, relativeTo: parentWindow.windowNumber)
 			}
 		}
-
 	}
 
 	override func mouseExited(at point: CGPoint, underNotch: Bool) {
@@ -59,7 +54,7 @@ class DiceEffect: NotchEffect {
 		
 		debugLog("point = \(point), underNotch = \(underNotch)")
 
-		if let trackingView = parentView.superview {
+		if let trackingView = parentWindow.contentView as? TrackingView {
 			let trackingPoint = parentView.convert(point, to: trackingView)
 			let contained = trackingView.bounds.contains(trackingPoint)
 			debugLog("trackingPoint = \(trackingPoint), contained = \(contained)")
