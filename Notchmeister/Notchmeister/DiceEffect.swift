@@ -182,19 +182,43 @@ class DiceEffect: NotchEffect {
 		}
 
 		func setupLights() {
-			let lightNode = SCNNode()
-			lightNode.light = SCNLight()
-			lightNode.light!.type = .omni
-			lightNode.light!.color = NSColor(red: 1.0, green: 0.58, blue: 0.0, alpha: 1.0)
-			lightNode.position = SCNVector3(x: 0, y: 0, z: 15)
-			scene.rootNode.addChildNode(lightNode)
-			
-			if !Defaults.shouldUseAlternateDice {
-				let ambientLightNode = SCNNode()
-				ambientLightNode.light = SCNLight()
-				ambientLightNode.light!.type = .ambient
-				ambientLightNode.light!.color = NSColor.white
-				scene.rootNode.addChildNode(ambientLightNode)
+			if Defaults.shouldUseAlternateDice {
+				scene.lightingEnvironment.contents = nil // remove procedural sky
+				
+				do {
+					let lightNode = SCNNode()
+					lightNode.light = SCNLight()
+					lightNode.light!.type = .omni
+					lightNode.light!.color = NSColor(red: 0.5, green: 0.5, blue: 0.8, alpha: 1.0)
+					lightNode.position = SCNVector3(x: 0, y: 0, z: 3)
+					scene.rootNode.addChildNode(lightNode)
+				}
+				do {
+					let lightNode = SCNNode()
+					lightNode.light = SCNLight()
+					lightNode.light!.type = .omni
+					lightNode.light!.color = NSColor(red: 0.8, green: 0.5, blue: 0.8, alpha: 1.0)
+					lightNode.position = SCNVector3(x: 0, y: -5, z: 3)
+					scene.rootNode.addChildNode(lightNode)
+				}
+			}
+			else {
+				do {
+					let lightNode = SCNNode()
+					lightNode.light = SCNLight()
+					lightNode.light!.type = .omni
+					lightNode.light!.color = NSColor(red: 1.0, green: 0.58, blue: 0.0, alpha: 1.0)
+					lightNode.position = SCNVector3(x: 0, y: 0, z: 15)
+					scene.rootNode.addChildNode(lightNode)
+				}
+				
+				do {
+					let lightNode = SCNNode()
+					lightNode.light = SCNLight()
+					lightNode.light!.type = .ambient
+					lightNode.light!.color = NSColor.white
+					scene.rootNode.addChildNode(lightNode)
+				}
 			}
 		}
 

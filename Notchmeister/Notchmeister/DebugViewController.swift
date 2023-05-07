@@ -37,6 +37,14 @@ class DebugViewController: NSViewController {
         fillNotchCheckbox.state = Defaults.shouldDrawNotchFill ? .on : .off
 		textNotchCheckbox.state = Defaults.shouldDrawNotchText ? .on : .off
 		alternateDiceCheckbox.state = Defaults.shouldUseAlternateDice ? .on : .off
+		
+		if NSScreen.hasNotchedScreen {
+			fakeNotchCheckbox.isEnabled = false
+			largeFakeNotchCheckbox.isEnabled = false
+			deactivateFakeNotchCheckbox.isEnabled = false
+			fillNotchCheckbox.isEnabled = false
+			textNotchCheckbox.isEnabled = false
+		}
     }
         
     //MARK: - Actions
