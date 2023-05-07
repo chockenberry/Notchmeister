@@ -169,11 +169,23 @@ extension SceneHitView: SCNSceneRendererDelegate {
 				let rootNode = scene.rootNode
 				
 				let dieScene1 = rootNode.childNode(withName: "die1", recursively: true)!
-				let node1 = dieScene1.childNode(withName: "D6", recursively: true)!
+				let node1: SCNNode
+				if Defaults.shouldUseAlternateDice {
+					node1 = dieScene1.childNode(withName: "SpikeDice", recursively: true)!
+				}
+				else {
+					node1 = dieScene1.childNode(withName: "D6", recursively: true)!
+				}
 				
 				let dieScene2 = rootNode.childNode(withName: "die2", recursively: true)!
-				let node2 = dieScene2.childNode(withName: "D6", recursively: true)!
-				
+				let node2: SCNNode
+				if Defaults.shouldUseAlternateDice {
+					node2 = dieScene2.childNode(withName: "SpikeDice", recursively: true)!
+				}
+				else {
+					node2 = dieScene2.childNode(withName: "D6", recursively: true)!
+				}
+
 				let destination: SCNNode? = rootNode
 				
 				let target1 = targetForNode(node1, with: destination, in: renderer)

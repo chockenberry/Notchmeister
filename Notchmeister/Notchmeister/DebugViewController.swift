@@ -16,6 +16,7 @@ class DebugViewController: NSViewController {
     @IBOutlet weak var outlineNotchCheckbox: NSButton!
     @IBOutlet weak var fillNotchCheckbox: NSButton!
 	@IBOutlet weak var textNotchCheckbox: NSButton!
+	@IBOutlet weak var alternateDiceCheckbox: NSButton!
 
     //MARK: - Life Cycle
     
@@ -35,6 +36,7 @@ class DebugViewController: NSViewController {
         outlineNotchCheckbox.state = Defaults.shouldDrawNotchOutline ? .on : .off
         fillNotchCheckbox.state = Defaults.shouldDrawNotchFill ? .on : .off
 		textNotchCheckbox.state = Defaults.shouldDrawNotchText ? .on : .off
+		alternateDiceCheckbox.state = Defaults.shouldUseAlternateDice ? .on : .off
     }
         
     //MARK: - Actions
@@ -79,6 +81,10 @@ class DebugViewController: NSViewController {
 		updateConfiguration()
 	}
 
+	@IBAction func alternateDiceValueChanged(_ sender: Any) {
+		Defaults.shouldUseAlternateDice = (alternateDiceCheckbox.state == .on)
+		updateConfiguration()
+	}
 
 	@IBAction func resetDefaults(_ sender: Any) {
 		Defaults.reset()	

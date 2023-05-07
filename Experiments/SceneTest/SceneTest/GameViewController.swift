@@ -149,6 +149,23 @@ class GameViewController: NSViewController {
 		die2.physicsBody?.applyForce(SCNVector3(x: 0, y: 0, z: spin2), at: SCNVector3(x: 0.0, y: 1.0, z: 0.0), asImpulse: true)
 		 */
 		setupCord(anchor: anchor, linkCount: 16, die: die2)
+		
+		if let dieResourceUrl = Bundle.main.url(forResource: "die-test", withExtension: "scn", subdirectory: "art.scnassets") {
+			if let altDieReference = SCNReferenceNode(url: dieResourceUrl) {
+				altDieReference.load()
+				altDieReference.name = "die3"
+				do {
+					let newNode = altDieReference
+					scene.rootNode.addChildNode(newNode)
+					let die = newNode.childNode(withName: "SpikeDice", recursively: true)!
+					//die.physicsBody?.isAffectedByGravity = true
+					die.worldPosition = SCNVector3Make(0, CGFloat(-length), 0)
+					//altDieReference.worldPosition = SCNVector3Make(0, CGFloat(-length), 0)
+					setupCord(anchor: anchor, linkCount: 20, die: die)
+				}
+			}
+		}
+
 	}
 
 	var links: [SCNNode] = []

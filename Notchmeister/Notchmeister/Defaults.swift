@@ -22,6 +22,7 @@ enum Defaults : String, CaseIterable
 	case notchTextEnabled
 	case effectSelection
 	case hideDockIconEnabled
+	case alternateDiceEnabled
 
 	static var registered = false
 	
@@ -37,6 +38,7 @@ enum Defaults : String, CaseIterable
 				Defaults.notchTextEnabled.rawValue: true,
 				Defaults.effectSelection.rawValue: Effects.festive.rawValue,
 				Defaults.hideDockIconEnabled.rawValue: false,
+				Defaults.alternateDiceEnabled.rawValue: false,
 			])
 			registered = true
 		}
@@ -94,6 +96,11 @@ enum Defaults : String, CaseIterable
 	static var shouldHideDockIcon: Bool {
 		get { UserDefaults.standard.bool(forKey: Defaults.hideDockIconEnabled.rawValue) }
 		set { UserDefaults.standard.set(newValue, forKey: Defaults.hideDockIconEnabled.rawValue)}
+	}
+
+	static var shouldUseAlternateDice: Bool {
+		get { UserDefaults.standard.bool(forKey: Defaults.alternateDiceEnabled.rawValue) }
+		set { UserDefaults.standard.set(newValue, forKey: Defaults.alternateDiceEnabled.rawValue)}
 	}
 
 	static let notchlessHelp = "This Mac doesn't have a notch.\n\nThanks to Notchmeister's built-in genuine replacement notch, you can still have fun. This replacement part, like all others, doesn't quite work as original: it's shorter and the mouse doesn't disappear underneath.\n\nNote also that this notch only appears when the app is active so it doesn't interfere with other apps.\n\n"

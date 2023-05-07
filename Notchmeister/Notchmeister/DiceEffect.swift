@@ -23,8 +23,6 @@ class DiceEffect: NotchEffect {
 	}
 		
 	override func mouseEntered(at point: CGPoint, underNotch: Bool) {
-		guard let parentWindow else { return }
-
 		debugLog("point = \(point), underNotch = \(underNotch)")
 	}
 
@@ -74,25 +72,6 @@ class DiceEffect: NotchEffect {
 				}
 			}
 		}
-	}
-
-	@objc
-	func handleClick(_ gestureRecognizer: NSGestureRecognizer) {
-#if true
-		debugLog()
-#else
-		// retrieve the SCNView
-		let scnView = self.view as! SCNView
-		
-		// check what nodes are clicked
-		let p = gestureRecognizer.location(in: scnView)
-		let hitResults = scnView.hitTest(p, options: [:])
-		// check that we clicked on at least one object
-		if hitResults.count > 0 {
-			let node = hitResults.first!.node
-			debugLog("node = \(node)")
-		}
-#endif
 	}
 	
 	private let size = CGSize(width: 300, height: 120)
@@ -206,15 +185,17 @@ class DiceEffect: NotchEffect {
 			let lightNode = SCNNode()
 			lightNode.light = SCNLight()
 			lightNode.light!.type = .omni
-			lightNode.light!.color = NSColor.systemOrange
+			lightNode.light!.color = NSColor(red: 1.0, green: 0.58, blue: 0.0, alpha: 1.0)
 			lightNode.position = SCNVector3(x: 0, y: 0, z: 15)
 			scene.rootNode.addChildNode(lightNode)
 			
-			let ambientLightNode = SCNNode()
-			ambientLightNode.light = SCNLight()
-			ambientLightNode.light!.type = .ambient
-			ambientLightNode.light!.color = NSColor.white
-			scene.rootNode.addChildNode(ambientLightNode)
+			if !Defaults.shouldUseAlternateDice {
+				let ambientLightNode = SCNNode()
+				ambientLightNode.light = SCNLight()
+				ambientLightNode.light!.type = .ambient
+				ambientLightNode.light!.color = NSColor.white
+				scene.rootNode.addChildNode(ambientLightNode)
+			}
 		}
 
 		let anchorY: CGFloat = 2.25
@@ -247,16 +228,48 @@ class DiceEffect: NotchEffect {
 			anchor.physicsBody?.isAffectedByGravity = false
 
 			let dieReference1 = scene.rootNode.childNode(withName: "die1", recursively: true)!
-			let die1 = dieReference1.childNode(withName: "D6", recursively: true)!
-			die1.physicsBody?.isAffectedByGravity = true
-			die1.worldPosition = SCNVector3Make(-1, anchorY + 1, 0)
-			setupCord(anchor: anchor, linkCount: linkCount, die: die1)
-			
+			if Defaults.shouldUseAlternateDice {
+				if let dieResourceUrl = Bundle.main.url(forResource: "die-alt", withExtension: "scn", subdirectory: "dice.scnassets") {
+					if let newNode = SCNReferenceNode(url: dieResourceUrl) {
+						newNode.load()
+						newNode.name = "die1"
+						dieReference1.removeFromParentNode()
+
+						newNode.worldPosition = SCNVector3Make(-1, anchorY + 1, 0)
+						scene.rootNode.addChildNode(newNode)
+
+						let die = newNode.childNode(withName: "SpikeDice", recursively: true)!
+						setupCord(anchor: anchor, linkCount: linkCount, die: die)
+					}
+				}
+			}
+			else {
+				let die1 = dieReference1.childNode(withName: "D6", recursively: true)!
+				die1.worldPosition = SCNVector3Make(-1, anchorY + 1, 0)
+				setupCord(anchor: anchor, linkCount: linkCount, die: die1)
+			}
+
 			let dieReference2 = scene.rootNode.childNode(withName: "die2", recursively: true)!
-			let die2 = dieReference2.childNode(withName: "D6", recursively: true)!
-			die2.physicsBody?.isAffectedByGravity = true
-			die2.worldPosition = SCNVector3(1, anchorY + 1, 0)
-			setupCord(anchor: anchor, linkCount: linkCount + 2, die: die2)
+			if Defaults.shouldUseAlternateDice {
+				if let dieResourceUrl = Bundle.main.url(forResource: "die-alt", withExtension: "scn", subdirectory: "dice.scnassets") {
+					if let newNode = SCNReferenceNode(url: dieResourceUrl) {
+						newNode.load()
+						newNode.name = "die2"
+						dieReference2.removeFromParentNode()
+
+						newNode.worldPosition = SCNVector3Make(-1, anchorY + 1, 0)
+						scene.rootNode.addChildNode(newNode)
+
+						let die = newNode.childNode(withName: "SpikeDice", recursively: true)!
+						setupCord(anchor: anchor, linkCount: linkCount + 2, die: die)
+					}
+				}
+			}
+			else {
+				let die2 = dieReference2.childNode(withName: "D6", recursively: true)!
+				die2.worldPosition = SCNVector3(1, anchorY + 1, 0)
+				setupCord(anchor: anchor, linkCount: linkCount + 2, die: die2)
+			}
 		}
 
 		var links: [SCNNode] = []
@@ -264,7 +277,13 @@ class DiceEffect: NotchEffect {
 		func setupCord(anchor: SCNNode, linkCount: Int, die: SCNNode) {
 			
 			func createLink(position: CGFloat) -> SCNNode {
-				let geometry = SCNCylinder(radius: 0.025, height: 0.15)
+				let geometry: SCNGeometry
+				if Defaults.shouldUseAlternateDice {
+					geometry = SCNSphere(radius: 0.04)
+				}
+				else {
+					geometry = SCNCylinder(radius: 0.025, height: 0.15)
+				}
 				
 				let link = SCNNode(geometry: geometry)
 				link.physicsBody = SCNPhysicsBody(type: .dynamic, shape: nil)
@@ -277,18 +296,29 @@ class DiceEffect: NotchEffect {
 				link.physicsBody?.velocityFactor = SCNVector3Make(1, 1, 1)
 				link.physicsBody?.isAffectedByGravity = true
 				
-				let cycleDuration: TimeInterval = 0.5
-				let changeColor = SCNAction.customAction(duration: cycleDuration) { node, elapsedTime in
-					//let offset = (cycleDuration * position)
-					let offset = cycleDuration - (cycleDuration * position)
-					let normalized = sin((.pi * 4) * ((elapsedTime / cycleDuration) - offset))
-					//debugLog("\(elapsedTime) -> \(normalized)")
-					//let color = NSColor(red: normalized / 2, green: normalized / 4, blue: normalized, alpha: 1) // purple
-					//let color = NSColor(red: normalized / 2 + 0.5, green: normalized / 4 + 0.25, blue: 0.5, alpha: 1)
-					let color = NSColor(red: normalized / 2 + 0.5, green: normalized / 4 + 0.25, blue: 0.5 - (normalized * 0.25), alpha: 1)
-					node.geometry?.firstMaterial?.diffuse.contents = color
+				// 0.8, 0.75, 0.0
+				if Defaults.shouldUseAlternateDice {
+					link.geometry?.firstMaterial?.lightingModel = .physicallyBased
+					let color = NSColor(red: 0.80, green: 0.75, blue: 0.00, alpha: 1)
+//					let color = NSColor(red: 0.8, green: 0.8, blue: 0.0, alpha: 1)
+					link.geometry?.firstMaterial?.diffuse.contents = color
+					link.geometry?.firstMaterial?.metalness.contents = 1.0 // NSColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+					link.geometry?.firstMaterial?.roughness.contents = 0.0
 				}
-				link.runAction(SCNAction.repeatForever(changeColor))
+				else {
+					let cycleDuration: TimeInterval = 0.5
+					let changeColor = SCNAction.customAction(duration: cycleDuration) { node, elapsedTime in
+						//let offset = (cycleDuration * position)
+						let offset = cycleDuration - (cycleDuration * position)
+						let normalized = sin((.pi * 4) * ((elapsedTime / cycleDuration) - offset))
+						//debugLog("\(elapsedTime) -> \(normalized)")
+						//let color = NSColor(red: normalized / 2, green: normalized / 4, blue: normalized, alpha: 1) // purple
+						//let color = NSColor(red: normalized / 2 + 0.5, green: normalized / 4 + 0.25, blue: 0.5, alpha: 1)
+						let color = NSColor(red: normalized / 2 + 0.5, green: normalized / 4 + 0.25, blue: 0.5 - (normalized * 0.25), alpha: 1)
+						node.geometry?.firstMaterial?.diffuse.contents = color
+					}
+					link.runAction(SCNAction.repeatForever(changeColor))
+				}
 				
 				return link
 			}
