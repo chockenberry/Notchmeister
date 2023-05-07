@@ -303,7 +303,7 @@ class DiceEffect: NotchEffect {
 			func createLink(position: CGFloat) -> SCNNode {
 				let geometry: SCNGeometry
 				if Defaults.shouldUseAlternateDice {
-					geometry = SCNSphere(radius: 0.04)
+					geometry = SCNSphere(radius: 0.05)
 				}
 				else {
 					geometry = SCNCylinder(radius: 0.025, height: 0.15)
@@ -320,14 +320,13 @@ class DiceEffect: NotchEffect {
 				link.physicsBody?.velocityFactor = SCNVector3Make(1, 1, 1)
 				link.physicsBody?.isAffectedByGravity = true
 				
-				// 0.8, 0.75, 0.0
 				if Defaults.shouldUseAlternateDice {
 					link.geometry?.firstMaterial?.lightingModel = .physicallyBased
 					let color = NSColor(red: 0.80, green: 0.75, blue: 0.00, alpha: 1)
-//					let color = NSColor(red: 0.8, green: 0.8, blue: 0.0, alpha: 1)
+					//let color = NSColor(red: 0.5, green: 0.5, blue: 0.0, alpha: 1)
 					link.geometry?.firstMaterial?.diffuse.contents = color
-					link.geometry?.firstMaterial?.metalness.contents = 1.0 // NSColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
-					link.geometry?.firstMaterial?.roughness.contents = 0.0
+					link.geometry?.firstMaterial?.metalness.contents = 1.0
+					link.geometry?.firstMaterial?.roughness.contents = 0.2
 				}
 				else {
 					let cycleDuration: TimeInterval = 0.5
