@@ -391,6 +391,8 @@ class DiceEffect: NotchEffect {
 
 		let scene = SCNScene(named: "dice.scnassets/notch.scn")!
 
+		//scene.physicsWorld.speed = 1.5
+		
 		setupCamera()
 		setupLights()
 		setupObjects()
