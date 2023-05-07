@@ -73,8 +73,8 @@ extension NSScreen {
 		if Defaults.shouldLargeFakeNotch {
 			// NOTE: The notch size changes depending on the screen scaling. At the lowest setting ("Large Text") the height is 22 pt.
 			// At the highest setting ("More Space"), it is 38 pt. The default size is 32 pt.
-//			fakeNotchSize = NSSize(width:185, height:32) // default
-//			fakeNotchSize = NSSize(width:127, height:22) // larger text
+			//fakeNotchSize = NSSize(width:127, height:22) // larger text
+			//fakeNotchSize = NSSize(width:185, height:32) // default
 			fakeNotchSize = NSSize(width:220, height:38) // more space
 		}
 		else {

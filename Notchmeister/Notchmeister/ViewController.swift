@@ -28,6 +28,8 @@ class ViewController: NSViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+		debugButton.isHidden = true
+
         configureForDefaults()
 
 		self.screenParametersNotificationObserver = NotificationCenter.default.addObserver(forName: NSApplication.didChangeScreenParametersNotification, object: nil, queue: nil) { [weak self] note in
@@ -46,16 +48,6 @@ class ViewController: NSViewController {
 
     }
 
-	override func viewWillDisappear() {
-		debugLog()
-		
-		// NOTE: Turn on the debug button in the release build by holding down the Option key while closing the main window,
-		// then reopen the window using the Dock icon.
-		if NSEvent.modifierFlags.contains(.option) {
-			debugButton.isHidden = false
-		}
-	}
-
     private func configureForDefaults() {
 		Defaults.register()
 		
@@ -72,12 +64,6 @@ class ViewController: NSViewController {
 		effectPopUpButton.selectItem(withTag: effect.rawValue)
 		
 		hideDockButton.state = Defaults.shouldHideDockIcon ? .on : .off
-		
-#if DEBUG
-		debugButton.isHidden = false
-#else
-		debugButton.isHidden = true
-#endif
     }
     
     private func createNotchWindows() {
@@ -135,15 +121,21 @@ class ViewController: NSViewController {
 	}
 
 	@IBAction func openHelp(_ sender: Any) {
-		let alert = NSAlert()
-		alert.messageText = "Notchmeister Help"
-		if NSScreen.hasNotchedScreen {
-			alert.informativeText = Defaults.notchedHelp
+		if NSEvent.modifierFlags.contains(.option) {
+			// NOTE: Turn on the debug button by holding down the Option key while clicking the Help button.
+			debugButton.isHidden = false
 		}
 		else {
-			alert.informativeText = Defaults.notchlessHelp + Defaults.notchlessHelpButton
+			let alert = NSAlert()
+			alert.messageText = "Notchmeister Help"
+			if NSScreen.hasNotchedScreen {
+				alert.informativeText = Defaults.notchedHelp
+			}
+			else {
+				alert.informativeText = Defaults.notchlessHelp + Defaults.notchlessHelpButton
+			}
+			alert.runModal()
 		}
-		alert.runModal()
 	}
 }
 

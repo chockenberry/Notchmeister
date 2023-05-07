@@ -258,16 +258,6 @@
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ewE-fL-l0e">
-                                <rect key="frame" x="20" y="228.5" width="19" height="18"/>
-                                <buttonCell key="cell" type="bevel" bezelStyle="rounded" image="wrench.and.screwdriver" catalog="system" imagePosition="only" alignment="center" controlSize="large" imageScaling="proportionallyDown" inset="2" id="3DI-vc-m08">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="openDebugViewController:" target="XfG-lQ-9wD" id="f34-Xo-ft1"/>
-                                </connections>
-                            </button>
                             <button horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="omC-Yz-2sa">
                                 <rect key="frame" x="16" y="12" width="35" height="35"/>
                                 <buttonCell key="cell" type="help" bezelStyle="helpButton" alignment="center" controlSize="large" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="nfV-tt-cmW">
@@ -291,6 +281,16 @@
                                     <action selector="quitApplication:" target="XfG-lQ-9wD" id="PvF-am-97d"/>
                                 </connections>
                             </button>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ewE-fL-l0e">
+                                <rect key="frame" x="53" y="16" width="34" height="34"/>
+                                <buttonCell key="cell" type="round" bezelStyle="circular" image="wrench.and.screwdriver.fill" catalog="system" imagePosition="only" alignment="center" controlSize="large" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="3DI-vc-m08">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="openDebugViewController:" target="XfG-lQ-9wD" id="f34-Xo-ft1"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <constraints>
                             <constraint firstItem="omC-Yz-2sa" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="20" id="0kc-Ed-MZr"/>
@@ -303,17 +303,17 @@
                             <constraint firstItem="HP6-Vj-CA4" firstAttribute="top" secondItem="ZSS-8U-k2J" secondAttribute="bottom" constant="8" symbolic="YES" id="JF0-Lu-r8n"/>
                             <constraint firstItem="PPi-Xy-Y4k" firstAttribute="top" secondItem="DQb-Wa-YfR" secondAttribute="bottom" constant="20" id="L6v-GG-jEZ"/>
                             <constraint firstItem="tMl-9w-Wzm" firstAttribute="leading" secondItem="ZSS-8U-k2J" secondAttribute="leading" id="LZF-J2-mFb"/>
-                            <constraint firstItem="ewE-fL-l0e" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="20" id="RZE-a3-tcl"/>
                             <constraint firstItem="DQb-Wa-YfR" firstAttribute="centerX" secondItem="m2S-Jp-Qdl" secondAttribute="centerX" id="Rt6-GL-ImR"/>
                             <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="PPi-Xy-Y4k" secondAttribute="trailing" constant="20" id="YFn-l2-YMa"/>
                             <constraint firstItem="tMl-9w-Wzm" firstAttribute="trailing" secondItem="HP6-Vj-CA4" secondAttribute="trailing" id="ZCs-LT-Wvp"/>
                             <constraint firstItem="PPi-Xy-Y4k" firstAttribute="centerX" secondItem="DQb-Wa-YfR" secondAttribute="centerX" id="agV-c3-SFn"/>
-                            <constraint firstItem="ewE-fL-l0e" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="20" id="byx-Ou-ToC"/>
                             <constraint firstItem="ZSS-8U-k2J" firstAttribute="top" secondItem="tMl-9w-Wzm" secondAttribute="bottom" constant="8" symbolic="YES" id="gc5-NW-hMl"/>
                             <constraint firstItem="ZSS-8U-k2J" firstAttribute="leading" secondItem="PPi-Xy-Y4k" secondAttribute="leading" id="nE9-bu-meV"/>
                             <constraint firstItem="DQb-Wa-YfR" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="20" symbolic="YES" id="obc-h5-hEI"/>
                             <constraint firstItem="JcQ-7t-VSZ" firstAttribute="top" secondItem="HP6-Vj-CA4" secondAttribute="bottom" constant="8" symbolic="YES" id="vk8-5b-gQE"/>
                             <constraint firstItem="tMl-9w-Wzm" firstAttribute="top" secondItem="PPi-Xy-Y4k" secondAttribute="bottom" constant="8" symbolic="YES" id="xTm-tX-eFs"/>
+                            <constraint firstItem="ewE-fL-l0e" firstAttribute="leading" secondItem="omC-Yz-2sa" secondAttribute="trailing" constant="10" id="xp4-0h-Iix"/>
+                            <constraint firstItem="ewE-fL-l0e" firstAttribute="centerY" secondItem="omC-Yz-2sa" secondAttribute="centerY" id="yIR-nG-NUb"/>
                         </constraints>
                     </view>
                     <connections>
@@ -329,32 +329,24 @@
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="75" y="718.5"/>
+            <point key="canvasLocation" x="75" y="718"/>
         </scene>
         <!--Debug View Controller-->
         <scene sceneID="dMZ-Fk-pfK">
             <objects>
                 <viewController storyboardIdentifier="debugViewController" id="Cb5-Lm-sZD" customClass="DebugViewController" customModule="Notchmeister" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="yHf-hb-Xxs">
-                        <rect key="frame" x="0.0" y="0.0" width="334" height="240"/>
+                        <rect key="frame" x="0.0" y="0.0" width="300" height="366"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <stackView distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Aih-3p-shV">
-                                <rect key="frame" x="20" y="60" width="294" height="160"/>
+                            <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Srn-qg-VXb">
+                                <rect key="frame" x="20" y="60" width="260" height="286"/>
                                 <subviews>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="EFD-t6-idF">
-                                        <rect key="frame" x="-2" y="144" width="88" height="16"/>
-                                        <textFieldCell key="cell" lineBreakMode="clipping" title="Development:" id="9Py-Sc-DOI">
-                                            <font key="font" metaFont="system"/>
-                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                        </textFieldCell>
-                                    </textField>
-                                    <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Srn-qg-VXb">
-                                        <rect key="frame" x="92" y="0.0" width="202" height="160"/>
+                                    <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jZl-Tf-POj">
+                                        <rect key="frame" x="0.0" y="252" width="161" height="34"/>
                                         <subviews>
                                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Qh7-pz-oeU">
-                                                <rect key="frame" x="-2" y="143" width="161" height="18"/>
+                                                <rect key="frame" x="-2" y="17" width="161" height="18"/>
                                                 <buttonCell key="cell" type="check" title="Enable debug drawing" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="dmw-rr-miI">
                                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                     <font key="font" metaFont="system"/>
@@ -363,8 +355,32 @@
                                                     <action selector="debugDrawingValueChanged:" target="Cb5-Lm-sZD" id="IX6-Km-WED"/>
                                                 </connections>
                                             </button>
+                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="lNl-QJ-TKe">
+                                                <rect key="frame" x="18" y="0.0" width="145" height="14"/>
+                                                <textFieldCell key="cell" lineBreakMode="clipping" title="A peek behind the curtains" id="6Rn-FN-FMu">
+                                                    <font key="font" metaFont="system" size="11"/>
+                                                    <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                </textFieldCell>
+                                            </textField>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstItem="lNl-QJ-TKe" firstAttribute="leading" secondItem="Qh7-pz-oeU" secondAttribute="leading" constant="20" id="Yof-aE-hEo"/>
+                                        </constraints>
+                                        <visibilityPriorities>
+                                            <integer value="1000"/>
+                                            <integer value="1000"/>
+                                        </visibilityPriorities>
+                                        <customSpacing>
+                                            <real value="3.4028234663852886e+38"/>
+                                            <real value="3.4028234663852886e+38"/>
+                                        </customSpacing>
+                                    </stackView>
+                                    <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9S5-Ky-jw6">
+                                        <rect key="frame" x="0.0" y="210" width="202" height="34"/>
+                                        <subviews>
                                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="GpJ-jA-PUB">
-                                                <rect key="frame" x="-2" y="119" width="204" height="18"/>
+                                                <rect key="frame" x="-2" y="17" width="204" height="18"/>
                                                 <buttonCell key="cell" type="check" title="Fake notch for the notch-less" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="9af-4Q-E6A">
                                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                     <font key="font" metaFont="system"/>
@@ -373,8 +389,32 @@
                                                     <action selector="fakeNotchValueChanged:" target="Cb5-Lm-sZD" id="eyk-w7-9kV"/>
                                                 </connections>
                                             </button>
+                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="vpo-mV-VXb">
+                                                <rect key="frame" x="18" y="0.0" width="158" height="14"/>
+                                                <textFieldCell key="cell" lineBreakMode="clipping" title="A genuine replacement notch" id="LS7-Ik-QsF">
+                                                    <font key="font" metaFont="system" size="11"/>
+                                                    <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                </textFieldCell>
+                                            </textField>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstItem="vpo-mV-VXb" firstAttribute="leading" secondItem="GpJ-jA-PUB" secondAttribute="leading" constant="20" id="OBS-At-LeY"/>
+                                        </constraints>
+                                        <visibilityPriorities>
+                                            <integer value="1000"/>
+                                            <integer value="1000"/>
+                                        </visibilityPriorities>
+                                        <customSpacing>
+                                            <real value="3.4028234663852886e+38"/>
+                                            <real value="3.4028234663852886e+38"/>
+                                        </customSpacing>
+                                    </stackView>
+                                    <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CUq-gu-RUg">
+                                        <rect key="frame" x="0.0" y="168" width="249" height="34"/>
+                                        <subviews>
                                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="b3D-fJ-mEF">
-                                                <rect key="frame" x="-2" y="95" width="166" height="18"/>
+                                                <rect key="frame" x="-2" y="17" width="166" height="18"/>
                                                 <buttonCell key="cell" type="check" title="Fake notch deactivates" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="rk0-rN-Ui1">
                                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                     <font key="font" metaFont="system"/>
@@ -383,8 +423,32 @@
                                                     <action selector="deactivateFakeNotchValueChanged:" target="Cb5-Lm-sZD" id="Lfn-jR-LHy"/>
                                                 </connections>
                                             </button>
+                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="GrV-cx-49W">
+                                                <rect key="frame" x="18" y="0.0" width="233" height="14"/>
+                                                <textFieldCell key="cell" lineBreakMode="clipping" title="Activating another app hides the fake notch" id="MZs-OA-GMP">
+                                                    <font key="font" metaFont="system" size="11"/>
+                                                    <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                </textFieldCell>
+                                            </textField>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstItem="GrV-cx-49W" firstAttribute="leading" secondItem="b3D-fJ-mEF" secondAttribute="leading" constant="20" id="yIa-x5-aqg"/>
+                                        </constraints>
+                                        <visibilityPriorities>
+                                            <integer value="1000"/>
+                                            <integer value="1000"/>
+                                        </visibilityPriorities>
+                                        <customSpacing>
+                                            <real value="3.4028234663852886e+38"/>
+                                            <real value="3.4028234663852886e+38"/>
+                                        </customSpacing>
+                                    </stackView>
+                                    <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Tw7-ds-yvO">
+                                        <rect key="frame" x="0.0" y="126" width="256" height="34"/>
+                                        <subviews>
                                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="XxQ-Du-PQi">
-                                                <rect key="frame" x="-2" y="71" width="128" height="18"/>
+                                                <rect key="frame" x="-2" y="17" width="128" height="18"/>
                                                 <buttonCell key="cell" type="check" title="Large fake notch" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="EJ6-v0-Now">
                                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                     <font key="font" metaFont="system"/>
@@ -393,8 +457,32 @@
                                                     <action selector="largeFakeNotchValueChanged:" target="Cb5-Lm-sZD" id="clG-oU-vh0"/>
                                                 </connections>
                                             </button>
+                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="PNK-Ww-VIr">
+                                                <rect key="frame" x="18" y="0.0" width="240" height="14"/>
+                                                <textFieldCell key="cell" lineBreakMode="clipping" title="Chonky boy, just like when using More Space" id="AJw-ON-FaK">
+                                                    <font key="font" metaFont="system" size="11"/>
+                                                    <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                </textFieldCell>
+                                            </textField>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstItem="PNK-Ww-VIr" firstAttribute="leading" secondItem="XxQ-Du-PQi" secondAttribute="leading" constant="20" id="eKI-UX-8co"/>
+                                        </constraints>
+                                        <visibilityPriorities>
+                                            <integer value="1000"/>
+                                            <integer value="1000"/>
+                                        </visibilityPriorities>
+                                        <customSpacing>
+                                            <real value="3.4028234663852886e+38"/>
+                                            <real value="3.4028234663852886e+38"/>
+                                        </customSpacing>
+                                    </stackView>
+                                    <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zXP-w8-yTe">
+                                        <rect key="frame" x="0.0" y="84" width="204" height="34"/>
+                                        <subviews>
                                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="rKO-N3-Lc5">
-                                                <rect key="frame" x="-2" y="47" width="160" height="18"/>
+                                                <rect key="frame" x="-2" y="17" width="160" height="18"/>
                                                 <buttonCell key="cell" type="check" title="Outline the fake notch" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="ohU-Sq-GOo">
                                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                     <font key="font" metaFont="system"/>
@@ -403,8 +491,32 @@
                                                     <action selector="outlineNotchValueChanaged:" target="Cb5-Lm-sZD" id="LdV-3j-hry"/>
                                                 </connections>
                                             </button>
+                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="BIA-Kl-XhI">
+                                                <rect key="frame" x="18" y="0.0" width="188" height="14"/>
+                                                <textFieldCell key="cell" lineBreakMode="clipping" title="Draws a white border around notch" id="Mgm-xz-5Pz">
+                                                    <font key="font" metaFont="system" size="11"/>
+                                                    <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                </textFieldCell>
+                                            </textField>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstItem="BIA-Kl-XhI" firstAttribute="leading" secondItem="rKO-N3-Lc5" secondAttribute="leading" constant="20" id="42X-Jo-JFI"/>
+                                        </constraints>
+                                        <visibilityPriorities>
+                                            <integer value="1000"/>
+                                            <integer value="1000"/>
+                                        </visibilityPriorities>
+                                        <customSpacing>
+                                            <real value="3.4028234663852886e+38"/>
+                                            <real value="3.4028234663852886e+38"/>
+                                        </customSpacing>
+                                    </stackView>
+                                    <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3NI-Zm-XLs">
+                                        <rect key="frame" x="0.0" y="42" width="176" height="34"/>
+                                        <subviews>
                                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="n8l-IV-LaP">
-                                                <rect key="frame" x="-2" y="23" width="134" height="18"/>
+                                                <rect key="frame" x="-2" y="17" width="134" height="18"/>
                                                 <buttonCell key="cell" type="check" title="Fill the fake notch" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="lhG-hn-ete">
                                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                     <font key="font" metaFont="system"/>
@@ -413,8 +525,32 @@
                                                     <action selector="fillNotchValueChanged:" target="Cb5-Lm-sZD" id="10f-GQ-F3r"/>
                                                 </connections>
                                             </button>
+                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cYH-cp-dQ9">
+                                                <rect key="frame" x="18" y="0.0" width="160" height="14"/>
+                                                <textFieldCell key="cell" lineBreakMode="clipping" title="Fills the fake notch with black" id="ffF-6J-ub0">
+                                                    <font key="font" metaFont="system" size="11"/>
+                                                    <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                </textFieldCell>
+                                            </textField>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstItem="cYH-cp-dQ9" firstAttribute="leading" secondItem="n8l-IV-LaP" secondAttribute="leading" constant="20" id="6p7-Pu-Kw0"/>
+                                        </constraints>
+                                        <visibilityPriorities>
+                                            <integer value="1000"/>
+                                            <integer value="1000"/>
+                                        </visibilityPriorities>
+                                        <customSpacing>
+                                            <real value="3.4028234663852886e+38"/>
+                                            <real value="3.4028234663852886e+38"/>
+                                        </customSpacing>
+                                    </stackView>
+                                    <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SSA-pU-KIA">
+                                        <rect key="frame" x="0.0" y="0.0" width="169" height="34"/>
+                                        <subviews>
                                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="FAq-Fo-9yt">
-                                                <rect key="frame" x="-2" y="-1" width="138" height="18"/>
+                                                <rect key="frame" x="-2" y="17" width="138" height="18"/>
                                                 <buttonCell key="cell" type="check" title="Text on fake notch" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="io9-Ci-bdL">
                                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                     <font key="font" metaFont="system"/>
@@ -423,22 +559,23 @@
                                                     <action selector="textNotchValueChanged:" target="Cb5-Lm-sZD" id="HDS-y8-SrI"/>
                                                 </connections>
                                             </button>
+                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="u1N-LI-iP6">
+                                                <rect key="frame" x="18" y="0.0" width="153" height="14"/>
+                                                <textFieldCell key="cell" lineBreakMode="clipping" title="Show NO-F4K3 part number" id="4df-uS-rGs">
+                                                    <font key="font" metaFont="system" size="11"/>
+                                                    <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                </textFieldCell>
+                                            </textField>
                                         </subviews>
+                                        <constraints>
+                                            <constraint firstItem="u1N-LI-iP6" firstAttribute="leading" secondItem="FAq-Fo-9yt" secondAttribute="leading" constant="20" id="d3P-bo-E7h"/>
+                                        </constraints>
                                         <visibilityPriorities>
-                                            <integer value="1000"/>
-                                            <integer value="1000"/>
-                                            <integer value="1000"/>
-                                            <integer value="1000"/>
-                                            <integer value="1000"/>
                                             <integer value="1000"/>
                                             <integer value="1000"/>
                                         </visibilityPriorities>
                                         <customSpacing>
-                                            <real value="3.4028234663852886e+38"/>
-                                            <real value="3.4028234663852886e+38"/>
-                                            <real value="3.4028234663852886e+38"/>
-                                            <real value="3.4028234663852886e+38"/>
-                                            <real value="3.4028234663852886e+38"/>
                                             <real value="3.4028234663852886e+38"/>
                                             <real value="3.4028234663852886e+38"/>
                                         </customSpacing>
@@ -447,14 +584,24 @@
                                 <visibilityPriorities>
                                     <integer value="1000"/>
                                     <integer value="1000"/>
+                                    <integer value="1000"/>
+                                    <integer value="1000"/>
+                                    <integer value="1000"/>
+                                    <integer value="1000"/>
+                                    <integer value="1000"/>
                                 </visibilityPriorities>
                                 <customSpacing>
+                                    <real value="3.4028234663852886e+38"/>
+                                    <real value="3.4028234663852886e+38"/>
+                                    <real value="3.4028234663852886e+38"/>
+                                    <real value="3.4028234663852886e+38"/>
+                                    <real value="3.4028234663852886e+38"/>
                                     <real value="3.4028234663852886e+38"/>
                                     <real value="3.4028234663852886e+38"/>
                                 </customSpacing>
                             </stackView>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Vnq-v4-gW5">
-                                <rect key="frame" x="183" y="13" width="138" height="32"/>
+                                <rect key="frame" x="149" y="13" width="138" height="32"/>
                                 <buttonCell key="cell" type="push" title="Reset to Defaults" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Iqt-Kq-SMU">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -465,13 +612,13 @@
                             </button>
                         </subviews>
                         <constraints>
+                            <constraint firstItem="Srn-qg-VXb" firstAttribute="top" secondItem="yHf-hb-Xxs" secondAttribute="top" constant="20" id="0xP-qc-63m"/>
                             <constraint firstItem="Vnq-v4-gW5" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="yHf-hb-Xxs" secondAttribute="leading" constant="20" id="54T-hs-GAb"/>
-                            <constraint firstItem="Aih-3p-shV" firstAttribute="top" secondItem="yHf-hb-Xxs" secondAttribute="top" constant="20" symbolic="YES" id="5OL-QE-xp9"/>
-                            <constraint firstAttribute="trailing" secondItem="Aih-3p-shV" secondAttribute="trailing" constant="20" symbolic="YES" id="91S-dJ-YrY"/>
                             <constraint firstAttribute="trailing" secondItem="Vnq-v4-gW5" secondAttribute="trailing" constant="20" symbolic="YES" id="EIT-nd-CRp"/>
-                            <constraint firstItem="Aih-3p-shV" firstAttribute="leading" secondItem="yHf-hb-Xxs" secondAttribute="leading" constant="20" symbolic="YES" id="HiP-Bp-37e"/>
-                            <constraint firstItem="Vnq-v4-gW5" firstAttribute="top" secondItem="Aih-3p-shV" secondAttribute="bottom" constant="20" symbolic="YES" id="nDZ-2o-hAD"/>
+                            <constraint firstItem="Vnq-v4-gW5" firstAttribute="top" secondItem="Srn-qg-VXb" secondAttribute="bottom" constant="20" symbolic="YES" id="u5o-kd-hk6"/>
                             <constraint firstAttribute="bottom" secondItem="Vnq-v4-gW5" secondAttribute="bottom" constant="20" symbolic="YES" id="vUX-TR-LKS"/>
+                            <constraint firstItem="Srn-qg-VXb" firstAttribute="leading" secondItem="yHf-hb-Xxs" secondAttribute="leading" constant="20" id="wsA-5S-4Yr"/>
+                            <constraint firstAttribute="trailing" secondItem="Srn-qg-VXb" secondAttribute="trailing" constant="20" id="z9l-92-kdk"/>
                         </constraints>
                     </view>
                     <connections>
@@ -486,10 +633,10 @@
                 </viewController>
                 <customObject id="fN4-Qi-AUp" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="488" y="651"/>
+            <point key="canvasLocation" x="488" y="887"/>
         </scene>
     </scenes>
     <resources>
-        <image name="wrench.and.screwdriver" catalog="system" width="19" height="18"/>
+        <image name="wrench.and.screwdriver.fill" catalog="system" width="19" height="18"/>
     </resources>
 </document>
