@@ -279,11 +279,13 @@ class DiceEffect: NotchEffect {
 				
 				let cycleDuration: TimeInterval = 0.5
 				let changeColor = SCNAction.customAction(duration: cycleDuration) { node, elapsedTime in
-					let offset = (cycleDuration * position)
+					//let offset = (cycleDuration * position)
+					let offset = cycleDuration - (cycleDuration * position)
 					let normalized = sin((.pi * 4) * ((elapsedTime / cycleDuration) - offset))
 					//debugLog("\(elapsedTime) -> \(normalized)")
-	//				let color = NSColor(red: normalized / 2, green: normalized / 4, blue: normalized, alpha: 1) // purple
-					let color = NSColor(red: normalized / 2 + 0.5, green: normalized / 4 + 0.25, blue: 0.5, alpha: 1)
+					//let color = NSColor(red: normalized / 2, green: normalized / 4, blue: normalized, alpha: 1) // purple
+					//let color = NSColor(red: normalized / 2 + 0.5, green: normalized / 4 + 0.25, blue: 0.5, alpha: 1)
+					let color = NSColor(red: normalized / 2 + 0.5, green: normalized / 4 + 0.25, blue: 0.5 - (normalized * 0.25), alpha: 1)
 					node.geometry?.firstMaterial?.diffuse.contents = color
 				}
 				link.runAction(SCNAction.repeatForever(changeColor))
