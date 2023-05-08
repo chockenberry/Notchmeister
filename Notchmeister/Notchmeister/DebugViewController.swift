@@ -38,13 +38,12 @@ class DebugViewController: NSViewController {
 		textNotchCheckbox.state = Defaults.shouldDrawNotchText ? .on : .off
 		alternateDiceCheckbox.state = Defaults.shouldUseAlternateDice ? .on : .off
 		
-		if NSScreen.hasNotchedScreen {
-			fakeNotchCheckbox.isEnabled = false
-			largeFakeNotchCheckbox.isEnabled = false
-			deactivateFakeNotchCheckbox.isEnabled = false
-			fillNotchCheckbox.isEnabled = false
-			textNotchCheckbox.isEnabled = false
-		}
+		let enabled = Defaults.shouldFakeNotch
+		largeFakeNotchCheckbox.isEnabled = enabled
+		deactivateFakeNotchCheckbox.isEnabled = enabled
+		outlineNotchCheckbox.isEnabled = enabled
+		fillNotchCheckbox.isEnabled = enabled
+		textNotchCheckbox.isEnabled = enabled
     }
         
     //MARK: - Actions
@@ -61,6 +60,7 @@ class DebugViewController: NSViewController {
     
     @IBAction func fakeNotchValueChanged(_ sender: Any) {
         Defaults.shouldFakeNotch = (fakeNotchCheckbox.state == .on)
+		configureForDefaults()
 		updateConfiguration()
     }
 

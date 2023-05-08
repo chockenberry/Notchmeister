@@ -19,8 +19,8 @@ class NotchWindow: NSWindow {
   
 		let index = (NSScreen.screens.firstIndex(of: screen) ?? Int.min) + 1
 
-		// NOTE: Fusion Dice need a little more height than the other effects. Easiest way to deal with this (because of TrackingView) is to extend the height of
-		// the window.
+		// NOTE: Fusion Dice need a little more height than the other effects. Easiest way to deal with this (because of TrackingView) is
+		// to extend the height of the window a bit.
 		let height = Self.padding * 1.5
 		
 		let contentRect = CGRect(x: notchRect.origin.x - Self.padding, y: notchRect.origin.y - height, width: notchRect.width + (Self.padding * 2), height: notchRect.height + height)
@@ -50,7 +50,6 @@ class NotchWindow: NSWindow {
         self.hasShadow = false
 		// TODO: .transient works well for fake notch (so it goes away with Exposé), .stationary is better with a real notch (stays put with Exposé)
         self.collectionBehavior = [.transient, .canJoinAllSpaces]
-//		self.acceptsMouseMovedEvents = true
 		
 		if Defaults.shouldHideDockIcon {
 			let contentRect = CGRect(x: notchRect.origin.x - Self.activationPadding, y: notchRect.origin.y - Self.activationPadding, width: notchRect.width + (Self.activationPadding * 2), height: notchRect.height + Self.activationPadding)
@@ -88,7 +87,6 @@ class NotchWindow: NSWindow {
 			self.backgroundColor = .clear
 		}
         
-        //let contentView = NSView(frame: frame)
 		// NOTE: This was initially on the NotchView, but it was unreliable, probably due to the use of
 		// layer hosting views and/or the tracking rect being outside the bounds of the notch.
 		// To workaround this issue, the content view acts as a proxy and the NSResponder methods in
@@ -96,7 +94,6 @@ class NotchWindow: NSWindow {
 		// the NotchEffect).
 		let contentView = TrackingView(frame: frame)
 		contentView.wantsLayer = false
-        //contentView.wantsLayer = true;
 
 		self.title = "NotchWindow \(index)"
         self.contentView = contentView
@@ -105,8 +102,6 @@ class NotchWindow: NSWindow {
 		if Defaults.shouldFakeNotch {
 			createFakeNotchView(size: notchRect.size)
 		}
-		
-//		self.delegate = self
 	}
 
 	deinit {
@@ -202,12 +197,4 @@ class NotchWindow: NSWindow {
 		self.notchView?.mouseExited(windowPoint: event.locationInWindow)
 	}
 	
-}
-
-extension NotchWindow: NSWindowDelegate {
-	
-//	func windowDidUpdate(_ notification: Notification) {
-//		debugLog()
-//	}
-
 }

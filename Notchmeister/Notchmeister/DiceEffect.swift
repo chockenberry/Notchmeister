@@ -76,15 +76,20 @@ class DiceEffect: NotchEffect {
 	
 	private let size = CGSize(width: 300, height: 120)
 	
+#if true
+	private let debugOffset: CGFloat = 0
+#else
+	// NOTE: To see what's going on under the notch...
+	private let debugOffset: CGFloat = -38
+#endif
+	
 	private func configureSceneHitWindow() -> NSWindow? {
 		guard let parentWindow else { return nil }
 		guard let screen = parentWindow.screen else { return nil }
 
-		//let size = parentWindow.frame.size
-		
 		let index = (NSScreen.screens.firstIndex(of: screen) ?? Int.min) + 1
 
-		let origin = CGPoint(x: screen.frame.midX - (size.width / 2), y: screen.frame.maxY - size.height)
+		let origin = CGPoint(x: screen.frame.midX - (size.width / 2), y: screen.frame.maxY - size.height + debugOffset)
 		
 		let contentRect = CGRect(origin: origin, size: size)
 
@@ -104,19 +109,9 @@ class DiceEffect: NotchEffect {
 		window.title = "Dice Hit Window \(index)"
 		window.contentView = contentView
 
-#if false
-		if Defaults.shouldDebugDrawing {
-			window.backgroundColor = NSColor.systemYellow
-		}
-		else {
-			window.backgroundColor = .clear
-		}
-#else
 		window.backgroundColor = .clear
-#endif
 		
 		window.alphaValue = 1.0
-//		window.alphaValue = 0.05
 
 		return window
 	}
@@ -125,11 +120,9 @@ class DiceEffect: NotchEffect {
 		guard let parentWindow else { return nil }
 		guard let screen = parentWindow.screen else { return nil }
 
-		//let size = parentWindow.frame.size
-
 		let index = (NSScreen.screens.firstIndex(of: screen) ?? Int.min) + 1
 
-		let origin = CGPoint(x: screen.frame.midX - (size.width / 2), y: screen.frame.maxY - size.height)
+		let origin = CGPoint(x: screen.frame.midX - (size.width / 2), y: screen.frame.maxY - size.height + debugOffset)
 		
 		let contentRect = CGRect(origin: origin, size: size)
 
@@ -155,16 +148,12 @@ class DiceEffect: NotchEffect {
 		window.title = "Dice Animation Window \(index)"
 		window.contentView = contentView
 
-#if true
 		if Defaults.shouldDebugDrawing {
 			window.backgroundColor = NSColor.systemYellow.withAlphaComponent(0.25)
 		}
 		else {
 			window.backgroundColor = .clear
 		}
-#else
-		window.backgroundColor = .clear
-#endif
 
 		return window
 	}
@@ -316,7 +305,7 @@ class DiceEffect: NotchEffect {
 				link.physicsBody?.damping = 0.5
 				link.physicsBody?.categoryBitMask = 1
 				link.physicsBody?.collisionBitMask = 0
-				link.physicsBody?.friction = 1.0
+				link.physicsBody?.friction = 0.0
 				link.physicsBody?.velocityFactor = SCNVector3Make(1, 1, 1)
 				link.physicsBody?.isAffectedByGravity = true
 				
@@ -391,6 +380,7 @@ class DiceEffect: NotchEffect {
 		let scene = SCNScene(named: "dice.scnassets/notch.scn")!
 
 		//scene.physicsWorld.speed = 1.5
+		//scene.physicsWorld.gravity = SCNVector3Make(0, -12.8, 0)
 		
 		setupCamera()
 		setupLights()

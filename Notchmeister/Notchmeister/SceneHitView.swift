@@ -98,7 +98,7 @@ class SceneHitView: NSView {
 				let amount = CGFloat.random(in: 1...3) * direction * 10
 				hitResult.node.physicsBody?.applyForce(SCNVector3(amount, 0, 0), at: SCNVector3(x: 0.5, y: 0.5, z: 0.5), asImpulse: true)
 				if Defaults.shouldUseAlternateDice {
-					if firstSpin || Float.random(in: 0...1) < 0.2 {
+					if firstSpin || Float.random(in: 0...1) < 0.1 {
 						if let sound = NSSound(named: "chewie") {
 							if !sound.isPlaying {
 								sound.play()
@@ -107,14 +107,6 @@ class SceneHitView: NSView {
 						firstSpin = false
 					}
 				}
-//				else {
-//					if let sound = NSSound(named: "tingle") {
-//						sound.stop()
-//						if !sound.isPlaying {
-//							sound.play()
-//						}
-//					}
-//				}
 			}
 		}
 	}
