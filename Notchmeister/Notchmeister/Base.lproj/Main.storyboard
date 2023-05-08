@@ -282,7 +282,7 @@
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ewE-fL-l0e">
-                                <rect key="frame" x="53" y="16" width="34" height="34"/>
+                                <rect key="frame" x="16" y="55" width="34" height="34"/>
                                 <buttonCell key="cell" type="round" bezelStyle="circular" image="wrench.and.screwdriver.fill" catalog="system" imagePosition="only" alignment="center" controlSize="large" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="3DI-vc-m08">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -298,12 +298,14 @@
                             <constraint firstAttribute="bottom" secondItem="omC-Yz-2sa" secondAttribute="bottom" constant="20" symbolic="YES" id="B05-dU-5bQ"/>
                             <constraint firstAttribute="trailing" secondItem="JcQ-7t-VSZ" secondAttribute="trailing" constant="20" id="B42-SV-PvJ"/>
                             <constraint firstItem="HP6-Vj-CA4" firstAttribute="leading" secondItem="ZSS-8U-k2J" secondAttribute="leading" constant="20" id="Bzi-pm-cro"/>
+                            <constraint firstItem="ewE-fL-l0e" firstAttribute="centerX" secondItem="omC-Yz-2sa" secondAttribute="centerX" id="F3i-c6-rdO"/>
                             <constraint firstAttribute="trailing" secondItem="HP6-Vj-CA4" secondAttribute="trailing" constant="60" id="HGi-Ba-H1b"/>
                             <constraint firstAttribute="bottom" secondItem="JcQ-7t-VSZ" secondAttribute="bottom" constant="20" symbolic="YES" id="I7g-hL-ama"/>
                             <constraint firstItem="HP6-Vj-CA4" firstAttribute="top" secondItem="ZSS-8U-k2J" secondAttribute="bottom" constant="8" symbolic="YES" id="JF0-Lu-r8n"/>
                             <constraint firstItem="PPi-Xy-Y4k" firstAttribute="top" secondItem="DQb-Wa-YfR" secondAttribute="bottom" constant="20" id="L6v-GG-jEZ"/>
                             <constraint firstItem="tMl-9w-Wzm" firstAttribute="leading" secondItem="ZSS-8U-k2J" secondAttribute="leading" id="LZF-J2-mFb"/>
                             <constraint firstItem="DQb-Wa-YfR" firstAttribute="centerX" secondItem="m2S-Jp-Qdl" secondAttribute="centerX" id="Rt6-GL-ImR"/>
+                            <constraint firstItem="omC-Yz-2sa" firstAttribute="top" secondItem="ewE-fL-l0e" secondAttribute="bottom" constant="12" symbolic="YES" id="VeG-C0-eG2"/>
                             <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="PPi-Xy-Y4k" secondAttribute="trailing" constant="20" id="YFn-l2-YMa"/>
                             <constraint firstItem="tMl-9w-Wzm" firstAttribute="trailing" secondItem="HP6-Vj-CA4" secondAttribute="trailing" id="ZCs-LT-Wvp"/>
                             <constraint firstItem="PPi-Xy-Y4k" firstAttribute="centerX" secondItem="DQb-Wa-YfR" secondAttribute="centerX" id="agV-c3-SFn"/>
@@ -312,8 +314,6 @@
                             <constraint firstItem="DQb-Wa-YfR" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="20" symbolic="YES" id="obc-h5-hEI"/>
                             <constraint firstItem="JcQ-7t-VSZ" firstAttribute="top" secondItem="HP6-Vj-CA4" secondAttribute="bottom" constant="8" symbolic="YES" id="vk8-5b-gQE"/>
                             <constraint firstItem="tMl-9w-Wzm" firstAttribute="top" secondItem="PPi-Xy-Y4k" secondAttribute="bottom" constant="8" symbolic="YES" id="xTm-tX-eFs"/>
-                            <constraint firstItem="ewE-fL-l0e" firstAttribute="leading" secondItem="omC-Yz-2sa" secondAttribute="trailing" constant="10" id="xp4-0h-Iix"/>
-                            <constraint firstItem="ewE-fL-l0e" firstAttribute="centerY" secondItem="omC-Yz-2sa" secondAttribute="centerY" id="yIR-nG-NUb"/>
                         </constraints>
                     </view>
                     <connections>
