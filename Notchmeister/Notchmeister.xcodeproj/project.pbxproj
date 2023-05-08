@@ -46,6 +46,8 @@
 		44A68CF427431A0700CCBCF4 /* FakeNotchView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 44A68CF327431A0700CCBCF4 /* FakeNotchView.xib */; };
 		44A817B0274322A300731822 /* FakeNotchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44A817AF274322A300731822 /* FakeNotchView.swift */; };
 		44A817B627446C5200731822 /* FestiveEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44A817B527446C5200731822 /* FestiveEffect.swift */; };
+		44AA97842A087C7D00213FCA /* chewie.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 44AA97832A087C7D00213FCA /* chewie.mp3 */; };
+		44AA97862A087F7500213FCA /* tingle.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 44AA97852A087F7500213FCA /* tingle.m4a */; };
 		44B724AA29F5A681002E03E6 /* DiceEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B724A929F5A681002E03E6 /* DiceEffect.swift */; };
 		44B724AC29F5B010002E03E6 /* SceneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B724AB29F5B010002E03E6 /* SceneView.swift */; };
 		44B724B029FAF128002E03E6 /* SceneHitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B724AF29FAF128002E03E6 /* SceneHitView.swift */; };
@@ -96,6 +98,8 @@
 		44A817AF274322A300731822 /* FakeNotchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeNotchView.swift; sourceTree = "<group>"; };
 		44A817B527446C5200731822 /* FestiveEffect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FestiveEffect.swift; sourceTree = "<group>"; };
 		44A817BB2749B8B700731822 /* Experiments */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Experiments; path = ../Experiments; sourceTree = "<group>"; };
+		44AA97832A087C7D00213FCA /* chewie.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = chewie.mp3; sourceTree = "<group>"; };
+		44AA97852A087F7500213FCA /* tingle.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = tingle.m4a; sourceTree = "<group>"; };
 		44B724A929F5A681002E03E6 /* DiceEffect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiceEffect.swift; sourceTree = "<group>"; };
 		44B724AB29F5B010002E03E6 /* SceneView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneView.swift; sourceTree = "<group>"; };
 		44B724AF29FAF128002E03E6 /* SceneHitView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneHitView.swift; sourceTree = "<group>"; };
@@ -178,6 +182,8 @@
 				441C5AB5272C9FD30094507E /* Assets.xcassets */,
 				441C5AB7272C9FD30094507E /* Main.storyboard */,
 				44F5C5E729FC79CC000331C2 /* dice.scnassets */,
+				44AA97832A087C7D00213FCA /* chewie.mp3 */,
+				44AA97852A087F7500213FCA /* tingle.m4a */,
 				441C5ABA272C9FD30094507E /* Notchmeister.entitlements */,
 				51F8A861272CCC9C00D349F1 /* Info.plist */,
 				440EAB83275812AD009DBAF5 /* Credits.rtf */,
@@ -262,9 +268,11 @@
 			files = (
 				44F5C5E829FC79CC000331C2 /* dice.scnassets in Resources */,
 				441C5AB6272C9FD30094507E /* Assets.xcassets in Resources */,
+				44AA97862A087F7500213FCA /* tingle.m4a in Resources */,
 				44A68CF427431A0700CCBCF4 /* FakeNotchView.xib in Resources */,
 				441C5AB9272C9FD30094507E /* Main.storyboard in Resources */,
 				440EAB84275812AD009DBAF5 /* Credits.rtf in Resources */,
+				44AA97842A087C7D00213FCA /* chewie.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
