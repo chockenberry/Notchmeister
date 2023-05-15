@@ -180,36 +180,40 @@ extension SceneHitView: SCNSceneRendererDelegate {
 			DispatchQueue.main.async { [self] in
 				let rootNode = scene.rootNode
 				
-				let dieScene1 = rootNode.childNode(withName: "die1", recursively: true)!
-				let node1: SCNNode
-				if Defaults.shouldUseAlternateDice {
-					node1 = dieScene1.childNode(withName: "SpikeDice", recursively: true)!
-				}
-				else {
-					node1 = dieScene1.childNode(withName: "D6", recursively: true)!
+				var node1: SCNNode? = nil
+				if let dieScene1 = rootNode.childNode(withName: "die1", recursively: true) {
+					if Defaults.shouldUseAlternateDice {
+						node1 = dieScene1.childNode(withName: "SpikeDice", recursively: true)
+					}
+					else {
+						node1 = dieScene1.childNode(withName: "D6", recursively: true)
+					}
 				}
 				
-				let dieScene2 = rootNode.childNode(withName: "die2", recursively: true)!
-				let node2: SCNNode
-				if Defaults.shouldUseAlternateDice {
-					node2 = dieScene2.childNode(withName: "SpikeDice", recursively: true)!
+				var node2: SCNNode? = nil
+				if let dieScene2 = rootNode.childNode(withName: "die2", recursively: true) {
+					if Defaults.shouldUseAlternateDice {
+						node2 = dieScene2.childNode(withName: "SpikeDice", recursively: true)
+					}
+					else {
+						node2 = dieScene2.childNode(withName: "D6", recursively: true)
+					}
 				}
-				else {
-					node2 = dieScene2.childNode(withName: "D6", recursively: true)!
-				}
-
-				let destination: SCNNode? = rootNode
 				
-				let target1 = targetForNode(node1, with: destination, in: renderer)
-				let target2 = targetForNode(node2, with: destination, in: renderer)
-				
-				if target1.center.moved(from: lastTargetCenter1) || target2.center.moved(from: lastTargetCenter2) {
-					self.targets = [target1, target2]
-					lastTargetCenter1 = target1.center
-					lastTargetCenter2 = target2.center
-				}
-				else {
-					//debugLog("no change")
+				if let node1, let node2 {
+					let destination: SCNNode? = rootNode
+					
+					let target1 = targetForNode(node1, with: destination, in: renderer)
+					let target2 = targetForNode(node2, with: destination, in: renderer)
+					
+					if target1.center.moved(from: lastTargetCenter1) || target2.center.moved(from: lastTargetCenter2) {
+						self.targets = [target1, target2]
+						lastTargetCenter1 = target1.center
+						lastTargetCenter2 = target2.center
+					}
+					else {
+						//debugLog("no change")
+					}
 				}
 			}
 		}
