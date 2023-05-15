@@ -240,48 +240,57 @@ class DiceEffect: NotchEffect {
 			anchor.worldPosition = SCNVector3Make(0, anchorY, 0)
 			anchor.physicsBody?.isAffectedByGravity = false
 
-			let dieReference1 = scene.rootNode.childNode(withName: "die1", recursively: true)!
-			if Defaults.shouldUseAlternateDice {
-				if let dieResourceUrl = Bundle.main.url(forResource: "die-alt", withExtension: "scn", subdirectory: "dice.scnassets") {
-					if let newNode = SCNReferenceNode(url: dieResourceUrl) {
-						newNode.load()
-						newNode.name = "die1"
-						dieReference1.removeFromParentNode()
-
-						newNode.worldPosition = SCNVector3Make(-1, anchorY + 1, 0)
-						scene.rootNode.addChildNode(newNode)
-
-						let die = newNode.childNode(withName: "SpikeDice", recursively: true)!
-						setupCord(anchor: anchor, linkCount: linkCount, die: die)
+			do {
+				var die1: SCNNode? = nil
+				let dieReference1 = scene.rootNode.childNode(withName: "die1", recursively: true)!
+				if Defaults.shouldUseAlternateDice {
+					if let dieResourceUrl = Bundle.main.url(forResource: "die-alt", withExtension: "scn", subdirectory: "dice.scnassets") {
+						if let newNode = SCNReferenceNode(url: dieResourceUrl) {
+							newNode.load()
+							newNode.name = "die1"
+							dieReference1.removeFromParentNode()
+							scene.rootNode.addChildNode(newNode)
+							die1 = newNode.childNode(withName: "SpikeDice", recursively: true)!
+						}
 					}
 				}
-			}
-			else {
-				let die1 = dieReference1.childNode(withName: "D6", recursively: true)!
-				die1.worldPosition = SCNVector3Make(-1, anchorY + 1, 0)
-				setupCord(anchor: anchor, linkCount: linkCount, die: die1)
-			}
-
-			let dieReference2 = scene.rootNode.childNode(withName: "die2", recursively: true)!
-			if Defaults.shouldUseAlternateDice {
-				if let dieResourceUrl = Bundle.main.url(forResource: "die-alt", withExtension: "scn", subdirectory: "dice.scnassets") {
-					if let newNode = SCNReferenceNode(url: dieResourceUrl) {
-						newNode.load()
-						newNode.name = "die2"
-						dieReference2.removeFromParentNode()
-
-						newNode.worldPosition = SCNVector3Make(-1, anchorY + 1, 0)
-						scene.rootNode.addChildNode(newNode)
-
-						let die = newNode.childNode(withName: "SpikeDice", recursively: true)!
-						setupCord(anchor: anchor, linkCount: linkCount + 2, die: die)
-					}
+				else {
+					die1 = dieReference1.childNode(withName: "D6", recursively: true)!
+				}
+				if let die1 {
+					die1.worldPosition = SCNVector3Make(-anchorY / 2, anchorY + 1, 0)
+					setupCord(anchor: anchor, linkCount: linkCount, die: die1)
+					
+					let spin1 = CGFloat.random(in: -20...20)
+					die1.physicsBody?.applyForce(SCNVector3(x: 0, y: -20, z: spin1), at: SCNVector3(x: 0.0, y: 1.0, z: 0.0), asImpulse: true)
 				}
 			}
-			else {
-				let die2 = dieReference2.childNode(withName: "D6", recursively: true)!
-				die2.worldPosition = SCNVector3(1, anchorY + 1, 0)
-				setupCord(anchor: anchor, linkCount: linkCount + 2, die: die2)
+			
+			do {
+				var die2: SCNNode? = nil
+				let dieReference2 = scene.rootNode.childNode(withName: "die2", recursively: true)!
+				if Defaults.shouldUseAlternateDice {
+					if let dieResourceUrl = Bundle.main.url(forResource: "die-alt", withExtension: "scn", subdirectory: "dice.scnassets") {
+						if let newNode = SCNReferenceNode(url: dieResourceUrl) {
+							newNode.load()
+							newNode.name = "die2"
+							dieReference2.removeFromParentNode()
+							scene.rootNode.addChildNode(newNode)
+							die2 = newNode.childNode(withName: "SpikeDice", recursively: true)!
+						}
+					}
+				}
+				else {
+					die2 = dieReference2.childNode(withName: "D6", recursively: true)!
+				}
+				
+				if let die2 {
+					die2.worldPosition = SCNVector3(anchorY / 2, anchorY + 1, 0)
+					setupCord(anchor: anchor, linkCount: linkCount + 2, die: die2)
+					
+					let spin2 = CGFloat.random(in: -20...20)
+					die2.physicsBody?.applyForce(SCNVector3(x: 0, y: -20, z: spin2), at: SCNVector3(x: 0.0, y: 1.0, z: 0.0), asImpulse: true)
+				}
 			}
 		}
 
