@@ -261,8 +261,9 @@ class DiceEffect: NotchEffect {
 					die1.worldPosition = SCNVector3Make(-anchorY / 2, anchorY + 1, 0)
 					setupCord(anchor: anchor, linkCount: linkCount, die: die1)
 					
-					let spin1 = CGFloat.random(in: -20...20)
-					die1.physicsBody?.applyForce(SCNVector3(x: 0, y: -20, z: spin1), at: SCNVector3(x: 0.0, y: 1.0, z: 0.0), asImpulse: true)
+					let direction: CGFloat = Bool.random() ? -1 : 1
+					let amount = CGFloat.random(in: 1.5...2) * direction * 10
+					die1.physicsBody?.applyForce(SCNVector3(x: 0, y: -20, z: amount), at: SCNVector3(x: 0.0, y: 1.0, z: 0.0), asImpulse: true)
 				}
 			}
 			
@@ -283,13 +284,13 @@ class DiceEffect: NotchEffect {
 				else {
 					die2 = dieReference2.childNode(withName: "D6", recursively: true)!
 				}
-				
 				if let die2 {
 					die2.worldPosition = SCNVector3(anchorY / 2, anchorY + 1, 0)
 					setupCord(anchor: anchor, linkCount: linkCount + 2, die: die2)
 					
-					let spin2 = CGFloat.random(in: -20...20)
-					die2.physicsBody?.applyForce(SCNVector3(x: 0, y: -20, z: spin2), at: SCNVector3(x: 0.0, y: 1.0, z: 0.0), asImpulse: true)
+					let direction: CGFloat = Bool.random() ? -1 : 1
+					let amount = CGFloat.random(in: 1.5...2) * direction * 10
+					die2.physicsBody?.applyForce(SCNVector3(x: 0, y: -20, z: amount), at: SCNVector3(x: 0.0, y: 1.0, z: 0.0), asImpulse: true)
 				}
 			}
 		}
