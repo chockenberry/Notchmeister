@@ -34,6 +34,10 @@ class GameViewController: NSViewController {
         // retrieve the SCNView
         let scnView = self.view as! SCNView
         
+		if scnView.scene == nil {
+			scnView.scene = scene
+		}
+		
         // check what nodes are clicked
         let p = gestureRecognizer.location(in: scnView)
         let hitResults = scnView.hitTest(p, options: [:])
@@ -45,7 +49,7 @@ class GameViewController: NSViewController {
 			let die1 = dieScene1.childNode(withName: "D6", recursively: true)!
 			//die1.worldPosition = SCNVector3(-length, length, 0)
 			if node == die1 {
-				let spin1 = CGFloat.random(in: 4.0 ... 8.0)
+				let spin1 = CGFloat.random(in: 80.0 ... 160.0)
 				die1.physicsBody?.applyForce(SCNVector3(x: 0, y: 0, z: spin1), at: SCNVector3(x: 1.0, y: 1.0, z: 0.0), asImpulse: true)
 			}
 			
@@ -53,7 +57,7 @@ class GameViewController: NSViewController {
 			let die2 = dieScene2.childNode(withName: "D6", recursively: true)!
 			//die2.worldPosition = SCNVector3(length, length, 0)
 			if node == die2 {
-				let spin2 = CGFloat.random(in: -8.0 ... -4.0)
+				let spin2 = CGFloat.random(in: -160.0 ... -80.0)
 				die2.physicsBody?.applyForce(SCNVector3(x: 0, y: 0, z: spin2), at: SCNVector3(x: 1.0, y: 1.0, z: 0.0), asImpulse: true)
 			}
 #else
@@ -150,6 +154,7 @@ class GameViewController: NSViewController {
 		 */
 		setupCord(anchor: anchor, linkCount: 16, die: die2)
 		
+#if false
 		if let dieResourceUrl = Bundle.main.url(forResource: "die-test", withExtension: "scn", subdirectory: "art.scnassets") {
 			if let altDieReference = SCNReferenceNode(url: dieResourceUrl) {
 				altDieReference.load()
@@ -165,7 +170,7 @@ class GameViewController: NSViewController {
 				}
 			}
 		}
-
+#endif
 	}
 
 	var links: [SCNNode] = []
@@ -182,7 +187,7 @@ class GameViewController: NSViewController {
 			
 			let link = SCNNode(geometry: geometry)
 			link.physicsBody = SCNPhysicsBody(type: .dynamic, shape: nil)
-			link.physicsBody?.mass = 0.5
+			link.physicsBody?.mass = 10.0
 			link.physicsBody?.restitution = 0
 			link.physicsBody?.damping = 0.5
 			link.physicsBody?.categoryBitMask = 1
@@ -251,7 +256,7 @@ class GameViewController: NSViewController {
 		let scnView = self.view as! SCNView
 		
 		// set the scene to the view
-		scnView.scene = scene
+		//scnView.scene = scene
 		
 		// allows the user to manipulate the camera
 		scnView.allowsCameraControl = true
