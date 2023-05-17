@@ -95,7 +95,14 @@ class DebugViewController: NSViewController {
 	}
 
 	@IBAction func resetDefaults(_ sender: Any) {
-		Defaults.reset()	
+		Defaults.reset()
+		if !NSScreen.hasNotchedScreen {
+			Defaults.shouldFakeNotch = true
+		}
+		else {
+			Defaults.shouldFakeNotch = false
+		}
+
 		configureForDefaults()
 		updateConfiguration()
 	}

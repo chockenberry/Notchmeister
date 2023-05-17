@@ -129,12 +129,18 @@ class ViewController: NSViewController {
 			let alert = NSAlert()
 			alert.messageText = "Notchmeister Help"
 			if NSScreen.hasNotchedScreen {
-				alert.informativeText = Defaults.notchedHelp
+				alert.informativeText = Defaults.notchedHelp + Defaults.githubHelpButton
 			}
 			else {
-				alert.informativeText = Defaults.notchlessHelp + Defaults.notchlessHelpButton
+				alert.informativeText = Defaults.notchlessHelp + Defaults.githubHelpButton
 			}
-			alert.runModal()
+			alert.addButton(withTitle: "OK")
+			alert.addButton(withTitle: "Open GitHub…")
+			let result = alert.runModal()
+			if result == .alertSecondButtonReturn {
+				debugLog("open github…")
+				NSWorkspace.shared.open(Defaults.gitHubUrl)
+			}
 		}
 	}
 }

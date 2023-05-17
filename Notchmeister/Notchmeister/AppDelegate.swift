@@ -70,8 +70,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	}
 	
 	@IBAction func openGitHub(_ sender: Any) {
-		guard let url = URL(string: "https://github.com/chockenberry/Notchmeister") else { NSSound.beep(); return }
-		NSWorkspace.shared.open(url)
+		NSWorkspace.shared.open(Defaults.gitHubUrl)
 	}
 
 	@IBAction func openWindow(_ sender: Any) {

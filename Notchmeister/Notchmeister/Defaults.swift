@@ -106,8 +106,10 @@ enum Defaults : String, CaseIterable
 	static let notchlessHelp = "This Mac doesn't have a notch.\n\nThanks to Notchmeister's built-in genuine replacement notch, you can still have fun. This replacement part, like all others, doesn't quite work as original: it's shorter and the mouse doesn't disappear underneath.\n\nNote also that this notch only appears when the app is active so it doesn't interfere with other apps.\n\n"
 
 	static let notchlessHelpIntro = "Side effects of this app include making you want a new MacBook even more than you already do. Sorry."
-	static let notchlessHelpButton = "If you need more assistance, take a look at the Help menu."
+	static let githubHelpButton = "It‘s unlikely that you‘ll need help with Notchmeister, but if you do, get in touch with us on GitHub. If you think the app needs a fix or new feature, this is the place to do it."
 
-	static let notchedHelp = "Congratulations, you have a notch!\n\nIt‘s unlikely that you‘ll need help with Notchmeister, but if you do, get in touch with us on GitHub. If you think the app needs a fix or new feature, this is the place to do it.\n\nThe quickest way to get to the project is with the Help menu."
+	static let notchedHelp = "Congratulations, you have a notch!\n\n"
 	
+	static let gitHubUrl = URL(string: "https://github.com/chockenberry/Notchmeister")!
+
 }
