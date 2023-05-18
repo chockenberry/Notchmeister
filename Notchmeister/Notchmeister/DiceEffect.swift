@@ -57,17 +57,18 @@ class DiceEffect: NotchEffect {
 			let contained = trackingView.bounds.contains(trackingPoint)
 			debugLog("trackingPoint = \(trackingPoint), contained = \(contained)")
 			if !contained {
+				let hidingWindow = hitWindow
+				self.hitWindow = nil
 				NSAnimationContext.runAnimationGroup { context in
 					context.duration = 0.5
 					context.timingFunction = CAMediaTimingFunction.init(name: .easeIn)
 					
-					let currentFrame = hitWindow.frame
+					let currentFrame = hidingWindow.frame
 					let newFrame = NSRect(origin: CGPoint(x: currentFrame.origin.x, y: currentFrame.origin.y + currentFrame.height), size: currentFrame.size)
-					hitWindow.animator().setFrame(newFrame, display: true)
+					hidingWindow.animator().setFrame(newFrame, display: true)
 					debugLog("hiding hitWindow...")
 				} completionHandler: {
-					hitWindow.orderOut(self)
-					self.hitWindow = nil
+					hidingWindow.orderOut(self)
 					debugLog("hitWindow hidden")
 				}
 			}

@@ -66,7 +66,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	}
 	
 	func applicationDidBecomeActive(_ notification: Notification) {
-		debugLog()
+		debugLog("windows = \(NSApp.windows.map { $0.title })")
 	}
 	
 	@IBAction func openGitHub(_ sender: Any) {
