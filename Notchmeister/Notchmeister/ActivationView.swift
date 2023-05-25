@@ -58,20 +58,11 @@ class ActivationView: NSView {
 	
 	override func mouseDown(with event: NSEvent) {
 		debugLog()
-		super.mouseDown(with: event)
-	}
-	
-	override func hitTest(_ point: NSPoint) -> NSView? {
-		debugLog("point = \(point)")
-		let result = super.hitTest(point)
-		if result != nil {
-			NSApplication.shared.activate(ignoringOtherApps: true)
-			if let window = NSApplication.shared.windows.first {
-				window.makeKeyAndOrderFront(self)
-				debugLog("activated main window")
-			}
+		NSApplication.shared.activate(ignoringOtherApps: true)
+		if let window = NSApplication.shared.windows.first {
+			window.makeKeyAndOrderFront(self)
+			debugLog("activated main window")
 		}
-		return result
 	}
 
 }
