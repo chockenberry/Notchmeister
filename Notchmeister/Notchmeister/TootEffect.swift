@@ -41,8 +41,8 @@ class TootEffect: NotchEffect {
 		cell.scaleSpeed = 0.1
 		cell.contentsScale = parentLayer.contentsScale
 		cell.yAcceleration = 40
-		cell.emissionLongitude = 0
-		cell.emissionRange = 0
+		cell.emissionLongitude = -.pi/2
+		cell.emissionRange = .pi
 		cell.spin = 0
 		
 		let image = NSImage(named: "spark")!
@@ -54,7 +54,7 @@ class TootEffect: NotchEffect {
 		cell.name = "tootEmitter"
 		
 		cell.color = NSColor(named: "tootEffect")!.cgColor
-		cell.alphaSpeed = -1.0 / cell.lifetime
+		cell.alphaSpeed = -1.0 / cell.lifetime // thank you Andrei Ardelean https://stackoverflow.com/a/25461549
 		//cell.alphaSpeed = 2.0
 		//cell.alphaRange = 1
 		//cell.redRange = 0
