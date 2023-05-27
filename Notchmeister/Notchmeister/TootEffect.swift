@@ -24,23 +24,23 @@ class TootEffect: NotchEffect {
 	private func configureSublayers() {
 		guard let parentLayer = parentLayer else { return }
 		
-		tootLayer.emitterPosition = CGPoint(x: parentLayer.bounds.midX, y: parentLayer.bounds.minY)
+		tootLayer.emitterPosition = CGPoint(x: parentLayer.bounds.midX, y: parentLayer.bounds.midY)
 		tootLayer.renderMode = .oldestLast
 		tootLayer.emitterShape = .line
-		tootLayer.emitterSize = CGSize(width: parentLayer.bounds.width, height: 1.0)
+		tootLayer.emitterSize = CGSize(width: parentLayer.bounds.width - 20, height: 1.0)
 		tootLayer.contentsScale = parentLayer.contentsScale
 		
 		let cell = CAEmitterCell()
 		cell.birthRate = 10
 		// velocity * lifetime = distance travelled, which should be close to the padding (50 pts)
-		cell.lifetime = 2
-		cell.velocity = 10
+		cell.lifetime = 5
+		cell.velocity = 1
 		
 		cell.scale = 2
 		cell.scaleRange = 1
-		cell.scaleSpeed = 0.5
+		cell.scaleSpeed = 0.1
 		cell.contentsScale = parentLayer.contentsScale
-		cell.yAcceleration = 20
+		cell.yAcceleration = 40
 		cell.emissionLongitude = 0
 		cell.emissionRange = 0
 		cell.spin = 0
@@ -53,11 +53,13 @@ class TootEffect: NotchEffect {
 		
 		cell.name = "tootEmitter"
 		
-//		cell.color = NSColor.green.cgColor
-//		cell.alphaSpeed = 1
-//		cell.alphaRange = 1
-//		cell.redRange = 0
-//		cell.blueRange = 0
+		cell.color = NSColor(named: "tootEffect")!.cgColor
+		cell.alphaSpeed = -1.0 / cell.lifetime
+		//cell.alphaSpeed = 2.0
+		//cell.alphaRange = 1
+		//cell.redRange = 0
+		//cell.greenRange = 0
+		//cell.blueRange = 0
 		
 		
 		/*
@@ -89,27 +91,32 @@ class TootEffect: NotchEffect {
 		tootLayer.opacity = 1
 		tootLayer.birthRate = 0
 
+		//tootLayer.emitterCells?.first?.isEnabled = false
+		/*
 		let keyPath = "emitterCells.tootEmitter.color"
 		
-		//tootLayer.setValue(NSColor(red: 1, green: 0, blue: 0, alpha: 1).cgColor, forKeyPath: keyPath)
+		//tootLayer.setValue(NSColor(red: 0, green: 0, blue: 1, alpha: 0.5).cgColor, forKeyPath: keyPath)
 
-		/*
+#if false
 		let colorAnimation = CABasicAnimation(keyPath: keyPath)
 		colorAnimation.beginTime = CACurrentMediaTime()
-		colorAnimation.fromValue = NSColor.green.cgColor
-		colorAnimation.toValue = NSColor.red.cgColor
+		colorAnimation.fromValue = NSColor.black.cgColor
+		colorAnimation.toValue = NSColor.clear.cgColor
 		colorAnimation.duration = 2
 		colorAnimation.fillMode = .forwards
-		 tootLayer.add(colorAnimation, forKey: "foo")
-*/
+		tootLayer.add(colorAnimation, forKey: "coloring")
+#else
 		let anim2 = CAKeyframeAnimation(keyPath: keyPath)
 		anim2.beginTime = CACurrentMediaTime()
 		anim2.duration = 5
 		anim2.keyTimes = [0, 0.25, 0.5, 0.75, 1]
 		anim2.repeatCount = 20
 		anim2.values = [NSColor.red.cgColor, NSColor.blue.cgColor, NSColor.yellow.cgColor, NSColor.cyan.cgColor, NSColor.magenta.cgColor]
+//		anim2.values = [NSColor.red, NSColor.blue, NSColor.yellow, NSColor.cyan, NSColor.magenta]
 
 		tootLayer.add(anim2, forKey: "coloring")
+#endif
+		*/
 		
 		parentLayer.addSublayer(tootLayer)
 	}
@@ -121,6 +128,7 @@ class TootEffect: NotchEffect {
 		//tootLayer.emitterCells?.first?.birthRate = 0
 		tootLayer.birthRate = 0
 		tootLayer.removeAllAnimations()
+		//tootLayer.emitterCells?.first?.isEnabled = true
 	}
 
 	override func mouseMoved(at point: CGPoint, underNotch: Bool) {
@@ -137,18 +145,23 @@ class TootEffect: NotchEffect {
 
 		if underNotch {
 			//if tootLayer.emitterCells?.first?.birthRate == 0 {
-			if tootLayer.presentation()?.birthRate == 0 {
+			//if tootLayer.presentation()?.birthRate == 0 {
+			if !hasTooted {
 				debugLog("starting emitter")
 				//tootLayer.emitterCells?.first?.birthRate = 10
 				
-				let animation = CABasicAnimation()
-				animation.duration = 3
-				animation.fromValue = 0
-				animation.toValue = 20
+				//let animation = CABasicAnimation()
+				let animation = CAKeyframeAnimation(keyPath: "birthRate")
+				animation.duration = 10
+				//animation.fromValue = 0
+				//animation.toValue = 20
+				animation.keyTimes = [0, 0.1, 0.5, 1]
+				animation.values = [0, 0, 20, 0]
+				
 				animation.repeatCount = 0
 				animation.autoreverses = false
 				animation.fillMode = .forwards
-				tootLayer.add(animation, forKey: "birthRate")
+				tootLayer.add(animation, forKey: "toot")
 //				CABasicAnimation *birthRateAnim = [CABasicAnimation animationWithKeyPath:@"birthRate"];
 //				birthRateAnim.duration = 5.0f;
 //				birthRateAnim.fromValue = [NSNumber numberWithFloat:((CAEmitterLayer *)emitterLayer).birthRate];
@@ -161,11 +174,21 @@ class TootEffect: NotchEffect {
 //				CATransaction.withActionsDisabled {
 //					tootLayer.birthRate = 10
 //				}
+				
+//				let keyPath = "emitterCells.tootEmitter.color"
+//				let colorAnimation = CABasicAnimation(keyPath: keyPath)
+//				colorAnimation.beginTime = CACurrentMediaTime()
+//				colorAnimation.fromValue = NSColor.white.cgColor
+//				colorAnimation.toValue = NSColor.clear.cgColor
+//				colorAnimation.duration = 5
+//				colorAnimation.fillMode = .forwards
+//				tootLayer.add(colorAnimation, forKey: "coloring")
+
 			}
 		}
 		
 		if underNotch {
-			if  !hasTooted {
+			if !hasTooted {
 				if let sound = NSSound(named: "autotoot") {
 					if !sound.isPlaying {
 						sound.play()
@@ -185,8 +208,8 @@ class TootEffect: NotchEffect {
 //		edgeLayer.opacity = 0
 		debugLog("stopping emitter")
 		//tootLayer.emitterCells?.first?.birthRate = 0
-		tootLayer.birthRate = 0
-		tootLayer.removeAllAnimations()
+		//tootLayer.birthRate = 0
+		//tootLayer.removeAllAnimations()
 	}
 
 }
