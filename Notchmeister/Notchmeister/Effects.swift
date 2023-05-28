@@ -45,7 +45,7 @@ enum Effects: Int, CaseIterable {
 #endif
 #if DEBUG
 		case .autotoot:
-			return "Auto Toot™"
+			return "AutoToot™"
 #endif
 		}
 	}

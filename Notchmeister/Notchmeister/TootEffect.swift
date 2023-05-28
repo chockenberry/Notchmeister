@@ -36,7 +36,7 @@ class TootEffect: NotchEffect {
 		cell.lifetime = 5
 		cell.velocity = 1
 		
-		cell.scale = 2
+		cell.scale = 1.5
 		cell.scaleRange = 1
 		cell.scaleSpeed = 0.1
 		cell.contentsScale = parentLayer.contentsScale
@@ -155,8 +155,8 @@ class TootEffect: NotchEffect {
 				animation.duration = 10
 				//animation.fromValue = 0
 				//animation.toValue = 20
-				animation.keyTimes = [0, 0.1, 0.5, 1]
-				animation.values = [0, 0, 20, 0]
+				animation.keyTimes = [0, 0.1, 0.15, 0.25, 1]
+				animation.values = [0, 0, 20, 30, 0]
 				
 				animation.repeatCount = 0
 				animation.autoreverses = false
