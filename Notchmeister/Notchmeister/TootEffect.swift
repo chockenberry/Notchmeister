@@ -81,7 +81,7 @@ class TootEffect: NotchEffect {
 						animation.duration = tootDuration
 						animation.keyTimes = 	[0.15,	0.25,	0.50,	0.75,	1]
 						animation.values =   	[20,	40,		60,		20,		0]
-						animation.beginTime = tootLayer.convertTime(CACurrentMediaTime(), from: nil)
+						animation.beginTime = tootLayer.convertTime(CACurrentMediaTime(), from: nil) + 0.5
 						
 						animation.repeatCount = 0
 						animation.autoreverses = false
