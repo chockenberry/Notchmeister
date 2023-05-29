@@ -72,7 +72,7 @@ enum Effects: Int, CaseIterable {
 #endif
 #if DEBUG
 		case .autotoot:
-			return "Have you ever wondered why there aren’t any fart apps for the Mac?"
+			return "Pressure buildup can reduce the performance of your Mac: use AutoToot™ to safely vent these gases."
 #endif
 		}
 	}
