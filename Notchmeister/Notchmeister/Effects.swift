@@ -16,10 +16,10 @@ enum Effects: Int, CaseIterable {
 	case radar
 	case expando
 	case dice
+	case autotoot
 #if DEBUG
 	case portal
 #endif
-	case autotoot
 
 	func displayName() -> String {
 		switch self {
@@ -37,12 +37,12 @@ enum Effects: Int, CaseIterable {
 			return "Expando"
 		case .dice:
 			return "Fusion Dice"
+		case .autotoot:
+			return "AutoToot™"
 #if DEBUG
 		case .portal:
 			return "Portal"
 #endif
-		case .autotoot:
-			return "AutoToot™"
 		}
 	}
 	
@@ -62,12 +62,12 @@ enum Effects: Int, CaseIterable {
 			return "Bigger is better, right?\n\n⚠️ Works best in Light appearance."
 		case .dice:
 			return "Apple’s expertise with silicon is not only with the die, but also the dice.\n\n☢️ AVOID EYE OR SKIN EXPOSURE"
+		case .autotoot:
+			return "Pressure buildup can reduce the performance of your Mac: AutoToot™ can safely vent harmful gases."
 #if DEBUG
 		case .portal:
 			return "Activate Macintosh Interdimensional Computation Extension (MICE)."
 #endif
-		case .autotoot:
-			return "Pressure buildup can reduce the performance of your Mac: use AutoToot™ to safely vent these gases."
 		}
 	}
 
@@ -87,12 +87,12 @@ enum Effects: Int, CaseIterable {
 			return ExpandoEffect(with: parentLayer, in: parentView, of: parentWindow)
 		case .dice:
 			return DiceEffect(with: parentLayer, in: parentView, of: parentWindow)
+		case .autotoot:
+			return TootEffect(with: parentLayer, in: parentView, of: parentWindow)
 #if DEBUG
 		case .portal:
 			return PortalEffect(with: parentLayer, in: parentView, of: parentWindow)
 #endif
-		case .autotoot:
-			return TootEffect(with: parentLayer, in: parentView, of: parentWindow)
 		}
 	}
 	
