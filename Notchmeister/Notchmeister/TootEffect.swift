@@ -64,12 +64,25 @@ class TootEffect: NotchEffect {
 		
 		parentLayer.addSublayer(tootLayer)
 	}
+
+#if DEBUG
+	var lastToot: Date = Date.distantPast
+#endif
 	
 	override func mouseMoved(at point: CGPoint, underNotch: Bool) {
 		let tootDuration: TimeInterval = 10
 		
 		if underNotch {
 			if !hasTooted {
+				debugLog("not hasTooted...")
+#if DEBUG
+
+				if lastToot.timeIntervalSinceNow > -60 {
+					debugLog("hasTooted updated recently - repeat?")
+				}
+				lastToot = Date()
+#endif
+
 				if let sound = NSSound(named: "autotoot") {
 					if !sound.isPlaying {
 						sound.play()
@@ -77,23 +90,30 @@ class TootEffect: NotchEffect {
 					
 					do {
 						tootLayer.beginTime = CACurrentMediaTime()
+						CATransaction.begin()
+						
 						let animation = CAKeyframeAnimation(keyPath: "emitterCells.tootEmitter.birthRate")
 						animation.duration = tootDuration
-						animation.keyTimes = 	[0.15,	0.25,	0.50,	0.75,	1]
-						animation.values =   	[20,	40,		60,		20,		0]
+						animation.keyTimes = 	[0.15,	0.25,	0.50,	0.75,	0.76,	1]
+						animation.values =   	[20,	40,		60,		20,		0,		0]
 						animation.beginTime = tootLayer.convertTime(CACurrentMediaTime(), from: nil) + 0.5
 						
 						animation.repeatCount = 0
 						animation.autoreverses = false
 						animation.fillMode = .forwards
 						animation.isRemovedOnCompletion = true
-						tootLayer.add(animation, forKey: "tootRate")
-					}
 
-					Timer.scheduledTimer(withTimeInterval: tootDuration, repeats: false) { timer in
-						self.hasTooted = false
+						CATransaction.setCompletionBlock{ [weak self] in
+							debugLog("resetting hasTooted...")
+							self?.hasTooted = false
+						}
+
+						tootLayer.add(animation, forKey: "tootRate")
+
+						CATransaction.commit()
 					}
 					
+					debugLog("setting hasTooted...")
 					hasTooted = true
 				}
 			}
