@@ -20,6 +20,7 @@ Have you ever wondered what happens to your mouse while it‘s traveling underne
 
 ⁕ Fusion Dice - Apple’s expertise with silicon is not only with the die, but also the dice.
 
+⁕ AutoToot™ - Pressure buildup can reduce the performance of your Mac: AutoToot™ can safely vent harmful gases.
 
 Notchmeister is also small and unobtrusive, both visually and with system resources. It’s fun, but doesn’t get in your way while you work.
 
