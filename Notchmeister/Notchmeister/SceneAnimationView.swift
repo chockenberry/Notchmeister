@@ -23,10 +23,6 @@ class SceneAnimationView: SCNView {
 	override init(frame frameRect: NSRect) {
 		debugLog()
 		super.init(frame: frameRect)
-
-// WTF CHANGE
-		self.showsStatistics = true
-		
 	}
 		
 	override func acceptsFirstMouse(for event: NSEvent?) -> Bool {

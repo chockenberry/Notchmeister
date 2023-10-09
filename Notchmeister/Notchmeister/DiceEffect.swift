@@ -177,19 +177,11 @@ class DiceEffect: NotchEffect {
 			if Defaults.shouldUseAlternateDice {
 				scene.lightingEnvironment.contents = nil // remove procedural sky
 				
-// WTF CHANGE
-				//scene.lightingEnvironment.intensity = 3
-
-				
 				do {
 					let lightNode = SCNNode()
 					lightNode.light = SCNLight()
 					lightNode.light!.type = .omni
-// WTF CHANGE
-					//lightNode.light!.color = NSColor(red: 0.5, green: 0.5, blue: 0.8, alpha: 1.0)
-					lightNode.light!.intensity = 1000
-					lightNode.light!.color = NSColor(displayP3Red: 0.5, green: 0.5, blue: 0.8, alpha: 1.0)
-					
+					lightNode.light!.color = NSColor(red: 0.5, green: 0.5, blue: 0.8, alpha: 1.0)
 					lightNode.position = SCNVector3(x: 0, y: 0, z: 3)
 					scene.rootNode.addChildNode(lightNode)
 				}
@@ -197,20 +189,12 @@ class DiceEffect: NotchEffect {
 					let lightNode = SCNNode()
 					lightNode.light = SCNLight()
 					lightNode.light!.type = .omni
-// WTF CHANGE
-					//lightNode.light!.color = NSColor(red: 0.8, green: 0.5, blue: 0.8, alpha: 1.0)
-					lightNode.light!.intensity = 1000
-					lightNode.light!.color = NSColor(displayP3Red: 0.8, green: 0.5, blue: 0.8, alpha: 1.0)
-					
+					lightNode.light!.color = NSColor(red: 0.8, green: 0.5, blue: 0.8, alpha: 1.0)
 					lightNode.position = SCNVector3(x: 0, y: -5, z: 3)
 					scene.rootNode.addChildNode(lightNode)
 				}
 			}
 			else {
-// WTF CHANGE
-				//scene.lightingEnvironment.contents = nil // remove procedural sky
-				//scene.lightingEnvironment.intensity = 3
-				
 				do {
 					let lightNode = SCNNode()
 					lightNode.light = SCNLight()
@@ -343,9 +327,7 @@ class DiceEffect: NotchEffect {
 					let color = NSColor(red: 0.80, green: 0.75, blue: 0.00, alpha: 1)
 					//let color = NSColor(red: 0.5, green: 0.5, blue: 0.0, alpha: 1)
 					link.geometry?.firstMaterial?.diffuse.contents = color
-// WTF CHANGE
-					//link.geometry?.firstMaterial?.metalness.contents = 1.0
-					link.geometry?.firstMaterial?.metalness.contents = 0.9
+					link.geometry?.firstMaterial?.metalness.contents = 1.0
 					
 					link.geometry?.firstMaterial?.roughness.contents = 0.2
 				}
@@ -410,36 +392,6 @@ class DiceEffect: NotchEffect {
 		}
 
 		let scene = SCNScene(named: "dice.scnassets/notch.scn")!
-
-// WTF CHANGE BEGIN
-		//scene.lightingEnvironment.intensity = 10.0
-		//scene.wantsScreenSpaceReflection = true
-		
-		/*
-		scene.background.contents = SKTexture(imageNamed: "gradient")
-		scene.lightingEnvironment.contents = scene.background.contents
-		 */
-		let texture = MDLSkyCubeTexture(name: "sky",
-										channelEncoding: .float16,
-										textureDimensions: vector_int2(64, 64),
-										turbidity: 1,
-										sunElevation: 0.777999997,
-										upperAtmosphereScattering: 0.4,
-										groundAlbedo: 0.33)
-		texture.groundColor = NSColor(red: 1.0, green: 0.832, blue: 0.472, alpha: 1.0).cgColor
-		texture.gamma = 0.05
-		texture.exposure = 0.0
-		texture.brightness = 0.0
-		texture.contrast = 0.0
-		texture.saturation = -2.0
-		texture.horizonElevation = 0.0
-
-		//scene.lightingEnvironment.contents = texture
-		//scene.lightingEnvironment.contents = NSColor.white
-		scene.lightingEnvironment.intensity = 3
-		//scene.lightingEnvironment.intensity = 10
-		scene.background.contents = NSColor.white
-// WTF CHANGE END
 
 		//scene.physicsWorld.speed = 1.5
 		//scene.physicsWorld.gravity = SCNVector3Make(0, -12.8, 0)
