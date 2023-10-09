@@ -34,6 +34,17 @@ class ViewController: NSViewController {
 
 		self.screenParametersNotificationObserver = NotificationCenter.default.addObserver(forName: NSApplication.didChangeScreenParametersNotification, object: nil, queue: nil) { [weak self] note in
 			debugLog("screen parameters changed, updating configuration...")
+			if #available(macOS 14, *) {
+				if Defaults.shouldFakeNotch {
+					// NOTE: On macOS Sonoma, creating the fake notch windows causes the screen parameters to change.
+					// Calling updateConfiguration causes new windows to be created and initiates an endless loop of change
+					// notifications.
+					//
+					// Rather than dive into what is probably a nasty side effect of the CGDisplayStream change detection, the
+					// notification is just ignored. A reasonable compromise for a demo.
+					return
+				}
+			}
 			self?.updateConfiguration()
 		}
 
