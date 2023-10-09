@@ -47,7 +47,6 @@ class DiceEffect: NotchEffect {
 	}
 
 	override func mouseExited(at point: CGPoint, underNotch: Bool) {
-		return
 		guard let parentView else { return }
 		guard let parentWindow else { return }
 		guard let hitWindow else { return }
