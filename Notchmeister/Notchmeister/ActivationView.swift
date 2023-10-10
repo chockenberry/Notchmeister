@@ -19,8 +19,8 @@ class ActivationView: NSView {
 		}
 		dirtyRect.fill()
 
-		let drawControlPanel = NSScreen.hasNotchedScreen
-		
+		let drawControlPanel = NSScreen.hasNotchedScreen && !Defaults.shouldHideControlPanel
+
 		if drawControlPanel {
 			let notchWidth = bounds.width - (NotchWindow.activationPadding * 2)
 			let smallMinimumWidth: CGFloat = 137 + (.notchLowerRadius * 2)

@@ -17,6 +17,7 @@ class DebugViewController: NSViewController {
     @IBOutlet weak var fillNotchCheckbox: NSButton!
 	@IBOutlet weak var textNotchCheckbox: NSButton!
 	@IBOutlet weak var alternateDiceCheckbox: NSButton!
+	@IBOutlet weak var hideControlPanelCheckbox: NSButton!
 
     //MARK: - Life Cycle
     
@@ -37,7 +38,8 @@ class DebugViewController: NSViewController {
         fillNotchCheckbox.state = Defaults.shouldDrawNotchFill ? .on : .off
 		textNotchCheckbox.state = Defaults.shouldDrawNotchText ? .on : .off
 		alternateDiceCheckbox.state = Defaults.shouldUseAlternateDice ? .on : .off
-		
+		hideControlPanelCheckbox.state = Defaults.shouldHideControlPanel ? .on : .off
+
 		let enabled = Defaults.shouldFakeNotch
 		largeFakeNotchCheckbox.isEnabled = enabled
 		deactivateFakeNotchCheckbox.isEnabled = enabled
@@ -91,6 +93,11 @@ class DebugViewController: NSViewController {
 
 	@IBAction func alternateDiceValueChanged(_ sender: Any) {
 		Defaults.shouldUseAlternateDice = (alternateDiceCheckbox.state == .on)
+		updateConfiguration()
+	}
+
+	@IBAction func hideControlPanelChanged(_ sender: Any) {
+		Defaults.shouldHideControlPanel = (hideControlPanelCheckbox.state == .on)
 		updateConfiguration()
 	}
 
