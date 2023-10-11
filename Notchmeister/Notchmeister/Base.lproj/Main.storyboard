@@ -336,14 +336,14 @@
             <objects>
                 <viewController storyboardIdentifier="debugViewController" id="Cb5-Lm-sZD" customClass="DebugViewController" customModule="Notchmeister" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="yHf-hb-Xxs">
-                        <rect key="frame" x="0.0" y="0.0" width="335" height="450"/>
+                        <rect key="frame" x="0.0" y="0.0" width="309" height="488"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Srn-qg-VXb">
-                                <rect key="frame" x="20" y="60" width="295" height="370"/>
+                            <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="11" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Srn-qg-VXb">
+                                <rect key="frame" x="20" y="60" width="269" height="408"/>
                                 <subviews>
                                     <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Sds-Tg-dsn">
-                                        <rect key="frame" x="0.0" y="336" width="198" height="34"/>
+                                        <rect key="frame" x="0.0" y="374" width="198" height="34"/>
                                         <subviews>
                                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="fy7-DJ-hcI">
                                                 <rect key="frame" x="-2" y="17" width="177" height="18"/>
@@ -376,12 +376,12 @@
                                             <real value="3.4028234663852886e+38"/>
                                         </customSpacing>
                                     </stackView>
-                                    <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="o0t-ck-QPV">
-                                        <rect key="frame" x="0.0" y="294" width="284" height="34"/>
+                                    <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" verticalClippingResistancePriority="250" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="o0t-ck-QPV">
+                                        <rect key="frame" x="0.0" y="315" width="269" height="48"/>
                                         <subviews>
                                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ky9-hg-bUD">
-                                                <rect key="frame" x="-2" y="17" width="139" height="18"/>
-                                                <buttonCell key="cell" type="check" title="Hide Control Panel" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="oPK-Ig-8ul">
+                                                <rect key="frame" x="-2" y="31" width="214" height="18"/>
+                                                <buttonCell key="cell" type="check" title="Hide control panel under notch" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="oPK-Ig-8ul">
                                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                     <font key="font" metaFont="system"/>
                                                 </buttonCell>
@@ -389,9 +389,9 @@
                                                     <action selector="hideControlPanelChanged:" target="Cb5-Lm-sZD" id="UsJ-gP-eJ2"/>
                                                 </connections>
                                             </button>
-                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="HB8-Gb-I6b">
-                                                <rect key="frame" x="18" y="0.0" width="268" height="14"/>
-                                                <textFieldCell key="cell" lineBreakMode="clipping" title="Stop the blooming effect on Liquid Retina displays" id="J43-vf-JgM">
+                                            <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="249" translatesAutoresizingMaskIntoConstraints="NO" id="HB8-Gb-I6b">
+                                                <rect key="frame" x="18" y="0.0" width="253" height="28"/>
+                                                <textFieldCell key="cell" title="Stops the blooming effect on Liquid Retina displays and surprises in screenshots" id="J43-vf-JgM">
                                                     <font key="font" metaFont="smallSystem"/>
                                                     <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -411,7 +411,7 @@
                                         </customSpacing>
                                     </stackView>
                                     <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jZl-Tf-POj">
-                                        <rect key="frame" x="0.0" y="252" width="161" height="34"/>
+                                        <rect key="frame" x="0.0" y="270" width="161" height="34"/>
                                         <subviews>
                                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Qh7-pz-oeU">
                                                 <rect key="frame" x="-2" y="17" width="161" height="18"/>
@@ -445,7 +445,7 @@
                                         </customSpacing>
                                     </stackView>
                                     <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9S5-Ky-jw6">
-                                        <rect key="frame" x="0.0" y="210" width="217" height="34"/>
+                                        <rect key="frame" x="0.0" y="225" width="217" height="34"/>
                                         <subviews>
                                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="GpJ-jA-PUB">
                                                 <rect key="frame" x="-2" y="17" width="204" height="18"/>
@@ -479,7 +479,7 @@
                                         </customSpacing>
                                     </stackView>
                                     <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CUq-gu-RUg">
-                                        <rect key="frame" x="0.0" y="168" width="249" height="34"/>
+                                        <rect key="frame" x="0.0" y="180" width="249" height="34"/>
                                         <subviews>
                                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="b3D-fJ-mEF">
                                                 <rect key="frame" x="-2" y="17" width="166" height="18"/>
@@ -513,7 +513,7 @@
                                         </customSpacing>
                                     </stackView>
                                     <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Tw7-ds-yvO">
-                                        <rect key="frame" x="0.0" y="126" width="256" height="34"/>
+                                        <rect key="frame" x="0.0" y="135" width="256" height="34"/>
                                         <subviews>
                                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="XxQ-Du-PQi">
                                                 <rect key="frame" x="-2" y="17" width="128" height="18"/>
@@ -547,7 +547,7 @@
                                         </customSpacing>
                                     </stackView>
                                     <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zXP-w8-yTe">
-                                        <rect key="frame" x="0.0" y="84" width="230" height="34"/>
+                                        <rect key="frame" x="0.0" y="90" width="230" height="34"/>
                                         <subviews>
                                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="rKO-N3-Lc5">
                                                 <rect key="frame" x="-2" y="17" width="160" height="18"/>
@@ -581,7 +581,7 @@
                                         </customSpacing>
                                     </stackView>
                                     <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3NI-Zm-XLs">
-                                        <rect key="frame" x="0.0" y="42" width="176" height="34"/>
+                                        <rect key="frame" x="0.0" y="45" width="176" height="34"/>
                                         <subviews>
                                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="n8l-IV-LaP">
                                                 <rect key="frame" x="-2" y="17" width="134" height="18"/>
@@ -673,7 +673,7 @@
                                 </customSpacing>
                             </stackView>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Vnq-v4-gW5">
-                                <rect key="frame" x="184" y="13" width="138" height="32"/>
+                                <rect key="frame" x="158" y="13" width="138" height="32"/>
                                 <buttonCell key="cell" type="push" title="Reset to Defaults" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Iqt-Kq-SMU">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -742,7 +742,7 @@
                     </customSpacing>
                 </stackView>
             </objects>
-            <point key="canvasLocation" x="488" y="887"/>
+            <point key="canvasLocation" x="403.5" y="1017"/>
         </scene>
     </scenes>
     <resources>
