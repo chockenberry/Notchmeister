@@ -336,14 +336,14 @@
             <objects>
                 <viewController storyboardIdentifier="debugViewController" id="Cb5-Lm-sZD" customClass="DebugViewController" customModule="Notchmeister" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="yHf-hb-Xxs">
-                        <rect key="frame" x="0.0" y="0.0" width="300" height="408"/>
+                        <rect key="frame" x="0.0" y="0.0" width="335" height="450"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Srn-qg-VXb">
-                                <rect key="frame" x="20" y="60" width="260" height="328"/>
+                                <rect key="frame" x="20" y="60" width="295" height="370"/>
                                 <subviews>
                                     <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Sds-Tg-dsn">
-                                        <rect key="frame" x="0.0" y="294" width="198" height="34"/>
+                                        <rect key="frame" x="0.0" y="336" width="198" height="34"/>
                                         <subviews>
                                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="fy7-DJ-hcI">
                                                 <rect key="frame" x="-2" y="17" width="177" height="18"/>
@@ -366,6 +366,40 @@
                                         </subviews>
                                         <constraints>
                                             <constraint firstItem="K07-E4-R0u" firstAttribute="leading" secondItem="fy7-DJ-hcI" secondAttribute="leading" constant="20" id="hZd-yz-eGt"/>
+                                        </constraints>
+                                        <visibilityPriorities>
+                                            <integer value="1000"/>
+                                            <integer value="1000"/>
+                                        </visibilityPriorities>
+                                        <customSpacing>
+                                            <real value="3.4028234663852886e+38"/>
+                                            <real value="3.4028234663852886e+38"/>
+                                        </customSpacing>
+                                    </stackView>
+                                    <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="o0t-ck-QPV">
+                                        <rect key="frame" x="0.0" y="294" width="284" height="34"/>
+                                        <subviews>
+                                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ky9-hg-bUD">
+                                                <rect key="frame" x="-2" y="17" width="139" height="18"/>
+                                                <buttonCell key="cell" type="check" title="Hide Control Panel" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="oPK-Ig-8ul">
+                                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                    <font key="font" metaFont="system"/>
+                                                </buttonCell>
+                                                <connections>
+                                                    <action selector="hideControlPanelChanged:" target="Cb5-Lm-sZD" id="UsJ-gP-eJ2"/>
+                                                </connections>
+                                            </button>
+                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="HB8-Gb-I6b">
+                                                <rect key="frame" x="18" y="0.0" width="268" height="14"/>
+                                                <textFieldCell key="cell" lineBreakMode="clipping" title="Stop the blooming effect on Liquid Retina displays" id="J43-vf-JgM">
+                                                    <font key="font" metaFont="smallSystem"/>
+                                                    <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                </textFieldCell>
+                                            </textField>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstItem="HB8-Gb-I6b" firstAttribute="leading" secondItem="ky9-hg-bUD" secondAttribute="leading" constant="20" id="f50-Qb-kSR"/>
                                         </constraints>
                                         <visibilityPriorities>
                                             <integer value="1000"/>
@@ -624,8 +658,10 @@
                                     <integer value="1000"/>
                                     <integer value="1000"/>
                                     <integer value="1000"/>
+                                    <integer value="1000"/>
                                 </visibilityPriorities>
                                 <customSpacing>
+                                    <real value="3.4028234663852886e+38"/>
                                     <real value="3.4028234663852886e+38"/>
                                     <real value="3.4028234663852886e+38"/>
                                     <real value="3.4028234663852886e+38"/>
@@ -637,7 +673,7 @@
                                 </customSpacing>
                             </stackView>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Vnq-v4-gW5">
-                                <rect key="frame" x="149" y="13" width="138" height="32"/>
+                                <rect key="frame" x="184" y="13" width="138" height="32"/>
                                 <buttonCell key="cell" type="push" title="Reset to Defaults" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Iqt-Kq-SMU">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -663,6 +699,7 @@
                         <outlet property="debugDrawingCheckbox" destination="Qh7-pz-oeU" id="xxR-Et-FnP"/>
                         <outlet property="fakeNotchCheckbox" destination="GpJ-jA-PUB" id="dh3-iz-Iep"/>
                         <outlet property="fillNotchCheckbox" destination="n8l-IV-LaP" id="x7N-8K-xPf"/>
+                        <outlet property="hideControlPanelCheckbox" destination="ky9-hg-bUD" id="2Yd-OB-oWY"/>
                         <outlet property="largeFakeNotchCheckbox" destination="XxQ-Du-PQi" id="y3E-nF-gra"/>
                         <outlet property="outlineNotchCheckbox" destination="rKO-N3-Lc5" id="hQc-bO-cMR"/>
                         <outlet property="textNotchCheckbox" destination="FAq-Fo-9yt" id="eeQ-NB-GmV"/>
