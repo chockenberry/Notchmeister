@@ -28,8 +28,12 @@ class ActivationView: NSView {
 			if notchWidth > smallMinimumWidth {
 				// NOTE: The machdep.cpu.brand_string sysctl is used to check for "Apple M2" or "Apple M1"
 				// https://cpufun.substack.com/p/more-m1-fun-hardware-information
+				let cpuBrand = cpuBrand()
 				let imageName: String
-				if cpuBrand() == "Apple M2" {
+				if cpuBrand == "Apple M3" {
+					imageName = notchWidth < largeMinimumWidth ? "m3-controlpanel-small" : "m3-controlpanel"
+				}
+				else if cpuBrand == "Apple M2" {
 					imageName = notchWidth < largeMinimumWidth ? "m2-controlpanel-small" : "m2-controlpanel"
 				}
 				else {
