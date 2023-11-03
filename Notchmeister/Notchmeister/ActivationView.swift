@@ -30,10 +30,10 @@ class ActivationView: NSView {
 				// https://cpufun.substack.com/p/more-m1-fun-hardware-information
 				let cpuBrand = cpuBrand()
 				let imageName: String
-				if cpuBrand == "Apple M3" {
+				if cpuBrand.hasPrefix("Apple M3") {
 					imageName = notchWidth < largeMinimumWidth ? "m3-controlpanel-small" : "m3-controlpanel"
 				}
-				else if cpuBrand == "Apple M2" {
+				else if cpuBrand.hasPrefix("Apple M2") {
 					imageName = notchWidth < largeMinimumWidth ? "m2-controlpanel-small" : "m2-controlpanel"
 				}
 				else {
