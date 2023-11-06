@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="22154" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="22155" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22154"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22155"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -156,7 +156,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="400" height="262"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DQb-Wa-YfR">
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DQb-Wa-YfR">
                                 <rect key="frame" x="64" y="223" width="273" height="19"/>
                                 <textFieldCell key="cell" controlSize="large" lineBreakMode="clipping" title="Move your mouse under the notch!" id="D7s-5M-fM7">
                                     <font key="font" metaFont="systemBold" size="16"/>
@@ -167,7 +167,7 @@
                             <stackView distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" horizontalHuggingPriority="750" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PPi-Xy-Y4k">
                                 <rect key="frame" x="76" y="117" width="248" height="86"/>
                                 <subviews>
-                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="pwF-E2-nS0">
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="pwF-E2-nS0">
                                         <rect key="frame" x="-2" y="69" width="44" height="16"/>
                                         <textFieldCell key="cell" lineBreakMode="clipping" title="Effect:" id="vQt-if-c95">
                                             <font key="font" metaFont="system"/>
@@ -197,7 +197,7 @@
                                                     <action selector="selectedEffectValueChanged:" target="XfG-lQ-9wD" id="GuE-yn-Kjf"/>
                                                 </connections>
                                             </popUpButton>
-                                            <textField focusRingType="none" horizontalHuggingPriority="750" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="eJu-Vj-QTs">
+                                            <textField horizontalHuggingPriority="750" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="eJu-Vj-QTs">
                                                 <rect key="frame" x="-2" y="0.0" width="204" height="56"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="56" id="Nwq-Hj-jnc"/>
@@ -250,7 +250,7 @@
                                     <action selector="hideDockIconValueChanged:" target="XfG-lQ-9wD" id="YlH-c9-La2"/>
                                 </connections>
                             </button>
-                            <textField focusRingType="none" horizontalHuggingPriority="750" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="HP6-Vj-CA4">
+                            <textField horizontalHuggingPriority="750" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="HP6-Vj-CA4">
                                 <rect key="frame" x="94" y="48" width="248" height="28"/>
                                 <textFieldCell key="cell" selectable="YES" title="When the Dock icon is hidden, clicking underneath the notch opens this window." id="89U-jp-sSf">
                                     <font key="font" metaFont="smallSystem"/>
@@ -355,7 +355,7 @@
                                                     <action selector="alternateDiceValueChanged:" target="Cb5-Lm-sZD" id="uba-bV-3Zj"/>
                                                 </connections>
                                             </button>
-                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="K07-E4-R0u">
+                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="K07-E4-R0u">
                                                 <rect key="frame" x="18" y="0.0" width="182" height="14"/>
                                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Live long and prosper (sound up!)" id="bhC-Hq-kuz">
                                                     <font key="font" metaFont="smallSystem"/>
@@ -389,7 +389,7 @@
                                                     <action selector="hideControlPanelChanged:" target="Cb5-Lm-sZD" id="UsJ-gP-eJ2"/>
                                                 </connections>
                                             </button>
-                                            <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="249" translatesAutoresizingMaskIntoConstraints="NO" id="HB8-Gb-I6b">
+                                            <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="249" translatesAutoresizingMaskIntoConstraints="NO" id="HB8-Gb-I6b">
                                                 <rect key="frame" x="18" y="0.0" width="253" height="28"/>
                                                 <textFieldCell key="cell" title="Stops the blooming effect on Liquid Retina displays and surprises in screenshots" id="J43-vf-JgM">
                                                     <font key="font" metaFont="smallSystem"/>
@@ -423,7 +423,7 @@
                                                     <action selector="debugDrawingValueChanged:" target="Cb5-Lm-sZD" id="IX6-Km-WED"/>
                                                 </connections>
                                             </button>
-                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="lNl-QJ-TKe">
+                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="lNl-QJ-TKe">
                                                 <rect key="frame" x="18" y="0.0" width="145" height="14"/>
                                                 <textFieldCell key="cell" lineBreakMode="clipping" title="A peek behind the curtains" id="6Rn-FN-FMu">
                                                     <font key="font" metaFont="smallSystem"/>
@@ -457,7 +457,7 @@
                                                     <action selector="fakeNotchValueChanged:" target="Cb5-Lm-sZD" id="eyk-w7-9kV"/>
                                                 </connections>
                                             </button>
-                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="vpo-mV-VXb">
+                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="vpo-mV-VXb">
                                                 <rect key="frame" x="18" y="0.0" width="201" height="14"/>
                                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Creates a genuine replacement notch" id="LS7-Ik-QsF">
                                                     <font key="font" metaFont="smallSystem"/>
@@ -491,7 +491,7 @@
                                                     <action selector="deactivateFakeNotchValueChanged:" target="Cb5-Lm-sZD" id="Lfn-jR-LHy"/>
                                                 </connections>
                                             </button>
-                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="GrV-cx-49W">
+                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="GrV-cx-49W">
                                                 <rect key="frame" x="18" y="0.0" width="233" height="14"/>
                                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Activating another app hides the fake notch" id="MZs-OA-GMP">
                                                     <font key="font" metaFont="smallSystem"/>
@@ -525,7 +525,7 @@
                                                     <action selector="largeFakeNotchValueChanged:" target="Cb5-Lm-sZD" id="clG-oU-vh0"/>
                                                 </connections>
                                             </button>
-                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="PNK-Ww-VIr">
+                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="PNK-Ww-VIr">
                                                 <rect key="frame" x="18" y="0.0" width="240" height="14"/>
                                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Chonky boy, just like when using More Space" id="AJw-ON-FaK">
                                                     <font key="font" metaFont="smallSystem"/>
@@ -559,7 +559,7 @@
                                                     <action selector="outlineNotchValueChanaged:" target="Cb5-Lm-sZD" id="LdV-3j-hry"/>
                                                 </connections>
                                             </button>
-                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="BIA-Kl-XhI">
+                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="BIA-Kl-XhI">
                                                 <rect key="frame" x="18" y="0.0" width="214" height="14"/>
                                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Draws a white border around fake notch" id="Mgm-xz-5Pz">
                                                     <font key="font" metaFont="smallSystem"/>
@@ -593,7 +593,7 @@
                                                     <action selector="fillNotchValueChanged:" target="Cb5-Lm-sZD" id="10f-GQ-F3r"/>
                                                 </connections>
                                             </button>
-                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cYH-cp-dQ9">
+                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cYH-cp-dQ9">
                                                 <rect key="frame" x="18" y="0.0" width="160" height="14"/>
                                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Fills the fake notch with black" id="ffF-6J-ub0">
                                                     <font key="font" metaFont="smallSystem"/>
@@ -627,7 +627,7 @@
                                                     <action selector="textNotchValueChanged:" target="Cb5-Lm-sZD" id="HDS-y8-SrI"/>
                                                 </connections>
                                             </button>
-                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="u1N-LI-iP6">
+                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="u1N-LI-iP6">
                                                 <rect key="frame" x="18" y="0.0" width="153" height="14"/>
                                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Show NO-F4K3 part number" id="4df-uS-rGs">
                                                     <font key="font" metaFont="smallSystem"/>
@@ -720,7 +720,7 @@
                                 <action selector="textNotchValueChanged:" target="Cb5-Lm-sZD" id="dAR-31-bkq"/>
                             </connections>
                         </button>
-                        <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="RjC-MG-Adi">
+                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="RjC-MG-Adi">
                             <rect key="frame" x="18" y="0.0" width="153" height="14"/>
                             <textFieldCell key="cell" lineBreakMode="clipping" title="Show NO-F4K3 part number" id="Bic-0t-1Dg">
                                 <font key="font" metaFont="smallSystem"/>
