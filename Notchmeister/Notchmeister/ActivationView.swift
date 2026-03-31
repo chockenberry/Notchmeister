@@ -85,8 +85,8 @@ class ActivationView: NSView {
 						drawIndent += mImage.size.width + drawPadding
 					}
 
-					let iteration = cpuBrand[prefix.endIndex..<cpuBrand.endIndex]
-					for number in iteration {
+					let numbers = cpuBrand[prefix.endIndex..<cpuBrand.endIndex]
+					for number in numbers {
 						if let numberImage = NSImage(named: String(number)) {
 							let origin = CGPoint(
 								x: drawRect.origin.x + brandOffset.x + pixelClamp(drawIndent),
