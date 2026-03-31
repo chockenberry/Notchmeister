@@ -17,7 +17,7 @@ enum Effects: Int, CaseIterable {
 	case expando
 	case dice
 	case autotoot
-#if DEBUG
+#if DEBUG && false
 	case portal
 #endif
 
@@ -39,7 +39,7 @@ enum Effects: Int, CaseIterable {
 			return "Fusion Dice"
 		case .autotoot:
 			return "AutoToot™"
-#if DEBUG
+#if DEBUG && false
 		case .portal:
 			return "Portal"
 #endif
@@ -64,7 +64,7 @@ enum Effects: Int, CaseIterable {
 			return "Apple’s expertise with silicon is not only with the die, but also the dice.\n\n☢️ AVOID EYE OR SKIN EXPOSURE"
 		case .autotoot:
 			return "Pressure buildup can reduce the performance of your Mac: AutoToot™ can safely vent harmful gases."
-#if DEBUG
+#if DEBUG && false
 		case .portal:
 			return "Activate Macintosh Interdimensional Computation Extension (MICE)."
 #endif
@@ -89,7 +89,7 @@ enum Effects: Int, CaseIterable {
 			return DiceEffect(with: parentLayer, in: parentView, of: parentWindow)
 		case .autotoot:
 			return TootEffect(with: parentLayer, in: parentView, of: parentWindow)
-#if DEBUG
+#if DEBUG && false
 		case .portal:
 			return PortalEffect(with: parentLayer, in: parentView, of: parentWindow)
 #endif
