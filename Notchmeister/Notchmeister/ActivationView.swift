@@ -150,10 +150,12 @@ class ActivationView: NSView {
 	
 	override func mouseDown(with event: NSEvent) {
 		debugLog()
-		NSApplication.shared.activate(ignoringOtherApps: true)
-		if let window = NSApplication.shared.windows.first {
-			window.makeKeyAndOrderFront(self)
-			debugLog("activated main window")
+		if Defaults.shouldActivateUnderNotch {
+			NSApplication.shared.activate(ignoringOtherApps: true)
+			if let window = NSApplication.shared.windows.first {
+				window.makeKeyAndOrderFront(self)
+				debugLog("activated main window")
+			}
 		}
 	}
 
