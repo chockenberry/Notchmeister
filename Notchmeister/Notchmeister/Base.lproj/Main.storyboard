@@ -425,7 +425,7 @@
                                             </button>
                                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="249" translatesAutoresizingMaskIntoConstraints="NO" id="Odk-ii-DfI">
                                                 <rect key="frame" x="18" y="0.0" width="253" height="28"/>
-                                                <textFieldCell key="cell" title="Ignores clicks under notch: to Quit the app, use Activity Monitor or Terminal." id="x7n-Uf-eYN">
+                                                <textFieldCell key="cell" title="If disabled, ignores clicks under notch: to Quit the app, use Activity Monitor or Terminal." id="x7n-Uf-eYN">
                                                     <font key="font" metaFont="smallSystem"/>
                                                     <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
