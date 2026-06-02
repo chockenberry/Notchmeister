@@ -28,7 +28,7 @@ class ViewController: NSViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-		debugButton.isHidden = true
+		debugButton.isHidden = !Defaults.shouldShowDebugButton
 
         configureForDefaults()
 
@@ -134,7 +134,8 @@ class ViewController: NSViewController {
 	@IBAction func openHelp(_ sender: Any) {
 		if NSEvent.modifierFlags.contains(.option) {
 			// NOTE: Turn on the debug button by holding down the Option key while clicking the Help button.
-			debugButton.isHidden = false
+			Defaults.shouldShowDebugButton = !Defaults.shouldShowDebugButton
+			debugButton.isHidden = !Defaults.shouldShowDebugButton
 		}
 		else {
 			let alert = NSAlert()
