@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "LED-body-new.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
