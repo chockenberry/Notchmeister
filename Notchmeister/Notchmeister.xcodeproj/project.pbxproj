@@ -28,6 +28,7 @@
 		4407B32D279B92BD00182733 /* ExpandoEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4407B32C279B92BD00182733 /* ExpandoEffect.swift */; };
 		440EAB84275812AD009DBAF5 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 440EAB83275812AD009DBAF5 /* Credits.rtf */; };
 		441934F62FCF4CA800C1EC0C /* MittEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 441934F52FCF4CA800C1EC0C /* MittEffect.swift */; };
+		441934F82FD09DE000C1EC0C /* SpeechSynthesizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 441934F72FD09DE000C1EC0C /* SpeechSynthesizer.swift */; };
 		441BC79E27629D5800BE0F01 /* WindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 441BC79D27629D5800BE0F01 /* WindowController.swift */; };
 		441BC7A02762EEA900BE0F01 /* PortalEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 441BC79F2762EEA900BE0F01 /* PortalEffect.swift */; };
 		441C5AB2272C9FD10094507E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 441C5AB1272C9FD10094507E /* AppDelegate.swift */; };
@@ -80,6 +81,7 @@
 		4407B32C279B92BD00182733 /* ExpandoEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandoEffect.swift; sourceTree = "<group>"; };
 		440EAB83275812AD009DBAF5 /* Credits.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
 		441934F52FCF4CA800C1EC0C /* MittEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MittEffect.swift; sourceTree = "<group>"; };
+		441934F72FD09DE000C1EC0C /* SpeechSynthesizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechSynthesizer.swift; sourceTree = "<group>"; };
 		441BC79D27629D5800BE0F01 /* WindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowController.swift; sourceTree = "<group>"; };
 		441BC79F2762EEA900BE0F01 /* PortalEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortalEffect.swift; sourceTree = "<group>"; };
 		441C5AAE272C9FD10094507E /* Notchmeister.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Notchmeister.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -180,6 +182,7 @@
 				441934F52FCF4CA800C1EC0C /* MittEffect.swift */,
 				44B724AF29FAF128002E03E6 /* SceneHitView.swift */,
 				44F5C5E529FC7672000331C2 /* SceneAnimationView.swift */,
+				441934F72FD09DE000C1EC0C /* SpeechSynthesizer.swift */,
 				44E42D692756DA0500BDD3DC /* Effects.swift */,
 				011C15B5272E1635003422E5 /* Defaults.swift */,
 				012BA33B273749A5008AF04E /* NotchExtensions.swift */,
@@ -362,6 +365,7 @@
 				44F5C5E629FC7672000331C2 /* SceneAnimationView.swift in Sources */,
 				44961D80273732ED004E1A0B /* GlowEffect.swift in Sources */,
 				44A817B627446C5200731822 /* FestiveEffect.swift in Sources */,
+				441934F82FD09DE000C1EC0C /* SpeechSynthesizer.swift in Sources */,
 				441C5AB2272C9FD10094507E /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -14,10 +14,10 @@ class MittEffect: NotchEffect {
 	var timer: Timer?
 	
 	let ledCount = 12
-	let padding: CGFloat = 10
+	let padding: CGFloat = 15
 
-	let ledBounds = CGRect(origin: .zero, size: CGSize(width: 20, height: 20))
-
+	let ledBounds = CGRect(origin: .zero, size: CGSize(width: 15, height: 15))
+	
 	private func ledImage(named name: String) -> CGImage? {
 		let image = NSImage(named: name)!
 		var proposedRect = ledBounds
@@ -116,14 +116,14 @@ class MittEffect: NotchEffect {
 	private func configureSublayers() {
 		guard let parentLayer = parentLayer else { return }
 
-		let availableWidth = parentLayer.bounds.width - (padding * 2)
-		let ledSpacing = availableWidth / CGFloat(ledCount - 1)
-		let yOffset = -ledBounds.height
-
 		do { // the layer that is a frame holding the screen
 			backgroundLayer.bounds = parentLayer.bounds
+#if DEBUG && true
 			backgroundLayer.backgroundColor = NSColor.darkGray.cgColor
-			backgroundLayer.cornerRadius = CGFloat.notchLowerRadius
+#else
+			backgroundLayer.backgroundColor = NSColor.black.cgColor
+#endif
+			backgroundLayer.cornerRadius = parentLayer.bounds.height / 2
 			backgroundLayer.masksToBounds = true
 			backgroundLayer.contentsScale = parentLayer.contentsScale
 			backgroundLayer.position = .zero
@@ -131,6 +131,9 @@ class MittEffect: NotchEffect {
 		}
 		
 		parentLayer.addSublayer(backgroundLayer)
+
+		let availableWidth = parentLayer.bounds.width - (padding * 2)
+		let ledSpacing = availableWidth / CGFloat(ledCount - 1)
 
 		for index in 0..<ledCount {
 			let ledLayer = CALayer()
@@ -225,92 +228,62 @@ class MittEffect: NotchEffect {
 		}
 	}
 
-	//var lastPoint: CGPoint = .zero
-
 	override func mouseEntered(at point: CGPoint, underNotch: Bool) {
 		guard let parentLayer = parentLayer else { return }
-
+		
 		let yOffset = parentLayer.bounds.maxY
-
+		
 		stopLights()
 		
+		let speechSynthesizer = SpeechSynthesizer.shared
+		if !speechSynthesizer.isSpeaking {
+			debugLog("isSpeaking: starting speech")
+			speechSynthesizer.speak("MITT System Activated - Auto Cruise Engaged")
+		}
+
 		CATransaction.begin()
 		CATransaction.setCompletionBlock { [weak self] in
 			self?.startLights()
 		}
-
+		
 		for (index, ledLayer) in ledLayers.enumerated() {
-			//ledLayer.contents = (index % 2 == 0 ? purpleOnImage : blueOnImage)
+			ledLayer.contents = switch (index) {
+			case 0, 11:
+				self.greenOffImage
+			case 1, 10:
+				self.yellowOffImage
+			case 2, 9:
+				self.orangeOffImage
+			case 3, 8:
+				self.redOffImage
+			case 4, 7:
+				self.purpleOffImage
+			case 5, 6:
+				self.blueOffImage
+			default:
+				self.whiteOffImage
+			}
 		}
 		
-			backgroundLayer.position = CGPoint(x: backgroundLayer.position.x, y: yOffset)
-			
-			let fromPosition: CGPoint
-			if let position = backgroundLayer.presentation()?.position {
-				fromPosition = position
-			}
-			else {
-				fromPosition = CGPoint(x: backgroundLayer.position.x, y: parentLayer.bounds.minY)
-			}
-			
-			let springDownAnimation = CASpringAnimation(keyPath: "position")
-			springDownAnimation.fromValue = fromPosition
-			springDownAnimation.toValue = CGPoint(x: backgroundLayer.position.x, y: yOffset)
-			springDownAnimation.duration = 2
-			springDownAnimation.damping = 8
-			springDownAnimation.mass = 0.5
-			backgroundLayer.add(springDownAnimation, forKey: "position")
-		//}
+		backgroundLayer.position = CGPoint(x: backgroundLayer.position.x, y: yOffset)
 		
-		CATransaction.commit()
-		
-		//lastPoint = point
-	}
-	
-	/*
-	var currentBulbIndex = -1
-
-	override func mouseMoved(at point: CGPoint, underNotch: Bool) {
-		guard let parentLayer = parentLayer else { return }
-			
-		let availableWidth = parentLayer.bounds.width - (padding * 2)
-		let bulbSpacing = availableWidth / CGFloat(ledCount - 1)
-
-		if underNotch {
-			let bulbInset = padding - (bulbSpacing / 2)
-			if point.x > bulbInset {
-				let bulbIndex = Int((point.x - bulbInset) / bulbSpacing)
-				if bulbIndex >= 0 && bulbIndex < ledCount {
-					if bulbIndex != currentBulbIndex {
-						currentBulbIndex = bulbIndex
-
-						let ledLayer = ledLayers[bulbIndex]
-						
-						CATransaction.begin()
-						
-						let horizontalDirection = point.x - lastPoint.x // negative = moving left, positive - moving right
-						let pulse: CGFloat = horizontalDirection > 0 ? -1 : 1
-						let springSwayAnimation = CASpringAnimation(keyPath: "transform.rotation")
-						springSwayAnimation.fromValue = CGFloat.pi / 16 * pulse
-						springSwayAnimation.toValue = 0
-						springSwayAnimation.duration = 3
-						springSwayAnimation.damping = 2
-						springSwayAnimation.fillMode = .forwards
-						springSwayAnimation.isAdditive = true
-						ledLayer.add(springSwayAnimation, forKey: "springSway")
-						
-						CATransaction.commit()
-					}
-				}
-			}
+		let fromPosition: CGPoint
+		if let position = backgroundLayer.presentation()?.position {
+			fromPosition = position
 		}
 		else {
-			currentBulbIndex = -1
+			fromPosition = CGPoint(x: backgroundLayer.position.x, y: parentLayer.bounds.minY)
 		}
 		
-		lastPoint = point
+		let animation = CABasicAnimation(keyPath: "position")
+		animation.fromValue = fromPosition
+		animation.toValue = CGPoint(x: backgroundLayer.position.x, y: yOffset)
+		animation.duration = 0.25
+		animation.timingFunction = CAMediaTimingFunction(name: .easeIn)
+		backgroundLayer.add(animation, forKey: "position")
+		
+		CATransaction.commit()
 	}
-	*/
 	
 	private func stopLights() {
 		timer?.invalidate()
@@ -319,35 +292,30 @@ class MittEffect: NotchEffect {
 
 	override func mouseExited(at point: CGPoint, underNotch: Bool) {
 		guard let parentLayer = parentLayer else { return }
-
-		//let yOffset = -ledBounds.height
+		
 		let yOffset = parentLayer.bounds.minY
-
+		
 		CATransaction.begin()
 		CATransaction.setCompletionBlock { [weak self] in
 			self?.stopLights()
 		}
 		
-		//ledLayers.forEach { ledLayer in
-		//	ledLayer.position = CGPoint(x: ledLayer.position.x, y: yOffset)
-		//}
 		backgroundLayer.position = CGPoint(x: backgroundLayer.position.x, y: yOffset)
-
-			let fromPosition: CGPoint
-			if let position = backgroundLayer.presentation()?.position {
-				fromPosition = position
-			}
-			else {
-				fromPosition = CGPoint(x: backgroundLayer.position.x, y: parentLayer.bounds.maxY)
-			}
-
-			let animation = CABasicAnimation(keyPath: "position")
-			animation.fromValue = fromPosition
-			animation.toValue = CGPoint(x: backgroundLayer.position.x, y: yOffset)
-			animation.duration = 1
-			animation.timingFunction = CAMediaTimingFunction(name: .easeIn)
-			backgroundLayer.add(animation, forKey: "position")
-		//}
+		
+		let fromPosition: CGPoint
+		if let position = backgroundLayer.presentation()?.position {
+			fromPosition = position
+		}
+		else {
+			fromPosition = CGPoint(x: backgroundLayer.position.x, y: parentLayer.bounds.maxY)
+		}
+		
+		let animation = CABasicAnimation(keyPath: "position")
+		animation.fromValue = fromPosition
+		animation.toValue = CGPoint(x: backgroundLayer.position.x, y: yOffset)
+		animation.duration = 0.25
+		animation.timingFunction = CAMediaTimingFunction(name: .easeIn)
+		backgroundLayer.add(animation, forKey: "position")
 		
 		CATransaction.commit()
 	}
