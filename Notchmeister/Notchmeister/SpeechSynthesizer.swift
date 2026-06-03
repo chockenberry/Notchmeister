@@ -20,23 +20,16 @@ public final class SpeechSynthesizer: NSObject, @unchecked Sendable {
 	public var rate: Float = 0.55
 	public var pitchMultiplier: Float = 1.35
 
-	private(set) var isSpeaking: Bool = false {
-		didSet {
-			debugLog("set = \(isSpeaking)")
-		}
-	}
-
-	private(set) var isBuffering: Bool = false
+	private(set) var isSpeaking: Bool = false
 	private(set) var currentLevel: Float = 0.0
-	private(set) var sampleCount = 0
 
 #if DEBUG
+	private var sampleCount = 0
 	private var maxLevel: Float = -Float.infinity
 	private var minLevel: Float = Float.infinity
 #endif
 	
 	public override init() {
-		debugLog("isSpeaking: init")
 		super.init()
 		
 		// NOTE: We can't use the AVSpeechSynthesizerDelegate methods to detect when speech is active.
@@ -91,8 +84,8 @@ public final class SpeechSynthesizer: NSObject, @unchecked Sendable {
 			
 			// db now represents the live audio level (e.g., -20 dB to 0 dB)
 			if (sum > 0.0) {
-				self.sampleCount += 1
 #if DEBUG
+				self.sampleCount += 1
 				if db > self.maxLevel {
 					self.maxLevel = db
 				}
@@ -103,8 +96,8 @@ public final class SpeechSynthesizer: NSObject, @unchecked Sendable {
 #endif
 			}
 			else {
-				self.sampleCount = 0
 #if DEBUG
+				self.sampleCount = 0
 				self.maxLevel = -Float.infinity
 				self.minLevel = Float.infinity
 #endif
