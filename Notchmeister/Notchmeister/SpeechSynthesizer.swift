@@ -8,6 +8,10 @@
 import Foundation
 import AVFoundation
 
+public extension Notification.Name {
+	static let speechSynthesizerLevelDidChange = Notification.Name("speechSynthesizerLevelDidChange")
+}
+
 public final class SpeechSynthesizer: NSObject, @unchecked Sendable {
 	
 	public static let shared = SpeechSynthesizer()
@@ -18,10 +22,10 @@ public final class SpeechSynthesizer: NSObject, @unchecked Sendable {
 	
 	public var voice = AVSpeechSynthesisVoice(identifier: "com.apple.voice.compact.en-GB.Daniel")
 	public var rate: Float = 0.55
-	public var pitchMultiplier: Float = 1.35
+	public var pitchMultiplier: Float = 1.4
 
 	private(set) var isSpeaking: Bool = false
-	private(set) var currentLevel: Float = 0.0
+	private(set) var level: Float = 0.0
 
 #if DEBUG
 	private var sampleCount = 0
@@ -34,9 +38,9 @@ public final class SpeechSynthesizer: NSObject, @unchecked Sendable {
 		
 		// NOTE: We can't use the AVSpeechSynthesizerDelegate methods to detect when speech is active.
 		// When using write() to feed AVAudioBuffer to the playerNode, the methods don't track the state
-		// of the player, so we track the state of the buffers and scheduling in the player to maintain
+		// of the player; instead we track the state of the buffers and scheduling in the player to maintain
 		// a consistent isSpeaking state. A side effect of this is that there's no way to stop speech
-		// that's already in progress.
+		// that's already in progress (it's possible, but hard to do without being glitchy).
 		
 		audioEngine.attach(playerNode)
 		let mainMixer = audioEngine.mainMixerNode
@@ -49,7 +53,7 @@ public final class SpeechSynthesizer: NSObject, @unchecked Sendable {
 #else
 
 		let utterance = AVSpeechUtterance(string: "Test")
-		utterance.voice = voice //AVSpeechSynthesisVoice(language: "en-US")!
+		utterance.voice = voice
 		utterance.rate = rate
 		utterance.pitchMultiplier = pitchMultiplier
 		utterance.volume = 1.0
@@ -72,19 +76,45 @@ public final class SpeechSynthesizer: NSObject, @unchecked Sendable {
 			let channelDataValue = channelData[0]
 			let frameLength = UInt(buffer.frameLength)
 			
-			// Calculate RMS
+#if false // process all channelData in one pass
+			// calculate RMS
 			var sum: Float = 0
 			for i in 0..<Int(frameLength) {
 				sum += channelDataValue[i] * channelDataValue[i]
 			}
 			let rms = sqrt(sum / Float(frameLength))
 			
-			// Convert to Decibels
+			// convert to Decibels
 			let db = 20 * log10(rms)
 			
-			// db now represents the live audio level (e.g., -20 dB to 0 dB)
+			// db now represents the audio level (e.g., -20 dB to 0 dB)
+			if db != self.level {
+				self.level = db
+				NotificationCenter.default.post(name: .speechSynthesizerLevelDidChange, object: self)
+			}
+#else // process channelData in multiple passes
+			let by: Int = Int(frameLength / 2)
+			for i in stride(from: 0, to: Int(frameLength), by: by) {
+				//print("stride: \(i) by \(by), \(i) -> \(i + by)")
+				var sum: Float = 0
+				for j in i..<(i + by) {
+					sum += channelDataValue[i + j] * channelDataValue[i + j]
+				}
+				let rms = sqrt(sum / Float(by))
+				let db = 20 * log10(rms)
+				if !db.isNaN {
+					if db != self.level {
+						self.level = db
+						DispatchQueue.main.async {
+							NotificationCenter.default.post(name: .speechSynthesizerLevelDidChange, object: self)
+						}
+					}
+				}
+			}
+#endif
+			
+#if DEBUG && false
 			if (sum > 0.0) {
-#if DEBUG
 				self.sampleCount += 1
 				if db > self.maxLevel {
 					self.maxLevel = db
@@ -93,18 +123,15 @@ public final class SpeechSynthesizer: NSObject, @unchecked Sendable {
 					self.minLevel = db
 				}
 				debugLog("\(String(format: "%.2f", AVAudioTime.seconds(forHostTime: time.hostTime))) - sample: \(self.sampleCount), sum: \(sum), frameLength: \(frameLength), rms: \(rms), level: \(db) (\(self.minLevel) -> \(self.maxLevel)) dB")
-#endif
 			}
 			else {
-#if DEBUG
 				self.sampleCount = 0
 				self.maxLevel = -Float.infinity
 				self.minLevel = Float.infinity
-#endif
 			}
-			self.currentLevel = db
+#endif
 		}
-		
+
 		do {
 			try audioEngine.start()
 		}
@@ -122,30 +149,26 @@ public final class SpeechSynthesizer: NSObject, @unchecked Sendable {
 		utterance.pitchMultiplier = pitchMultiplier
 		utterance.volume = 1.0
 
-#if false
-		speechSynthesizer.speak(utterance)
-#else
 		isSpeaking = true
 		
-		speechSynthesizer.write(utterance) { buffer in
+		self.speechSynthesizer.write(utterance) { buffer in
 			if let pcmBuffer = buffer as? AVAudioPCMBuffer {
-				//debugLog("\(pcmBuffer.frameLength) frames of \(pcmBuffer.frameCapacity)")
 				var isFinalBuffer = false
 				if pcmBuffer.frameLength == 0 {
-					debugLog("isSpeaking: done write, isFinalBuffer = true")
 					isFinalBuffer = true
 				}
+				// NOTE: The playerNode schedules the buffer on its own render thread, but it gets glitchy if a
+				// non-main thread is used to initiate the operation. Also, we're already running on the main thread
+				// at this point, but need to capture isFinalBuffer to know when reset to isSpeaking.
 				DispatchQueue.main.async { [isFinalBuffer] in
 					self.playerNode.scheduleBuffer(pcmBuffer, at: nil, options: [], completionCallbackType: .dataPlayedBack) { callbackType in
 						if isFinalBuffer {
 							self.isSpeaking = false
-							debugLog("isSpeaking: isFinalBuffer, isSpeaking = \(self.isSpeaking)")
 						}
 					}
 				}
 			}
 		}
-#endif
 
 	}
 	

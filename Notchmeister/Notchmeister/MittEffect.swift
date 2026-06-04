@@ -12,11 +12,33 @@ class MittEffect: NotchEffect {
 	var backgroundLayer: CALayer
 	var ledLayers: [CALayer]
 	var timer: Timer?
-	
+	var speechSynthesizerLevelsNotificationObserver: NSObjectProtocol? = nil
+
 	let ledCount = 12
 	let padding: CGFloat = 15
 
 	let ledBounds = CGRect(origin: .zero, size: CGSize(width: 15, height: 15))
+
+	lazy var mittStorage: [String] = {
+		if let path = Bundle.main.path(forResource: "mitt-storage", ofType: "txt") {
+			if let text = try? String(contentsOfFile: path, encoding: .utf8) {
+				let lines = text.split(separator: "\n")
+				var result = [String]()
+				for line in lines {
+					if !line.isEmpty && !line.starts(with: "#") {
+						result.append(String(line))
+					}
+				}
+#if DEBUG && true
+				return result
+#else
+				return result.shuffled()
+#endif
+			}
+		}
+
+		return ["MITT Storage Offline"]
+	}()
 	
 	private func ledImage(named name: String) -> CGImage? {
 		let image = NSImage(named: name)!
@@ -88,6 +110,12 @@ class MittEffect: NotchEffect {
 		super.init(with: parentLayer, in: parentView, of: parentWindow)
 
 		configureSublayers()
+		
+		self.speechSynthesizerLevelsNotificationObserver = NotificationCenter.default.addObserver(forName: Notification.Name.speechSynthesizerLevelDidChange, object: nil, queue: nil) { [weak self] note in
+			if let self = self {
+				self.updateLeds()
+			}
+		}
 	}
 	
 	deinit {
@@ -169,6 +197,56 @@ class MittEffect: NotchEffect {
 		}
 	}
 	
+	private func resetLedLayers(leftIndex: Int, rightIndex: Int, offImage: CGImage?) {
+		let leftLedLayer = ledLayers[leftIndex]
+		let rightLedLayer = ledLayers[rightIndex]
+
+		leftLedLayer.contents = offImage
+		rightLedLayer.contents = offImage
+	}
+
+	private func updateLedLayers(leftIndex: Int, rightIndex: Int, level: Float, cutoffLevel: Float, onImage: CGImage?, offImage: CGImage?) {
+		let leftLedLayer = ledLayers[leftIndex]
+		let rightLedLayer = ledLayers[rightIndex]
+		if level < cutoffLevel {
+			leftLedLayer.contents = onImage
+			rightLedLayer.contents = onImage
+		}
+		else {
+			leftLedLayer.contents = offImage
+			rightLedLayer.contents = offImage
+		}
+	}
+
+	private func updateLeds() {
+		let level = SpeechSynthesizer.shared.level
+
+		let greenCutoffLevel: Float = -45.0
+		let yellowCutoffLevel: Float = -40.0
+		let orangeCutoffLevel: Float = -35.0
+		let redCutoffLevel: Float = -30.0
+		let purpleCutoffLevel: Float = -25.0
+		let blueCutoffLevel: Float = -20.0
+
+		if level.isInfinite {
+			resetLedLayers(leftIndex: 0, rightIndex: 11, offImage: greenOffImage)
+			resetLedLayers(leftIndex: 1, rightIndex: 10, offImage: yellowOffImage)
+			resetLedLayers(leftIndex: 2, rightIndex: 9, offImage: orangeOffImage)
+			resetLedLayers(leftIndex: 3, rightIndex: 8, offImage: redOffImage)
+			resetLedLayers(leftIndex: 4, rightIndex: 7, offImage: purpleOffImage)
+			resetLedLayers(leftIndex: 5, rightIndex: 6, offImage: blueOffImage)
+		}
+		else {
+			updateLedLayers(leftIndex: 0, rightIndex: 11, level: level, cutoffLevel: greenCutoffLevel, onImage: greenOnImage, offImage: greenOffImage)
+			updateLedLayers(leftIndex: 1, rightIndex: 10, level: level, cutoffLevel: yellowCutoffLevel, onImage: yellowOnImage, offImage: yellowOffImage)
+			updateLedLayers(leftIndex: 2, rightIndex: 9, level: level, cutoffLevel: orangeCutoffLevel, onImage: orangeOnImage, offImage: orangeOffImage)
+			updateLedLayers(leftIndex: 3, rightIndex: 8, level: level, cutoffLevel: redCutoffLevel, onImage: redOnImage, offImage: redOffImage)
+			updateLedLayers(leftIndex: 4, rightIndex: 7, level: level, cutoffLevel: purpleCutoffLevel, onImage: purpleOnImage, offImage: purpleOffImage)
+			updateLedLayers(leftIndex: 5, rightIndex: 6, level: level, cutoffLevel: blueCutoffLevel, onImage: blueOnImage, offImage: blueOffImage)
+		}
+	}
+	
+	/*
 	private func startLights() {
 		if timer == nil {
 			patternAddress = 0b0000_0000_0000_0000
@@ -227,44 +305,42 @@ class MittEffect: NotchEffect {
 			})
 		}
 	}
-
+	*/
+	
+	var textIndex = 0
+	
 	override func mouseEntered(at point: CGPoint, underNotch: Bool) {
 		guard let parentLayer = parentLayer else { return }
 		
 		let yOffset = parentLayer.bounds.maxY
 		
-		stopLights()
+		//stopLights()
 		
-		let speechSynthesizer = SpeechSynthesizer.shared
-		if !speechSynthesizer.isSpeaking {
-			debugLog("isSpeaking: starting speech")
-			speechSynthesizer.speak("MITT System Activated - Auto Cruise Engaged")
-		}
-
 		CATransaction.begin()
-		CATransaction.setCompletionBlock { [weak self] in
-			self?.startLights()
-		}
-		
-		for (index, ledLayer) in ledLayers.enumerated() {
-			ledLayer.contents = switch (index) {
-			case 0, 11:
-				self.greenOffImage
-			case 1, 10:
-				self.yellowOffImage
-			case 2, 9:
-				self.orangeOffImage
-			case 3, 8:
-				self.redOffImage
-			case 4, 7:
-				self.purpleOffImage
-			case 5, 6:
-				self.blueOffImage
-			default:
-				self.whiteOffImage
+//		CATransaction.setCompletionBlock { [weak self] in
+//			self?.startLights()
+//		}
+		CATransaction.setCompletionBlock {
+			let speechSynthesizer = SpeechSynthesizer.shared
+			if !speechSynthesizer.isSpeaking {
+				//speechSynthesizer.speak("MITT System Activated - Auto Cruise Engaged")
+				//speechSynthesizer.speak("This is a test. For the next sixty seconds, this Mac will conduct a test of its Emergency Broadcast System. This is only a test --- Beep. Boop.")
+				//let textIndex = Int.random(in: 0..<self.mittStorage.count)
+				let text = self.mittStorage[self.textIndex]
+				speechSynthesizer.speak(text)
+				self.textIndex += 1
+				if self.textIndex >= self.mittStorage.count {
+					self.textIndex = 0
+				}
 			}
-		}
-		
+}
+		resetLedLayers(leftIndex: 0, rightIndex: 11, offImage: greenOffImage)
+		resetLedLayers(leftIndex: 1, rightIndex: 10, offImage: yellowOffImage)
+		resetLedLayers(leftIndex: 2, rightIndex: 9, offImage: orangeOffImage)
+		resetLedLayers(leftIndex: 3, rightIndex: 8, offImage: redOffImage)
+		resetLedLayers(leftIndex: 4, rightIndex: 7, offImage: purpleOffImage)
+		resetLedLayers(leftIndex: 5, rightIndex: 6, offImage: blueOffImage)
+
 		backgroundLayer.position = CGPoint(x: backgroundLayer.position.x, y: yOffset)
 		
 		let fromPosition: CGPoint
@@ -285,20 +361,22 @@ class MittEffect: NotchEffect {
 		CATransaction.commit()
 	}
 	
+	/*
 	private func stopLights() {
 		timer?.invalidate()
 		timer = nil
 	}
-
+	*/
+	
 	override func mouseExited(at point: CGPoint, underNotch: Bool) {
 		guard let parentLayer = parentLayer else { return }
 		
 		let yOffset = parentLayer.bounds.minY
 		
 		CATransaction.begin()
-		CATransaction.setCompletionBlock { [weak self] in
-			self?.stopLights()
-		}
+//		CATransaction.setCompletionBlock { [weak self] in
+//			self?.stopLights()
+//		}
 		
 		backgroundLayer.position = CGPoint(x: backgroundLayer.position.x, y: yOffset)
 		

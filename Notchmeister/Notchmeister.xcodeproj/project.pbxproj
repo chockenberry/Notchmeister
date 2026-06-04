@@ -27,6 +27,7 @@
 		012BA33C273749A5008AF04E /* NotchExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 012BA33B273749A5008AF04E /* NotchExtensions.swift */; };
 		4407B32D279B92BD00182733 /* ExpandoEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4407B32C279B92BD00182733 /* ExpandoEffect.swift */; };
 		440EAB84275812AD009DBAF5 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 440EAB83275812AD009DBAF5 /* Credits.rtf */; };
+		4416D1A32FD20C3600959EA8 /* mitt-storage.txt in Resources */ = {isa = PBXBuildFile; fileRef = 4416D1A22FD20C3600959EA8 /* mitt-storage.txt */; };
 		441934F62FCF4CA800C1EC0C /* MittEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 441934F52FCF4CA800C1EC0C /* MittEffect.swift */; };
 		441934F82FD09DE000C1EC0C /* SpeechSynthesizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 441934F72FD09DE000C1EC0C /* SpeechSynthesizer.swift */; };
 		441BC79E27629D5800BE0F01 /* WindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 441BC79D27629D5800BE0F01 /* WindowController.swift */; };
@@ -80,6 +81,7 @@
 		012BA33E273865ED008AF04E /* Notch Playground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = "Notch Playground.playground"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		4407B32C279B92BD00182733 /* ExpandoEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandoEffect.swift; sourceTree = "<group>"; };
 		440EAB83275812AD009DBAF5 /* Credits.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
+		4416D1A22FD20C3600959EA8 /* mitt-storage.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "mitt-storage.txt"; sourceTree = "<group>"; };
 		441934F52FCF4CA800C1EC0C /* MittEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MittEffect.swift; sourceTree = "<group>"; };
 		441934F72FD09DE000C1EC0C /* SpeechSynthesizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechSynthesizer.swift; sourceTree = "<group>"; };
 		441BC79D27629D5800BE0F01 /* WindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowController.swift; sourceTree = "<group>"; };
@@ -196,6 +198,7 @@
 				44AA97832A087C7D00213FCA /* chewie.mp3 */,
 				44AA97852A087F7500213FCA /* tingle.m4a */,
 				44A9DE032A227A3A00918E9F /* autotoot.mp3 */,
+				4416D1A22FD20C3600959EA8 /* mitt-storage.txt */,
 				441C5ABA272C9FD30094507E /* Notchmeister.entitlements */,
 				51F8A861272CCC9C00D349F1 /* Info.plist */,
 				440EAB83275812AD009DBAF5 /* Credits.rtf */,
@@ -284,6 +287,7 @@
 				44AA97862A087F7500213FCA /* tingle.m4a in Resources */,
 				44A68CF427431A0700CCBCF4 /* FakeNotchView.xib in Resources */,
 				441C5AB9272C9FD30094507E /* Main.storyboard in Resources */,
+				4416D1A32FD20C3600959EA8 /* mitt-storage.txt in Resources */,
 				440EAB84275812AD009DBAF5 /* Credits.rtf in Resources */,
 				44AA97842A087C7D00213FCA /* chewie.mp3 in Resources */,
 			);

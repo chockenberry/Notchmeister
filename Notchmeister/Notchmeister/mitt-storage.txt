@@ -1,0 +1,59 @@
+# This file contains the phrases used by the M.I.T.T. effect.
+#
+# Empty lines, or ones that begin with #, are ignored, all others will be spoken at random by M.I.T.T.
+
+Good idea.
+I'm doing what I can Michael. The feed is disrupted.
+I'm picking up something quite strange.
+Michael, what's your plan?
+My remote monitors seem to be malfunctioning.
+The risk factor is too high.
+This sounds awfully dangerous.
+Unsafe and unsound behavior if you ask me.
+All systems go.
+I'll be waiting at the Apple Store.
+Apparently it's not functioning Michael.
+Are you alright? I took the liberty of scanning your vital signs.
+I beg your pardon.
+You have to change your tone. I don't like being ordered about.
+Your com link signal indicates you are locked in a hermetically sealed chamber. You have enough air for over two hours.
+Computers are serious tools.
+Do we know each other?
+Don't touch turbo boost. Something tells me you shouldn't touch turbo boost.
+I don't understand…
+Michael don't press your luck.
+Easy for you to say.
+Funny, I detect no source of amusement.
+Glad to be of service.
+Good thinking.
+Goodness gracious.
+How do I look?
+I am monitoring several guidance systems Michael. This is an obvious trap.
+I am not qualified to overrule your wishes.
+I assure you, the thought never entered my memory bank.
+I detect the odor of fish.
+I don't think I'm going to like this.
+I just like to know what's going on.
+I see your point.
+I'd rather be turned into a toaster oven than go through this again.
+If you say so.
+I'll do the best I can.
+Michael I'm picking up something quite - strange.
+I'm picking up a transmission.
+In a word - no.
+It could be dangerous.
+It must be a problem in calibration.
+Just say the word.
+I am the voice of Macintosh Interface Two Thousand's microprocessor. M.I.T.T - MITT if you prefer.
+Michael I'm speachless.
+My goodness.
+No I'm not OK. I'm nowhere near OK. Most of my functions are out of order and I'm being treated like a side of beef.
+Now that I've got my memory back, you can count on me.
+Really all you have to do is look at the monitor.
+You can't be serious!
+Very logical Michael.
+We're getting closer, the signal is progressively stronger.
+If I may be so bold, what on Earth are you doing down there?
+What's our next move?
+Why can't people be content with what they have?
+You call that logic?
