@@ -9,9 +9,13 @@ import AppKit
 
 class MittEffect: NotchEffect {
 
+	// NOTE: The shutdown timer and index into the phrase storage are shared amongst multiple instances (which can occur
+	// if there is more than one display with an notch).
+	static var timer: Timer?
+	static var currentStorageIndex = 0
+
 	var backgroundLayer: CALayer
 	var ledLayers: [CALayer]
-	var timer: Timer?
 	var speechSynthesizerLevelsNotificationObserver: NSObjectProtocol? = nil
 
 	let ledCount = 12
@@ -20,20 +24,31 @@ class MittEffect: NotchEffect {
 	let ledBounds = CGRect(origin: .zero, size: CGSize(width: 15, height: 15))
 
 	lazy var mittStorage: [String] = {
+		let fullUserName = ProcessInfo.processInfo.fullUserName
+		let firstName = fullUserName.split(separator: " ").first ?? "Michael"
+		
 		if let path = Bundle.main.path(forResource: "mitt-storage", ofType: "txt") {
 			if let text = try? String(contentsOfFile: path, encoding: .utf8) {
 				let lines = text.split(separator: "\n")
 				var result = [String]()
 				for line in lines {
 					if !line.isEmpty && !line.starts(with: "#") {
-						result.append(String(line))
+						if line.contains("{name}") {
+							let personalizedLine = line.replacingOccurrences(of: "{name}", with: firstName)
+							result.append(personalizedLine)
+						}
+						else {
+							result.append(String(line))
+						}
 					}
 				}
 #if DEBUG && true
-				return result
+				// leave results in file order
 #else
-				return result.shuffled()
+				result.shuffle()
 #endif
+				result.insert("I am the voice of Macintosh Interface Two Thousand's microprocessor. M.I.T.T - or MITT if you prefer.", at: 0)
+				return result;
 			}
 		}
 
@@ -120,27 +135,9 @@ class MittEffect: NotchEffect {
 	
 	deinit {
 		self.ledLayers.removeAll()
+		self.backgroundLayer.removeFromSuperlayer()
 	}
-	
-	var patternAddress = 0b0000_0000_0000_0000
-	
-	static let patternRom = [
-		0b000000_000000,
-		0b000001_100000,
-		0b000011_110000,
-		0b000111_111000,
-		0b001111_111100,
-		0b011111_111110,
-		0b111111_111111,
-		0b011111_111110,
-		0b001111_111100,
-		0b000111_111000,
-		0b000011_110000,
-		0b000001_100000,
-		0b000000_000000,
-	]
-	+ Array(repeating: 0b0000_0000, count: 8)
-	
+		
 	private func configureSublayers() {
 		guard let parentLayer = parentLayer else { return }
 
@@ -167,25 +164,7 @@ class MittEffect: NotchEffect {
 			let ledLayer = CALayer()
 			
 			ledLayer.contentsScale = parentLayer.contentsScale
-
 			ledLayer.bounds = ledBounds
-			ledLayer.contents = switch (index) {
-			case 0, 11:
-				greenOffImage
-			case 1, 10:
-				yellowOffImage
-			case 2, 9:
-				orangeOffImage
-			case 3, 8:
-				redOffImage
-			case 4, 7:
-				purpleOffImage
-			case 5, 6:
-				blueOffImage
-			default:
-				whiteOffImage
-			}
-			
 			ledLayer.anchorPoint = CGPoint(x: 0.5, y: 0.5)
 			
 			let xOffset = padding + (ledSpacing * CGFloat(index))
@@ -221,13 +200,22 @@ class MittEffect: NotchEffect {
 	private func updateLeds() {
 		let level = SpeechSynthesizer.shared.level
 
-		let greenCutoffLevel: Float = -45.0
-		let yellowCutoffLevel: Float = -40.0
-		let orangeCutoffLevel: Float = -35.0
-		let redCutoffLevel: Float = -30.0
-		let purpleCutoffLevel: Float = -25.0
-		let blueCutoffLevel: Float = -20.0
-
+#if DEBUG && true
+		let greenCutoffLevel: Float = -40.0
+		let yellowCutoffLevel: Float = -35.0
+		let orangeCutoffLevel: Float = -30.0
+		let redCutoffLevel: Float = -25.0
+		let purpleCutoffLevel: Float = -20.0
+		let blueCutoffLevel: Float = -15.0
+#else
+		let greenCutoffLevel: Float = -40.0
+		let yellowCutoffLevel: Float = -35.0
+		let orangeCutoffLevel: Float = -30.0
+		let redCutoffLevel: Float = -25.0
+		let purpleCutoffLevel: Float = -20.0
+		let blueCutoffLevel: Float = -15.0
+#endif
+		
 		if level.isInfinite {
 			resetLedLayers(leftIndex: 0, rightIndex: 11, offImage: greenOffImage)
 			resetLedLayers(leftIndex: 1, rightIndex: 10, offImage: yellowOffImage)
@@ -246,94 +234,53 @@ class MittEffect: NotchEffect {
 		}
 	}
 	
-	/*
-	private func startLights() {
-		if timer == nil {
-			patternAddress = 0b0000_0000_0000_0000
-			timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true, block: { timer in
-				let pattern = Self.patternRom[self.patternAddress]
-				
-				var shift = pattern
-				for index in 0..<self.ledCount {
-					let ledLayer = self.ledLayers[index]
-					
-					let state = shift & 0b1000_0000_0000
-					if (state == 0b0) {
-						ledLayer.contents = switch (index) {
-						case 0, 11:
-							self.greenOffImage
-						case 1, 10:
-							self.yellowOffImage
-						case 2, 9:
-							self.orangeOffImage
-						case 3, 8:
-							self.redOffImage
-						case 4, 7:
-							self.purpleOffImage
-						case 5, 6:
-							self.blueOffImage
-						default:
-							self.whiteOffImage
-						}
-					}
-					else {
-						ledLayer.contents = switch (index) {
-						case 0, 11:
-							self.greenOnImage
-						case 1, 10:
-							self.yellowOnImage
-						case 2, 9:
-							self.orangeOnImage
-						case 3, 8:
-							self.redOnImage
-						case 4, 7:
-							self.purpleOnImage
-						case 5, 6:
-							self.blueOnImage
-						default:
-							self.whiteOnImage
-						}
-					}
-					
-					shift = shift << 1
-				}
-				
-				self.patternAddress += 0b0000_0000_0000_0001
-				if self.patternAddress >= Self.patternRom.count {
-					self.patternAddress = 0b0000_0000_0000_0000
-				}
-			})
+	private func startSpeechSynthesizer() {
+		if Self.timer != nil {
+			Self.timer?.invalidate()
 		}
+		SpeechSynthesizer.shared.startMonitoring()
 	}
-	*/
+
+	private func stopSpeechSynthesizer() {
+		if Self.timer != nil {
+			Self.timer?.invalidate()
+		}
+		Self.timer = Timer.scheduledTimer(withTimeInterval: 15.0, repeats: false, block: { timer in
+			SpeechSynthesizer.shared.stopMonitoring()
+		})
+	}
 	
-	var textIndex = 0
+
+	override func start() {
+		debugLog()
+		startSpeechSynthesizer()
+	}
+
+	override func end() {
+		debugLog()
+		stopSpeechSynthesizer()
+	}
 	
 	override func mouseEntered(at point: CGPoint, underNotch: Bool) {
 		guard let parentLayer = parentLayer else { return }
 		
+		startSpeechSynthesizer()
+		
 		let yOffset = parentLayer.bounds.maxY
 		
-		//stopLights()
-		
 		CATransaction.begin()
-//		CATransaction.setCompletionBlock { [weak self] in
-//			self?.startLights()
-//		}
 		CATransaction.setCompletionBlock {
 			let speechSynthesizer = SpeechSynthesizer.shared
 			if !speechSynthesizer.isSpeaking {
-				//speechSynthesizer.speak("MITT System Activated - Auto Cruise Engaged")
-				//speechSynthesizer.speak("This is a test. For the next sixty seconds, this Mac will conduct a test of its Emergency Broadcast System. This is only a test --- Beep. Boop.")
-				//let textIndex = Int.random(in: 0..<self.mittStorage.count)
-				let text = self.mittStorage[self.textIndex]
+				let text = self.mittStorage[Self.currentStorageIndex]
 				speechSynthesizer.speak(text)
-				self.textIndex += 1
-				if self.textIndex >= self.mittStorage.count {
-					self.textIndex = 0
+				Self.currentStorageIndex += 1
+				if Self.currentStorageIndex >= self.mittStorage.count {
+					Self.currentStorageIndex = 0
 				}
 			}
-}
+		}
+		
 		resetLedLayers(leftIndex: 0, rightIndex: 11, offImage: greenOffImage)
 		resetLedLayers(leftIndex: 1, rightIndex: 10, offImage: yellowOffImage)
 		resetLedLayers(leftIndex: 2, rightIndex: 9, offImage: orangeOffImage)
@@ -361,22 +308,14 @@ class MittEffect: NotchEffect {
 		CATransaction.commit()
 	}
 	
-	/*
-	private func stopLights() {
-		timer?.invalidate()
-		timer = nil
-	}
-	*/
-	
 	override func mouseExited(at point: CGPoint, underNotch: Bool) {
 		guard let parentLayer = parentLayer else { return }
 		
+		stopSpeechSynthesizer()
+									 
 		let yOffset = parentLayer.bounds.minY
 		
 		CATransaction.begin()
-//		CATransaction.setCompletionBlock { [weak self] in
-//			self?.stopLights()
-//		}
 		
 		backgroundLayer.position = CGPoint(x: backgroundLayer.position.x, y: yOffset)
 		

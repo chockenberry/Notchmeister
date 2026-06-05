@@ -68,7 +68,7 @@ enum Effects: Int, CaseIterable {
 		case .autotoot:
 			return "Pressure buildup can reduce the performance of your Mac: AutoToot™ can safely vent harmful gases."
 		case .mitt:
-			return "Macintosh Interface Two Thousand, at your service."
+			return "I am the voice of Macintosh Interface Two Thousand's microprocessor."
 #if DEBUG && false
 		case .portal:
 			return "Activate Macintosh Interdimensional Computation Extension (MICE)."
