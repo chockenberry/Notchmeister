@@ -1,7 +1,11 @@
-# This file contains the phrases used by the M.I.T.T. effect.
+# This file contains M.I.T.T.'s memory.
 #
-# Empty lines, or ones that begin with #, are ignored, all others will be spoken at random by M.I.T.T.
-# Lines that contain a {name} will use the current user's first name when speaking.
+# Empty lines or ones that begin with #, are ignored – all others will be spoken at random.
+#
+# Lines that contain a {name} will use the current user's first name when speaking. If you
+# want a custom name, replace all occurrences with whatever text you'd like. EG CHOCK
+#
+# After making changes to this file, restart Notchmeister.
 
 Good idea {name}.
 My intelligence is not artificial, it's just a text file.

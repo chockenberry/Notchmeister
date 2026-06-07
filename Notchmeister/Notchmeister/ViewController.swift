@@ -14,6 +14,7 @@ class ViewController: NSViewController {
 	var applicationActivationNotificationObserver: NSObjectProtocol? = nil
 
 	@IBOutlet weak var effectPopUpButton: NSPopUpButton!
+	@IBOutlet weak var effectEditButton: NSButton!
 	@IBOutlet weak var effectDescriptionTextField: NSTextField!
 	@IBOutlet weak var debugButton: NSButton!
 	@IBOutlet weak var hideDockButton: NSButton!
@@ -73,6 +74,13 @@ class ViewController: NSViewController {
 		guard let effect = Effects(rawValue: Defaults.selectedEffect) else { return }
 		effectDescriptionTextField.stringValue = effect.displayDescription()
 		effectPopUpButton.selectItem(withTag: effect.rawValue)
+		if let buttonLabel = effect.buttonLabel {
+			effectEditButton.title = buttonLabel
+			effectEditButton.isHidden = false
+		}
+		else {
+			effectEditButton.isHidden = true
+		}
 		
 		hideDockButton.state = Defaults.shouldHideDockIcon ? .on : .off
     }
@@ -111,6 +119,13 @@ class ViewController: NSViewController {
 		
 		guard let effect = Effects(rawValue: Defaults.selectedEffect) else { return }
 		effectDescriptionTextField.stringValue = effect.displayDescription()
+		if let buttonLabel = effect.buttonLabel {
+			effectEditButton.title = buttonLabel
+			effectEditButton.isHidden = false
+		}
+		else {
+			effectEditButton.isHidden = true
+		}
 	}
 	
 	@IBAction func hideDockIconValueChanged(_ sender: Any) {
@@ -125,6 +140,11 @@ class ViewController: NSViewController {
 		else {
 			NSApplication.shared.setActivationPolicy(.regular)
 		}
+	}
+
+	@IBAction func performEdit(_ sender: Any) {
+		guard let effect = Effects(rawValue: Defaults.selectedEffect) else { return }
+		effect.buttonAction()
 	}
 
 	@IBAction func quitApplication(_ sender: Any) {

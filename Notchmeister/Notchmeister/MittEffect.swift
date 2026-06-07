@@ -23,12 +23,25 @@ class MittEffect: NotchEffect {
 
 	let ledBounds = CGRect(origin: .zero, size: CGSize(width: 15, height: 15))
 
+	static let storageName = "MITT-Storage.txt"
+	
 	lazy var mittStorage: [String] = {
 		let fullUserName = ProcessInfo.processInfo.fullUserName
 		let firstName = fullUserName.split(separator: " ").first ?? "Michael"
 		
-		if let path = Bundle.main.path(forResource: "mitt-storage", ofType: "txt") {
-			if let text = try? String(contentsOfFile: path, encoding: .utf8) {
+		let fileManager = FileManager.default
+		
+		let urls = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask)
+		if let applicationSupportDirectory = urls.first {
+			let fileURL = applicationSupportDirectory.appendingPathComponent(Self.storageName, conformingTo: .plainText)
+			let filePath = fileURL.path
+			if !fileManager.fileExists(atPath: filePath) {
+				if let resourcePath = Bundle.main.path(forResource: "mitt-storage", ofType: "txt") {
+					try? fileManager.copyItem(atPath: resourcePath, toPath: filePath)
+				}
+			}
+			
+			if let text = try? String(contentsOfFile: filePath, encoding: .utf8) {
 				let lines = text.split(separator: "\n")
 				var result = [String]()
 				for line in lines {
@@ -261,6 +274,29 @@ class MittEffect: NotchEffect {
 		stopSpeechSynthesizer()
 	}
 	
+	static var buttonLabel: String? {
+		return "Edit Memory…"
+	}
+
+	static func buttonAction() {
+		let fileManager = FileManager.default
+
+		let urls = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask)
+		if let applicationSupportDirectory = urls.first {
+			let fileURL = applicationSupportDirectory.appendingPathComponent(Self.storageName, conformingTo: .plainText)
+			let filePath = fileURL.path
+			if fileManager.fileExists(atPath: filePath) {
+				NSWorkspace.shared.open(fileURL)
+			}
+			else {
+				let alert = NSAlert()
+				alert.messageText = "Memory Not Loaded"
+				alert.informativeText = "M.I.T.T. storage has not been initialized.\n\nPlease move your mouse under the notch to install memory."
+				alert.runModal()
+			}
+		}
+	}
+
 	override func mouseEntered(at point: CGPoint, underNotch: Bool) {
 		guard let parentLayer = parentLayer else { return }
 		

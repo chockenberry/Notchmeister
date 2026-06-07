@@ -37,6 +37,15 @@ class NotchEffect: NotchEffectable {
 		// override to perform work at the point when the effect becomes inactive
 	}
 
+	func buttonLabel() -> String? {
+		// override to show a button with the returned label
+		return nil
+	}
+
+	func buttonAction() {
+		// override to specify an action that's performed when the button is pressed
+	}
+
 	// NOTE: The point parameter is relative to upper-left origin of notch. The second parameter indicates if
 	// the point is underneath the notch.
 	

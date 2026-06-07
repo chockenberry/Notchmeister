@@ -76,6 +76,24 @@ enum Effects: Int, CaseIterable {
 		}
 	}
 
+	var buttonLabel: String? {
+		switch self {
+		case .mitt:
+			return MittEffect.buttonLabel
+		default:
+			return nil
+		}
+	}
+
+	func buttonAction() {
+		switch self {
+		case .mitt:
+			MittEffect.buttonAction()
+		default:
+			break
+		}
+	}
+	
 	func notchEffect(with parentLayer: CALayer, in parentView: NSView, of parentWindow: NSWindow) -> NotchEffect {
 		switch self {
 		case .glow:
