@@ -1,14 +1,15 @@
-# This file contains M.I.T.T.'s memory.
+# This file contains M.I.T.T.'s memory bank.
 #
 # Empty lines or ones that begin with #, are ignored – all others will be spoken at random.
 #
 # Lines that contain a {name} will use the current user's first name when speaking. If you
 # want a custom name, replace all occurrences with whatever text you'd like. EG CHOCK
 #
-# After making changes to this file, restart Notchmeister.
+# After making changes to the memory bank, restart Notchmeister to reload.
 
 Good idea {name}.
 My intelligence is not artificial, it's just a text file.
+This is a test. For the next sixty seconds, MITT will conduct a test of the Emergency Broadcast System. This is only a test, Beep, Boop.
 I'm doing what I can {name}. The feed is disrupted.
 I'm picking up something quite strange.
 {name}, what's your plan?
@@ -16,7 +17,6 @@ My remote monitors seem to be malfunctioning.
 The risk factor is too high.
 {name}, I'll be waiting at the Apple Store.
 This sounds awfully dangerous.
-This is a test. For the next sixty seconds, MITT will conduct a test of the Emergency Broadcast System. This is only a test - - - - - Beep. Boop.
 Unsafe and unsound behavior if you ask me.
 All systems go.
 Apparently it's not functioning {name}.
