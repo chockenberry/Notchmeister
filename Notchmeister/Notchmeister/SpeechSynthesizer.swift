@@ -173,7 +173,7 @@ public final class SpeechSynthesizer: NSObject, @unchecked Sendable {
 		guard !isSpeaking else { return }
 
 		let utterance = AVSpeechUtterance(string: text)
-		utterance.voice = voice //AVSpeechSynthesisVoice(language: "en-US")!
+		utterance.voice = voice
 		utterance.rate = rate
 		utterance.pitchMultiplier = pitchMultiplier
 		utterance.volume = 1.0
