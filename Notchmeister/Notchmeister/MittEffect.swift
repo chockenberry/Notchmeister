@@ -157,16 +157,21 @@ class MittEffect: NotchEffect {
 		do { // the layer that is a frame holding the screen
 			backgroundLayer.bounds = parentLayer.bounds
 #if DEBUG && true
-			//backgroundLayer.backgroundColor = NSColor.darkGray.cgColor
+			var bounds = parentLayer.bounds
+			bounds.size.height = 50
+
+			backgroundLayer.bounds = bounds
+
 			backgroundLayer.backgroundColor = NSColor(red: 0.84, green: 0.79, blue: 0.66, alpha: 1).cgColor
 			backgroundLayer.cornerRadius = 4
 #else
+			backgroundLayer.bounds = parentLayer.bounds
 			backgroundLayer.backgroundColor = NSColor.black.cgColor
 			backgroundLayer.cornerRadius = parentLayer.bounds.height / 2
 #endif
 			backgroundLayer.masksToBounds = true
 			backgroundLayer.contentsScale = parentLayer.contentsScale
-			backgroundLayer.position = CGPoint(x: 0, y: parentLayer.bounds.minY - parentLayer.bounds.height)
+			backgroundLayer.position = CGPoint(x: 0, y: parentLayer.bounds.minY - backgroundLayer.bounds.height)
 			backgroundLayer.anchorPoint = .zero
 		}
 		
@@ -331,7 +336,7 @@ class MittEffect: NotchEffect {
 			fromPosition = position
 		}
 		else {
-			fromPosition = CGPoint(x: backgroundLayer.position.x, y: parentLayer.bounds.minY - parentLayer.bounds.height)
+			fromPosition = CGPoint(x: backgroundLayer.position.x, y: parentLayer.bounds.minY - backgroundLayer.bounds.height)
 		}
 		
 		let animation = CABasicAnimation(keyPath: "position")
@@ -352,7 +357,7 @@ class MittEffect: NotchEffect {
 		
 		CATransaction.begin()
 		
-		backgroundLayer.position = CGPoint(x: backgroundLayer.position.x, y: parentLayer.bounds.minY - parentLayer.bounds.height)
+		backgroundLayer.position = CGPoint(x: backgroundLayer.position.x, y: parentLayer.bounds.minY - backgroundLayer.bounds.height)
 		
 		let fromPosition: CGPoint
 		if let position = backgroundLayer.presentation()?.position {
@@ -364,7 +369,7 @@ class MittEffect: NotchEffect {
 		
 		let animation = CABasicAnimation(keyPath: "position")
 		animation.fromValue = fromPosition
-		animation.toValue = CGPoint(x: backgroundLayer.position.x, y: parentLayer.bounds.minY - parentLayer.bounds.height)
+		animation.toValue = CGPoint(x: backgroundLayer.position.x, y: parentLayer.bounds.minY - backgroundLayer.bounds.height)
 		animation.duration = 0.25
 		animation.timingFunction = CAMediaTimingFunction(name: .easeIn)
 		animation.fillMode = .forwards
