@@ -164,7 +164,7 @@ class MittEffect: NotchEffect {
 			backgroundLayer.cornerRadius = parentLayer.bounds.height / 2
 			backgroundLayer.masksToBounds = true
 			backgroundLayer.contentsScale = parentLayer.contentsScale
-			backgroundLayer.position = .zero
+			backgroundLayer.position = CGPoint(x: 0, y: parentLayer.bounds.minY - parentLayer.bounds.height)
 			backgroundLayer.anchorPoint = .zero
 		}
 		
@@ -302,8 +302,6 @@ class MittEffect: NotchEffect {
 		
 		startSpeechSynthesizer()
 		
-		let yOffset = parentLayer.bounds.maxY
-		
 		CATransaction.begin()
 		CATransaction.setCompletionBlock {
 			let speechSynthesizer = SpeechSynthesizer.shared
@@ -324,21 +322,22 @@ class MittEffect: NotchEffect {
 		resetLedLayers(leftIndex: 4, rightIndex: 7, offImage: purpleOffImage)
 		resetLedLayers(leftIndex: 5, rightIndex: 6, offImage: blueOffImage)
 
-		backgroundLayer.position = CGPoint(x: backgroundLayer.position.x, y: yOffset)
+		backgroundLayer.position = CGPoint(x: backgroundLayer.position.x, y: parentLayer.bounds.maxY)
 		
 		let fromPosition: CGPoint
 		if let position = backgroundLayer.presentation()?.position {
 			fromPosition = position
 		}
 		else {
-			fromPosition = CGPoint(x: backgroundLayer.position.x, y: parentLayer.bounds.minY)
+			fromPosition = CGPoint(x: backgroundLayer.position.x, y: parentLayer.bounds.minY - parentLayer.bounds.height)
 		}
 		
 		let animation = CABasicAnimation(keyPath: "position")
 		animation.fromValue = fromPosition
-		animation.toValue = CGPoint(x: backgroundLayer.position.x, y: yOffset)
+		animation.toValue = CGPoint(x: backgroundLayer.position.x, y: parentLayer.bounds.maxY)
 		animation.duration = 0.25
 		animation.timingFunction = CAMediaTimingFunction(name: .easeIn)
+		animation.fillMode = .forwards
 		backgroundLayer.add(animation, forKey: "position")
 		
 		CATransaction.commit()
@@ -348,12 +347,10 @@ class MittEffect: NotchEffect {
 		guard let parentLayer = parentLayer else { return }
 		
 		stopSpeechSynthesizer()
-									 
-		let yOffset = parentLayer.bounds.minY
 		
 		CATransaction.begin()
 		
-		backgroundLayer.position = CGPoint(x: backgroundLayer.position.x, y: yOffset)
+		backgroundLayer.position = CGPoint(x: backgroundLayer.position.x, y: parentLayer.bounds.minY - parentLayer.bounds.height)
 		
 		let fromPosition: CGPoint
 		if let position = backgroundLayer.presentation()?.position {
@@ -365,9 +362,10 @@ class MittEffect: NotchEffect {
 		
 		let animation = CABasicAnimation(keyPath: "position")
 		animation.fromValue = fromPosition
-		animation.toValue = CGPoint(x: backgroundLayer.position.x, y: yOffset)
+		animation.toValue = CGPoint(x: backgroundLayer.position.x, y: parentLayer.bounds.minY - parentLayer.bounds.height)
 		animation.duration = 0.25
 		animation.timingFunction = CAMediaTimingFunction(name: .easeIn)
+		animation.fillMode = .forwards
 		backgroundLayer.add(animation, forKey: "position")
 		
 		CATransaction.commit()
