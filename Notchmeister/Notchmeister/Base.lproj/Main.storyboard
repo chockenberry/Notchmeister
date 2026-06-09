@@ -165,7 +165,7 @@
                                 </textFieldCell>
                             </textField>
                             <stackView distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" horizontalHuggingPriority="750" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PPi-Xy-Y4k">
-                                <rect key="frame" x="46" y="129" width="309" height="86"/>
+                                <rect key="frame" x="46" y="129" width="308" height="86"/>
                                 <subviews>
                                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="pwF-E2-nS0">
                                         <rect key="frame" x="-2" y="70" width="44" height="16"/>
@@ -176,13 +176,13 @@
                                         </textFieldCell>
                                     </textField>
                                     <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="10" horizontalStackHuggingPriority="750" verticalStackHuggingPriority="249.99998474121094" horizontalCompressionResistancePriority="751" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Tc8-Lp-iio">
-                                        <rect key="frame" x="48" y="0.0" width="261" height="86"/>
+                                        <rect key="frame" x="48" y="0.0" width="260" height="86"/>
                                         <subviews>
                                             <customView verticalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="NCF-dL-hht">
-                                                <rect key="frame" x="0.0" y="66" width="261" height="20"/>
+                                                <rect key="frame" x="0.0" y="66" width="260" height="20"/>
                                                 <subviews>
                                                     <button horizontalHuggingPriority="750" verticalHuggingPriority="750" horizontalCompressionResistancePriority="754" translatesAutoresizingMaskIntoConstraints="NO" id="8ct-Ek-1kP">
-                                                        <rect key="frame" x="77" y="-7" width="191" height="32"/>
+                                                        <rect key="frame" x="109" y="-7" width="158" height="32"/>
                                                         <buttonCell key="cell" type="push" title="Long Title or Short Button" bezelStyle="rounded" alignment="center" lineBreakMode="truncatingMiddle" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="FzZ-lk-kEy">
                                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                             <font key="font" metaFont="system"/>
@@ -192,16 +192,16 @@
                                                         </connections>
                                                     </button>
                                                     <popUpButton horizontalHuggingPriority="800" verticalHuggingPriority="750" horizontalCompressionResistancePriority="755" translatesAutoresizingMaskIntoConstraints="NO" id="2TI-ZC-i2V">
-                                                        <rect key="frame" x="-3" y="-4" width="83" height="25"/>
-                                                        <popUpButtonCell key="cell" type="push" title="Festive" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="3" imageScaling="proportionallyDown" inset="2" selectedItem="kXd-lN-dfU" id="gw7-Ab-WA0">
+                                                        <rect key="frame" x="-3" y="-4" width="115" height="25"/>
+                                                        <popUpButtonCell key="cell" type="push" title="Plasma Leak" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="2" imageScaling="proportionallyDown" inset="2" selectedItem="kLF-aV-OO3" id="gw7-Ab-WA0">
                                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                             <font key="font" metaFont="message"/>
                                                             <menu key="menu" id="3NN-jH-lPd">
                                                                 <items>
                                                                     <menuItem title="Glow" id="UuA-aU-a9p"/>
                                                                     <menuItem title="Cylon" tag="1" id="IPc-kO-S4N"/>
-                                                                    <menuItem title="Plasma" tag="2" id="kLF-aV-OO3"/>
-                                                                    <menuItem title="Festive" state="on" tag="3" id="kXd-lN-dfU"/>
+                                                                    <menuItem title="Plasma Leak" state="on" tag="2" id="kLF-aV-OO3"/>
+                                                                    <menuItem title="Festive" tag="3" id="kXd-lN-dfU"/>
                                                                     <menuItem title="Radar" tag="4" id="jjJ-vz-Urr"/>
                                                                 </items>
                                                             </menu>
@@ -237,6 +237,7 @@
                                             </textField>
                                         </subviews>
                                         <constraints>
+                                            <constraint firstAttribute="width" constant="260" id="AuC-sm-RAK"/>
                                             <constraint firstItem="NCF-dL-hht" firstAttribute="width" secondItem="Tc8-Lp-iio" secondAttribute="width" id="iTQ-7x-h78"/>
                                         </constraints>
                                         <visibilityPriorities>
@@ -263,7 +264,7 @@
                                 </customSpacing>
                             </stackView>
                             <box verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="tMl-9w-Wzm">
-                                <rect key="frame" x="46" y="118" width="294" height="5"/>
+                                <rect key="frame" x="46" y="118" width="308" height="5"/>
                             </box>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ZSS-8U-k2J">
                                 <rect key="frame" x="44" y="95" width="263" height="18"/>
@@ -331,6 +332,7 @@
                             <constraint firstItem="omC-Yz-2sa" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="20" id="0kc-Ed-MZr"/>
                             <constraint firstItem="ewE-fL-l0e" firstAttribute="centerY" secondItem="omC-Yz-2sa" secondAttribute="centerY" id="1Lp-tF-gr8"/>
                             <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="ZSS-8U-k2J" secondAttribute="trailing" constant="20" id="3Di-vi-EUf"/>
+                            <constraint firstItem="PPi-Xy-Y4k" firstAttribute="centerX" secondItem="m2S-Jp-Qdl" secondAttribute="centerX" id="3WS-L3-fHV"/>
                             <constraint firstAttribute="bottom" secondItem="omC-Yz-2sa" secondAttribute="bottom" constant="20" symbolic="YES" id="B05-dU-5bQ"/>
                             <constraint firstAttribute="trailing" secondItem="JcQ-7t-VSZ" secondAttribute="trailing" constant="20" id="B42-SV-PvJ"/>
                             <constraint firstItem="HP6-Vj-CA4" firstAttribute="leading" secondItem="ZSS-8U-k2J" secondAttribute="leading" constant="20" id="Bzi-pm-cro"/>
@@ -340,8 +342,7 @@
                             <constraint firstItem="PPi-Xy-Y4k" firstAttribute="top" secondItem="DQb-Wa-YfR" secondAttribute="bottom" constant="20" id="L6v-GG-jEZ"/>
                             <constraint firstItem="tMl-9w-Wzm" firstAttribute="leading" secondItem="ZSS-8U-k2J" secondAttribute="leading" id="LZF-J2-mFb"/>
                             <constraint firstItem="DQb-Wa-YfR" firstAttribute="centerX" secondItem="m2S-Jp-Qdl" secondAttribute="centerX" id="Rt6-GL-ImR"/>
-                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="PPi-Xy-Y4k" secondAttribute="trailing" constant="20" id="YFn-l2-YMa"/>
-                            <constraint firstItem="tMl-9w-Wzm" firstAttribute="trailing" secondItem="HP6-Vj-CA4" secondAttribute="trailing" id="ZCs-LT-Wvp"/>
+                            <constraint firstItem="tMl-9w-Wzm" firstAttribute="trailing" secondItem="PPi-Xy-Y4k" secondAttribute="trailing" id="ZCs-LT-Wvp"/>
                             <constraint firstItem="PPi-Xy-Y4k" firstAttribute="centerX" secondItem="DQb-Wa-YfR" secondAttribute="centerX" id="agV-c3-SFn"/>
                             <constraint firstItem="qcZ-l9-XQD" firstAttribute="centerY" secondItem="omC-Yz-2sa" secondAttribute="centerY" id="cvs-YN-EoE"/>
                             <constraint firstItem="ZSS-8U-k2J" firstAttribute="top" secondItem="tMl-9w-Wzm" secondAttribute="bottom" constant="8" symbolic="YES" id="gc5-NW-hMl"/>
