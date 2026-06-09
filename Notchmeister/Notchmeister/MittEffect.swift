@@ -157,11 +157,13 @@ class MittEffect: NotchEffect {
 		do { // the layer that is a frame holding the screen
 			backgroundLayer.bounds = parentLayer.bounds
 #if DEBUG && true
-			backgroundLayer.backgroundColor = NSColor.darkGray.cgColor
+			//backgroundLayer.backgroundColor = NSColor.darkGray.cgColor
+			backgroundLayer.backgroundColor = NSColor(red: 0.84, green: 0.79, blue: 0.66, alpha: 1).cgColor
+			backgroundLayer.cornerRadius = 4
 #else
 			backgroundLayer.backgroundColor = NSColor.black.cgColor
-#endif
 			backgroundLayer.cornerRadius = parentLayer.bounds.height / 2
+#endif
 			backgroundLayer.masksToBounds = true
 			backgroundLayer.contentsScale = parentLayer.contentsScale
 			backgroundLayer.position = CGPoint(x: 0, y: parentLayer.bounds.minY - parentLayer.bounds.height)
