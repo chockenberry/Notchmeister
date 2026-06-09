@@ -44,6 +44,7 @@
 		44961D7E27372F4D004E1A0B /* NotchEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44961D7D27372F4D004E1A0B /* NotchEffect.swift */; };
 		44961D80273732ED004E1A0B /* GlowEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44961D7F273732ED004E1A0B /* GlowEffect.swift */; };
 		44961D82273B3E42004E1A0B /* TrackingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44961D81273B3E42004E1A0B /* TrackingView.swift */; };
+		449823AD2FD799C100BFF1B7 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 449823AC2FD799C100BFF1B7 /* SettingsViewController.swift */; };
 		44A68CEB273DBD5500CCBCF4 /* PlasmaEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44A68CEA273DBD5500CCBCF4 /* PlasmaEffect.swift */; };
 		44A68CED273E18C900CCBCF4 /* CoreGraphics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44A68CEC273E18C900CCBCF4 /* CoreGraphics.swift */; };
 		44A68CF427431A0700CCBCF4 /* FakeNotchView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 44A68CF327431A0700CCBCF4 /* FakeNotchView.xib */; };
@@ -100,6 +101,7 @@
 		44961D7D27372F4D004E1A0B /* NotchEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotchEffect.swift; sourceTree = "<group>"; };
 		44961D7F273732ED004E1A0B /* GlowEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlowEffect.swift; sourceTree = "<group>"; };
 		44961D81273B3E42004E1A0B /* TrackingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingView.swift; sourceTree = "<group>"; };
+		449823AC2FD799C100BFF1B7 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		44A68CEA273DBD5500CCBCF4 /* PlasmaEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlasmaEffect.swift; sourceTree = "<group>"; };
 		44A68CEC273E18C900CCBCF4 /* CoreGraphics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreGraphics.swift; sourceTree = "<group>"; };
 		44A68CF327431A0700CCBCF4 /* FakeNotchView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FakeNotchView.xib; sourceTree = "<group>"; };
@@ -163,6 +165,7 @@
 				441C5AB1272C9FD10094507E /* AppDelegate.swift */,
 				441BC79D27629D5800BE0F01 /* WindowController.swift */,
 				441C5AB3272C9FD10094507E /* ViewController.swift */,
+				449823AC2FD799C100BFF1B7 /* SettingsViewController.swift */,
 				44E42D6B27570B2500BDD3DC /* DebugViewController.swift */,
 				441C5AC0272CA0780094507E /* NotchWindow.swift */,
 				44961D81273B3E42004E1A0B /* TrackingView.swift */,
@@ -347,6 +350,7 @@
 				441C5AC5272CA72F0094507E /* Debug.swift in Sources */,
 				441C5AC3272CA5310094507E /* NotchView.swift in Sources */,
 				44B724AA29F5A681002E03E6 /* DiceEffect.swift in Sources */,
+				449823AD2FD799C100BFF1B7 /* SettingsViewController.swift in Sources */,
 				441BC7A02762EEA900BE0F01 /* PortalEffect.swift in Sources */,
 				44A9DE062A227A7500918E9F /* TootEffect.swift in Sources */,
 				447158F12775226200565727 /* ActivationView.swift in Sources */,

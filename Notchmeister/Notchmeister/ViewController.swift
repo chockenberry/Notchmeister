@@ -16,6 +16,7 @@ class ViewController: NSViewController {
 	@IBOutlet weak var effectPopUpButton: NSPopUpButton!
 	@IBOutlet weak var effectEditButton: NSButton!
 	@IBOutlet weak var effectDescriptionTextField: NSTextField!
+	@IBOutlet weak var settingsButton: NSButton!
 	@IBOutlet weak var debugButton: NSButton!
 	@IBOutlet weak var hideDockButton: NSButton!
 
@@ -107,6 +108,11 @@ class ViewController: NSViewController {
 	}
 	
     //MARK: - Actions
+
+	@IBAction func openSettingsViewController(_ sender: Any) {
+		guard let viewController = self.storyboard?.instantiateController(withIdentifier: "settingsViewController") as? NSViewController else { return }
+		self.present(viewController, asPopoverRelativeTo: settingsButton.frame, of: view, preferredEdge: NSRectEdge.minX, behavior: .transient)
+	}
 
 	@IBAction func openDebugViewController(_ sender: Any) {
 		guard let viewController = self.storyboard?.instantiateController(withIdentifier: "debugViewController") as? NSViewController else { return }
