@@ -12,6 +12,7 @@ class SettingsViewController: NSViewController {
 	@IBOutlet weak var alternateDiceCheckbox: NSButton!
 	@IBOutlet weak var hideControlPanelCheckbox: NSButton!
 	@IBOutlet weak var activateUnderNotchCheckbox: NSButton!
+	@IBOutlet weak var hideWindowAtLaunchCheckbox: NSButton!
 
     //MARK: - Life Cycle
     
@@ -25,8 +26,34 @@ class SettingsViewController: NSViewController {
 		Defaults.register()
 		
 		alternateDiceCheckbox.state = Defaults.shouldUseAlternateDice ? .on : .off
-		hideControlPanelCheckbox.state = Defaults.shouldHideControlPanel ? .on : .off
-		activateUnderNotchCheckbox.state = Defaults.shouldActivateUnderNotch ? .on : .off
+		if Defaults.shouldFakeNotch {
+			hideControlPanelCheckbox.isEnabled = false
+			hideControlPanelCheckbox.state = .off
+		}
+		else {
+			hideControlPanelCheckbox.isEnabled = true
+			hideControlPanelCheckbox.state = Defaults.shouldHideControlPanel ? .on : .off
+		}
+		if Defaults.shouldHideDockIcon {
+			activateUnderNotchCheckbox.isEnabled = true
+			activateUnderNotchCheckbox.state = Defaults.shouldActivateUnderNotch ? .on : .off
+			
+			if Defaults.shouldActivateUnderNotch {
+				hideWindowAtLaunchCheckbox.isEnabled = true
+				hideWindowAtLaunchCheckbox.state = Defaults.shouldHideWindowAtLaunch ? .on : .off
+			}
+			else {
+				hideWindowAtLaunchCheckbox.isEnabled = false
+				hideWindowAtLaunchCheckbox.state = .off
+			}
+		}
+		else {
+			activateUnderNotchCheckbox.isEnabled = false
+			activateUnderNotchCheckbox.state = .off
+			
+			hideWindowAtLaunchCheckbox.isEnabled = false
+			hideWindowAtLaunchCheckbox.state = .off
+		}
     }
         
     //MARK: - Actions
@@ -48,6 +75,20 @@ class SettingsViewController: NSViewController {
 
 	@IBAction func activateUnderNotchChanged(_ sender: Any) {
 		Defaults.shouldActivateUnderNotch = (activateUnderNotchCheckbox.state == .on)
+		updateConfiguration()
+
+		if Defaults.shouldActivateUnderNotch {
+			hideWindowAtLaunchCheckbox.isEnabled = true
+			hideWindowAtLaunchCheckbox.state = Defaults.shouldHideWindowAtLaunch ? .on : .off
+		}
+		else {
+			hideWindowAtLaunchCheckbox.isEnabled = false
+			hideWindowAtLaunchCheckbox.state = .off
+		}
+	}
+
+	@IBAction func hideWindowAtLaunchChanged(_ sender: Any) {
+		Defaults.shouldHideWindowAtLaunch = (hideWindowAtLaunchCheckbox.state == .on)
 		updateConfiguration()
 	}
 

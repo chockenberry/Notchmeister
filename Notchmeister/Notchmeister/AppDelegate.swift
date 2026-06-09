@@ -29,6 +29,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	}
 	
 	func applicationDidFinishLaunching(_ aNotification: Notification) {
+		if Defaults.shouldHideDockIcon {
+			if Defaults.shouldActivateUnderNotch && Defaults.shouldHideWindowAtLaunch {
+				if let window = NSApplication.shared.windows.first {
+					window.orderOut(self)
+				}
+			}
+		}
 		
 #if !DEBUG
 		if !NSScreen.hasNotchedScreen {

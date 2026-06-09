@@ -26,6 +26,7 @@ enum Defaults : String, CaseIterable
 	case hideControlPanelEnabled
 	case activateUnderNotch
 	case showDebugButton
+	case hideWindowAtLaunchEnabled
 
 	static var registered = false
 	
@@ -45,6 +46,7 @@ enum Defaults : String, CaseIterable
 				Defaults.hideControlPanelEnabled.rawValue: false,
 				Defaults.activateUnderNotch.rawValue: true,
 				Defaults.showDebugButton.rawValue: false,
+				Defaults.hideWindowAtLaunchEnabled.rawValue: false,
 			])
 			registered = true
 		}
@@ -122,6 +124,11 @@ enum Defaults : String, CaseIterable
 	static var shouldShowDebugButton: Bool {
 		get { UserDefaults.standard.bool(forKey: Defaults.showDebugButton.rawValue) }
 		set { UserDefaults.standard.set(newValue, forKey: Defaults.showDebugButton.rawValue) }
+	}
+
+	static var shouldHideWindowAtLaunch: Bool {
+		get { UserDefaults.standard.bool(forKey: Defaults.hideWindowAtLaunchEnabled.rawValue) }
+		set { UserDefaults.standard.set(newValue, forKey: Defaults.hideWindowAtLaunchEnabled.rawValue) }
 	}
 
 	static let notchlessHelp = "This Mac doesn't have a notch.\n\nThanks to Notchmeister's built-in genuine replacement notch, you can still have fun. This replacement part, like all others, doesn't quite work as original: it's shorter and the mouse doesn't disappear underneath.\n\nNote also that this notch only appears when the app is active so it doesn't interfere with other apps.\n\n"
