@@ -1,6 +1,15 @@
-# This file contains M.I.T.T.'s memory bank.
 #
-# Empty lines or ones that begin with #, are ignored – all others will be spoken at random.
+#  █   █ ███ █████ █████      █   █ █████ █   █     █████ █   █ █████
+#  ██ ██  █    █     █        ██ ██ █     ██ ██       █    █ █    █
+#  █ █ █  █    █     █   ████ █ █ █ ████  █ █ █       █     █     █
+#  █   █  █    █     █        █   █ █     █   █       █    █ █    █
+#  █   █ ███   █     █        █   █ █████ █   █  █    █   █   █   █
+#
+# VERSION 1.0 - 6/26/82
+#
+# This file contains the memory bank for M.I.T.T.
+#
+# Lines that are empty, or begin with #, are ignored – all others will be spoken at random.
 #
 # Lines that contain a {name} will use the current user's first name when speaking. If you
 # want a custom name, replace all occurrences with whatever text you'd like. EG CHOCK

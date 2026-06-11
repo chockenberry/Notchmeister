@@ -23,7 +23,7 @@ class MittEffect: NotchEffect {
 
 	let ledBounds = CGRect(origin: .zero, size: CGSize(width: 15, height: 15))
 
-	static let storageName = "MITT-Storage.txt"
+	static let storageName = "MITT-MEM.TXT"
 	
 	lazy var mittStorage: [String] = {
 		let fullUserName = ProcessInfo.processInfo.fullUserName
@@ -158,11 +158,21 @@ class MittEffect: NotchEffect {
 			backgroundLayer.bounds = parentLayer.bounds
 #if DEBUG && true
 			var bounds = parentLayer.bounds
+			bounds.size.width = 220
 			bounds.size.height = 50
 
 			backgroundLayer.bounds = bounds
 
-			backgroundLayer.backgroundColor = NSColor(red: 0.84, green: 0.79, blue: 0.66, alpha: 1).cgColor
+			//let backgroundName = "MITT-background"
+			let backgroundName = "MITT-background-2"
+
+			//backgroundLayer.backgroundColor = NSColor(red: 0.84, green: 0.79, blue: 0.66, alpha: 1).cgColor
+			backgroundLayer.contentsScale = parentLayer.contentsScale
+			if let image = NSImage(named: backgroundName) {
+				var proposedRect = bounds
+				backgroundLayer.contents = image.cgImage(forProposedRect: &proposedRect, context: nil, hints: nil)
+			}
+			
 			backgroundLayer.cornerRadius = 4
 #else
 			backgroundLayer.bounds = parentLayer.bounds
