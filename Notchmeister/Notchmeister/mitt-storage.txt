@@ -1,9 +1,9 @@
 #
-#  █   █ ███ █████ █████      █   █ █████ █   █     █████ █   █ █████
-#  ██ ██  █    █     █        ██ ██ █     ██ ██       █    █ █    █
-#  █ █ █  █    █     █   ████ █ █ █ ████  █ █ █       █     █     █
-#  █   █  █    █     █        █   █ █     █   █       █    █ █    █
-#  █   █ ███   █     █        █   █ █████ █   █  █    █   █   █   █
+#  *   *  ***  ***** *****       *   * ***** *   *      ***** *   * *****
+#  ** **   *     *     *         ** ** *     ** **        *    * *    *
+#  * * *   *     *     *    ***  * * * ****  * * *        *     *     *
+#  *   *   *     *     *         *   * *     *   *  **    *    * *    *
+#  *   *  ***    *     *         *   * ***** *   *  **    *   *   *   *
 #
 # VERSION 1.0 - 6/26/82
 #
@@ -11,8 +11,9 @@
 #
 # Lines that are empty, or begin with #, are ignored – all others will be spoken at random.
 #
-# Lines that contain a {name} will use the current user's first name when speaking. If you
-# want a custom name, replace all occurrences with whatever text you'd like. EG CHOCK
+# Text that contain a {name} will use the current user's first name when speaking (congrats
+# if it's Michael). If you want a custom name, replace all occurrences with whatever text
+# you'd like. EG CHOCK
 #
 # After making changes to the memory bank, restart Notchmeister to reload.
 
