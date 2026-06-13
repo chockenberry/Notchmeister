@@ -35,10 +35,37 @@ class MittEffect: NotchEffect {
 		if let applicationSupportDirectory = urls.first {
 			let fileURL = applicationSupportDirectory.appendingPathComponent(Self.storageName, conformingTo: .plainText)
 			let filePath = fileURL.path
-			if !fileManager.fileExists(atPath: filePath) {
-				if let resourcePath = Bundle.main.path(forResource: "mitt-storage", ofType: "txt") {
-					try? fileManager.copyItem(atPath: resourcePath, toPath: filePath)
+			do {
+				if !fileManager.fileExists(atPath: filePath) {
+					if let resourcePath = Bundle.main.path(forResource: "mitt-storage", ofType: "txt") {
+						try fileManager.copyItem(atPath: resourcePath, toPath: filePath)
+					}
 				}
+				else {
+					let values = try fileURL.resourceValues(forKeys: [.creationDateKey, .contentModificationDateKey])
+					
+					if let creationDate = values.creationDate {
+						debugLog("creationDate = \(creationDate)")
+						
+						if let modificationDate = values.contentModificationDate {
+							debugLog("modificationDate = \(modificationDate)")
+
+							if Int(creationDate.timeIntervalSinceReferenceDate) == Int(modificationDate.timeIntervalSinceReferenceDate) {
+								// file has not been modified since it was created, update it if the resource has changed
+								if let resourcePath = Bundle.main.path(forResource: "mitt-storage", ofType: "txt") {
+									if !fileManager.contentsEqual(atPath: filePath, andPath: resourcePath) {
+										try fileManager.removeItem(atPath: filePath)
+										try fileManager.copyItem(atPath: resourcePath, toPath: filePath)
+									}
+								}
+							}
+						}
+						
+					}
+				}
+			}
+			catch {
+				debugLog("Error creating \(filePath): \(error.localizedDescription)")
 			}
 			
 			if let text = try? String(contentsOfFile: filePath, encoding: .utf8) {
@@ -60,12 +87,16 @@ class MittEffect: NotchEffect {
 #else
 				result.shuffle()
 #endif
+#if !DEBUG
 				result.insert("I am the voice of Macintosh Interface Two Thousand's microprocessor. M.I.T.T - or MITT if you prefer.", at: 0)
+#else
+				result.insert("Debug", at: 0)
+#endif
 				return result;
 			}
 		}
 
-		return ["MITT Storage Offline"]
+		return ["MITT Memory Bank is Offline"]
 	}()
 	
 	private func ledImage(named name: String) -> CGImage? {
