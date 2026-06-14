@@ -41,6 +41,7 @@
 		441C5AC5272CA72F0094507E /* Debug.swift in Sources */ = {isa = PBXBuildFile; fileRef = 441C5AC4272CA72F0094507E /* Debug.swift */; };
 		441C5AC7272CB2B00094507E /* CoreAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 441C5AC6272CB2B00094507E /* CoreAnimation.swift */; };
 		447158F12775226200565727 /* ActivationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 447158F02775226200565727 /* ActivationView.swift */; };
+		4482EFC02FDF21F9000093BF /* EyeEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4482EFBF2FDF21F9000093BF /* EyeEffect.swift */; };
 		44961D7E27372F4D004E1A0B /* NotchEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44961D7D27372F4D004E1A0B /* NotchEffect.swift */; };
 		44961D80273732ED004E1A0B /* GlowEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44961D7F273732ED004E1A0B /* GlowEffect.swift */; };
 		44961D82273B3E42004E1A0B /* TrackingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44961D81273B3E42004E1A0B /* TrackingView.swift */; };
@@ -98,6 +99,7 @@
 		441C5AC4272CA72F0094507E /* Debug.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Debug.swift; sourceTree = "<group>"; };
 		441C5AC6272CB2B00094507E /* CoreAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreAnimation.swift; sourceTree = "<group>"; };
 		447158F02775226200565727 /* ActivationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivationView.swift; sourceTree = "<group>"; };
+		4482EFBF2FDF21F9000093BF /* EyeEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EyeEffect.swift; sourceTree = "<group>"; };
 		44961D7D27372F4D004E1A0B /* NotchEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotchEffect.swift; sourceTree = "<group>"; };
 		44961D7F273732ED004E1A0B /* GlowEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlowEffect.swift; sourceTree = "<group>"; };
 		44961D81273B3E42004E1A0B /* TrackingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingView.swift; sourceTree = "<group>"; };
@@ -185,6 +187,7 @@
 				44B724A929F5A681002E03E6 /* DiceEffect.swift */,
 				44A9DE052A227A7500918E9F /* TootEffect.swift */,
 				441934F52FCF4CA800C1EC0C /* MittEffect.swift */,
+				4482EFBF2FDF21F9000093BF /* EyeEffect.swift */,
 				44B724AF29FAF128002E03E6 /* SceneHitView.swift */,
 				44F5C5E529FC7672000331C2 /* SceneAnimationView.swift */,
 				441934F72FD09DE000C1EC0C /* SpeechSynthesizer.swift */,
@@ -359,6 +362,7 @@
 				4407B32D279B92BD00182733 /* ExpandoEffect.swift in Sources */,
 				441BC79E27629D5800BE0F01 /* WindowController.swift in Sources */,
 				012BA33C273749A5008AF04E /* NotchExtensions.swift in Sources */,
+				4482EFC02FDF21F9000093BF /* EyeEffect.swift in Sources */,
 				441C5AC7272CB2B00094507E /* CoreAnimation.swift in Sources */,
 				44A68CEB273DBD5500CCBCF4 /* PlasmaEffect.swift in Sources */,
 				44961D7E27372F4D004E1A0B /* NotchEffect.swift in Sources */,
