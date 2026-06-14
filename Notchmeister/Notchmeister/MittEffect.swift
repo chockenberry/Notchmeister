@@ -13,7 +13,10 @@ class MittEffect: NotchEffect {
 	// if there is more than one display with an notch).
 	static var timer: Timer?
 	static var currentStorageIndex = 0
-
+#if false
+	static var hasSpoken = false
+#endif
+	
 	var backgroundLayer: CALayer
 	var ledLayers: [CALayer]
 	var speechSynthesizerLevelsNotificationObserver: NSObjectProtocol? = nil
@@ -351,6 +354,10 @@ class MittEffect: NotchEffect {
 		startSpeechSynthesizer()
 		
 		CATransaction.begin()
+#if false
+		debugLog("hasSpoken = false")
+		Self.hasSpoken = false
+#else
 		CATransaction.setCompletionBlock {
 			let speechSynthesizer = SpeechSynthesizer.shared
 			if !speechSynthesizer.isSpeaking {
@@ -362,6 +369,7 @@ class MittEffect: NotchEffect {
 				}
 			}
 		}
+#endif
 		
 		resetLedLayers(leftIndex: 0, rightIndex: 11, offImage: greenOffImage)
 		resetLedLayers(leftIndex: 1, rightIndex: 10, offImage: yellowOffImage)
@@ -390,6 +398,24 @@ class MittEffect: NotchEffect {
 		
 		CATransaction.commit()
 	}
+
+#if false
+	override func mouseMoved(at point: CGPoint, underNotch: Bool) {
+		if underNotch {
+			let speechSynthesizer = SpeechSynthesizer.shared
+			if !Self.hasSpoken && !speechSynthesizer.isSpeaking {
+				let text = self.mittStorage[Self.currentStorageIndex]
+				speechSynthesizer.speak(text)
+				Self.currentStorageIndex += 1
+				if Self.currentStorageIndex >= self.mittStorage.count {
+					Self.currentStorageIndex = 0
+				}
+				Self.hasSpoken = true
+				debugLog("hasSpoken = true")
+			}
+		}
+	}
+#endif
 	
 	override func mouseExited(at point: CGPoint, underNotch: Bool) {
 		guard let parentLayer = parentLayer else { return }
