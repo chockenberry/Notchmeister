@@ -52,7 +52,7 @@ enum Effects: Int, CaseIterable {
 	func displayDescription() -> String {
 		switch self {
 		case .glow:
-			return "A cursor will light your way.\n\n⚠️ Works best in Dark appearance."
+			return "A cursor will light your way.\n\n⚠️ Works best with Dark appearance."
 		case .cylon:
 			return "By your command.\n\nAnd don‘t get too close."
 		case .plasma:
@@ -62,7 +62,7 @@ enum Effects: Int, CaseIterable {
 		case .radar:
 			return "Notchmeister’s patented Nano Radar lets you know exactly where your mouse has gone."
 		case .expando:
-			return "Bigger is better, right?\n\n⚠️ Works best in Light appearance."
+			return "Bigger is better, right?\n\n⚠️ Works best with Light appearance."
 		case .dice:
 			return "Apple’s expertise with silicon is not only with the die, but also the dice.\n\n☢️ AVOID EYE OR SKIN EXPOSURE"
 		case .autotoot:
