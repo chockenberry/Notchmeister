@@ -17,5 +17,14 @@ extension CATransaction {
 		commit()
 	}
 	
+	class func withChange(duration: CFTimeInterval, _ change: () -> Void, completion: (() -> Void)? = nil) {
+		begin()
+		setAnimationDuration(duration)
+		if completion != nil {
+			setCompletionBlock(completion)
+		}
+		change()
+		commit()
+	}
 }
 

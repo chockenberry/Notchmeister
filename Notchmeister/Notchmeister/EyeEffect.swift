@@ -12,10 +12,12 @@ class EyeEffect: NotchEffect {
 	var leftEyeLayer: CAShapeLayer
 	var rightEyeLayer: CAShapeLayer
 	var backgroundLayer: CAShapeLayer
-	var eyesClosed = true
+	
+	var eyesOpen = false
+	var eyesExtended = false
 	
 	required init (with parentLayer: CALayer, in parentView: NSView, of parentWindow: NSWindow) {
-		let dimension = parentLayer.bounds.size.height - 2
+		let dimension = parentLayer.bounds.size.height - 4
 		self.leftEyeLayer = Self.eyeLayer(dimension: dimension)
 		self.rightEyeLayer = Self.eyeLayer(dimension: dimension)
 		self.backgroundLayer = CAShapeLayer()
@@ -51,7 +53,6 @@ class EyeEffect: NotchEffect {
 	private func configureSublayers() {
 		guard let parentLayer = parentLayer else { return }
 		
-		
 		do {
 			if Defaults.shouldDebugDrawing {
 				leftEyeLayer.fillColor = NSColor.systemGreen.cgColor
@@ -69,6 +70,9 @@ class EyeEffect: NotchEffect {
 			
 			leftEyeLayer.position = CGPoint(x: parentLayer.bounds.minX - halfOffset, y: parentLayer.bounds.midY)
 			rightEyeLayer.position = CGPoint(x: parentLayer.bounds.maxX + halfOffset, y: parentLayer.bounds.midY)
+
+			transformScale(layer: leftEyeLayer, isLeft: true, closed: true)
+			transformScale(layer: rightEyeLayer, isLeft: false, closed: true)
 
 			//layer.path = path.cgPath
 			//layer.bounds.size = size
@@ -117,18 +121,23 @@ class EyeEffect: NotchEffect {
 		}
 	}
 		
-	private func transformScale(layer: CALayer, closed: Bool) {
+	private func transformScale(layer: CALayer, isLeft: Bool, closed: Bool) {
 		if closed {
-			let transform = CATransform3DMakeScale(1, 0, 1)
-			layer.transform = transform
+			let transform = CATransform3DMakeRotation(isLeft ? .pi : 0, 0, 0, 1)
+			let finalTransform = CATransform3DScale(transform, 1, 0, 1)
+			//let finalTransform = CATransform3DMakeScale(1, 0, 0)
+			layer.transform = finalTransform
 		}
 		else {
-			let transform = CATransform3DMakeScale(1, 1, 1)
-			layer.transform = transform
+			let transform = CATransform3DMakeRotation(isLeft ? .pi : 0, 0, 0, 1)
+			let finalTransform = CATransform3DScale(transform, 1, 1, 1)
+			//let finalTransform = CATransform3DMakeScale(1, 0, 0)
+			layer.transform = finalTransform
 		}
 	}
 	
 	let enterExitDuration: TimeInterval = 2
+	let openCloseDuration: TimeInterval = 1
 	let movementDuration: TimeInterval = 0.1
 
 	override func mouseEntered(at point: CGPoint, underNotch: Bool) {
@@ -145,21 +154,53 @@ class EyeEffect: NotchEffect {
 			rightEyeLayer.opacity = 1
 			backgroundLayer.opacity = 1
 			
-			transformRotate(layer: leftEyeLayer, point: point, layerPoint: leftPoint, closed: true)
-			transformRotate(layer: rightEyeLayer, point: point, layerPoint: rightPoint, closed: true)
-//			transformScale(layer: leftEyeLayer, closed: true)
-//			transformScale(layer: rightEyeLayer, closed: true)
-			eyesClosed = true
+//			transformRotate(layer: leftEyeLayer, point: point, layerPoint: leftPoint, closed: true)
+//			transformRotate(layer: rightEyeLayer, point: point, layerPoint: rightPoint, closed: true)
+			transformScale(layer: leftEyeLayer, isLeft: true, closed: true)
+			transformScale(layer: rightEyeLayer, isLeft: false, closed: true)
+			eyesOpen = false
 		}
 
+		CATransaction.withChange(duration: enterExitDuration) {
+			let startBounds = parentLayer.bounds
+			let startPath = NSBezierPath.init(roundedRect: startBounds, xRadius: halfOffset, yRadius: halfOffset)
+			let endBounds = parentLayer.bounds.insetBy(dx: -offset, dy: 0)
+			let endPath = NSBezierPath.init(roundedRect: endBounds, xRadius: halfOffset, yRadius: halfOffset)
+
+			let animation = CABasicAnimation(keyPath: "path")
+			animation.fromValue = startPath.cgPath
+			animation.toValue = endPath.cgPath
+			//animation.duration = enterExitDuration
+			animation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+				
+			backgroundLayer.path = endPath.cgPath
+			backgroundLayer.add(animation, forKey: "animatePath")
+		} completion: {
+			self.eyesExtended = true
+			CATransaction.withChange(duration: self.openCloseDuration) {
+				//self.transformRotate(layer: self.leftEyeLayer, point: point, layerPoint: leftPoint, closed: false)
+				//self.transformRotate(layer: self.rightEyeLayer, point: point, layerPoint: rightPoint, closed: false)
+				self.transformScale(layer: self.leftEyeLayer, isLeft: true, closed: false)
+				self.transformScale(layer: self.rightEyeLayer, isLeft: false, closed: false)
+			} completion: {
+				//CATransaction.withActionsDisabled {
+					self.transformRotate(layer: self.leftEyeLayer, point: point, layerPoint: leftPoint, closed: false)
+					self.transformRotate(layer: self.rightEyeLayer, point: point, layerPoint: rightPoint, closed: false)
+
+				//}
+				self.eyesOpen = true
+			}
+
+		}
+/*
 		CATransaction.begin()
 		CATransaction.setAnimationDuration(enterExitDuration)
 
-		transformScale(layer: leftEyeLayer, closed: false)
-		transformScale(layer: rightEyeLayer, closed: false)
+//		transformScale(layer: leftEyeLayer, closed: false)
+//		transformScale(layer: rightEyeLayer, closed: false)
 
-		self.leftEyeLayer.opacity = 1
-		self.rightEyeLayer.opacity = 1
+//		self.leftEyeLayer.opacity = 1
+//		self.rightEyeLayer.opacity = 1
 
 
 		CATransaction.setCompletionBlock {
@@ -169,7 +210,7 @@ class EyeEffect: NotchEffect {
 			self.transformRotate(layer: self.rightEyeLayer, point: point, layerPoint: rightPoint, closed: false)
 			CATransaction.commit()
 			
-			self.eyesClosed = false
+			self.eyesOpen = true
 		}
 		
 		let startBounds = parentLayer.bounds
@@ -196,7 +237,7 @@ class EyeEffect: NotchEffect {
 //		//backgroundLayer.position = CGPoint(x: -offset, y: 0)
 //		
 //		CATransaction.commit()
-		
+*/
 	}
 
 	override func mouseMoved(at point: CGPoint, underNotch: Bool) {
@@ -207,16 +248,18 @@ class EyeEffect: NotchEffect {
 		let leftPoint = CGPoint(x: parentLayer.bounds.minX - offset, y: parentLayer.bounds.midY)
 		let rightPoint = CGPoint(x: parentLayer.bounds.maxX + offset, y: parentLayer.bounds.midY)
 
-		if !eyesClosed {
+		if eyesOpen {
 		
-		CATransaction.begin()
-		CATransaction.setAnimationDuration(movementDuration)
-//		let closed = eyesClosed
-//			CATransaction.withActionsDisabled {
-		 transformRotate(layer: leftEyeLayer, point: point, layerPoint: leftPoint, closed: false)
-		 transformRotate(layer: rightEyeLayer, point: point, layerPoint: rightPoint, closed: false)
-//			}
-		CATransaction.commit()
+			CATransaction.withChange(duration: movementDuration) {
+				transformRotate(layer: leftEyeLayer, point: point, layerPoint: leftPoint, closed: false)
+				transformRotate(layer: rightEyeLayer, point: point, layerPoint: rightPoint, closed: false)
+			}
+//		CATransaction.begin()
+//		CATransaction.setAnimationDuration(movementDuration)
+////		let closed = eyesClosed
+////			CATransaction.withActionsDisabled {
+////			}
+//		CATransaction.commit()
 		}
 	}
 
@@ -231,16 +274,77 @@ class EyeEffect: NotchEffect {
 		let rightPoint = CGPoint(x: parentLayer.bounds.maxX + halfOffset, y: parentLayer.bounds.midY)
 
 		CATransaction.withActionsDisabled {
+			transformScale(layer: leftEyeLayer, isLeft: true, closed: false)
+			transformScale(layer: rightEyeLayer, isLeft: false, closed: false)
+		}
+
+		CATransaction.withChange(duration: self.openCloseDuration) {
+			//self.transformRotate(layer: self.leftEyeLayer, point: point, layerPoint: leftPoint, closed: false)
+			//self.transformRotate(layer: self.rightEyeLayer, point: point, layerPoint: rightPoint, closed: false)
+			self.transformScale(layer: self.leftEyeLayer, isLeft: true, closed: true)
+			self.transformScale(layer: self.rightEyeLayer, isLeft: false, closed: true)
+		} completion: {
+			self.leftEyeLayer.opacity = 0
+			self.rightEyeLayer.opacity = 0
+			self.eyesOpen = false
+			CATransaction.withChange(duration: self.enterExitDuration) {
+				let startBounds = parentLayer.bounds.insetBy(dx: -offset, dy: 0)
+				let startPath = NSBezierPath.init(roundedRect: startBounds, xRadius: halfOffset, yRadius: halfOffset)
+				let endBounds = parentLayer.bounds
+				let endPath = NSBezierPath.init(roundedRect: endBounds, xRadius: halfOffset, yRadius: halfOffset)
+
+				let animation = CABasicAnimation(keyPath: "path")
+				animation.fromValue = startPath.cgPath
+				animation.toValue = endPath.cgPath
+				//animation.duration = self.enterExitDuration
+				animation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+					
+				self.backgroundLayer.path = endPath.cgPath
+				self.backgroundLayer.add(animation, forKey: "animatePath")
+			} completion: {
+				self.eyesExtended = false
+				CATransaction.withActionsDisabled {
+					self.backgroundLayer.opacity = 0
+				}
+			}
+		}
+
+		/*
+		CATransaction.withActionsDisabled {
 			leftEyeLayer.opacity = 0
 			rightEyeLayer.opacity = 0
 			//backgroundLayer.opacity = 0
 
 //			transformRotate(layer: leftEyeLayer, point: point, layerPoint: leftPoint, closed: true)
 //			transformRotate(layer: rightEyeLayer, point: point, layerPoint: rightPoint, closed: true)
-			transformScale(layer: leftEyeLayer, closed: true)
-			transformScale(layer: rightEyeLayer, closed: true)
+			transformScale(layer: leftEyeLayer, isLeft: true, closed: true)
+			transformScale(layer: rightEyeLayer, isLeft: false, closed: true)
+			eyesOpen = false
 		}
 
+		CATransaction.withChange(duration: enterExitDuration) {
+			let startBounds = parentLayer.bounds.insetBy(dx: -offset, dy: 0)
+			let startPath = NSBezierPath.init(roundedRect: startBounds, xRadius: halfOffset, yRadius: halfOffset)
+			let endBounds = parentLayer.bounds
+			let endPath = NSBezierPath.init(roundedRect: endBounds, xRadius: halfOffset, yRadius: halfOffset)
+
+			let animation = CABasicAnimation(keyPath: "path")
+			animation.fromValue = startPath.cgPath
+			animation.toValue = endPath.cgPath
+			//animation.duration = self.enterExitDuration
+			animation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+				
+			self.backgroundLayer.path = endPath.cgPath
+			self.backgroundLayer.add(animation, forKey: "animatePath")
+		} completion: {
+			CATransaction.withActionsDisabled {
+				self.backgroundLayer.opacity = 0
+				self.eyesExtended = false
+			}
+		}
+*/
+		
+		/*
 		CATransaction.begin()
 		CATransaction.setAnimationDuration(enterExitDuration)
 		
@@ -279,6 +383,7 @@ class EyeEffect: NotchEffect {
 //		}
 
 		CATransaction.commit()
+		 */
 	}
 
 }
