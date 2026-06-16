@@ -44,7 +44,6 @@ class EyeEffect: NotchEffect {
 		let pupilDimension = dimension / 3
 		let pupilSize = CGSize(width: pupilDimension, height: pupilDimension)
 		let pupilPath = NSBezierPath.init(ovalIn: NSRect(origin: .zero, size: pupilSize))
-		pupilLayer.fillColor = NSColor.black.cgColor
 		pupilLayer.path = pupilPath.cgPath
 		pupilLayer.bounds.size = pupilSize
 		
@@ -54,6 +53,17 @@ class EyeEffect: NotchEffect {
 		rotationLayer.addSublayer(pupilLayer)
 		
 		layer.addSublayer(rotationLayer)
+
+		if Defaults.shouldDebugDrawing {
+			layer.fillColor = NSColor.systemRed.cgColor
+			pupilLayer.fillColor = NSColor.systemBlue.cgColor
+			rotationLayer.backgroundColor = NSColor.systemGreen.withAlphaComponent(0.75).cgColor
+		}
+		else {
+			layer.fillColor = NSColor(named: "eyeEffect-iris")?.cgColor ?? NSColor.white.cgColor
+			pupilLayer.fillColor =  NSColor(named: "eyeEffect-pupil")?.cgColor ?? NSColor.black.cgColor
+		}
+		
 		return layer
 	}
 	
@@ -61,16 +71,6 @@ class EyeEffect: NotchEffect {
 		guard let parentLayer = parentLayer else { return }
 		
 		do {
-			if Defaults.shouldDebugDrawing {
-				leftEyeLayer.fillColor = NSColor.systemGreen.cgColor
-				leftEyeLayer.sublayers?.first?.backgroundColor = NSColor.systemPurple.cgColor
-				rightEyeLayer.fillColor = NSColor.systemRed.cgColor
-				rightEyeLayer.sublayers?.first?.backgroundColor = NSColor.systemBlue.cgColor
-			}
-			else {
-				leftEyeLayer.fillColor = NSColor.white.cgColor
-				rightEyeLayer.fillColor = NSColor.white.cgColor
-			}
 			leftEyeLayer.opacity = 0
 			rightEyeLayer.opacity = 0
 
@@ -139,8 +139,8 @@ class EyeEffect: NotchEffect {
 		}
 	}
 	
-	let enterExitDuration: TimeInterval = 1.25
-	let openCloseDuration: TimeInterval = 1.5
+	let enterExitDuration: TimeInterval = 0.25
+	let openCloseDuration: TimeInterval = 0.5
 	let movementDuration: TimeInterval = 0.1
 
 	override func mouseEntered(at point: CGPoint, underNotch: Bool) {
@@ -242,8 +242,8 @@ class EyeEffect: NotchEffect {
 		let endPath = NSBezierPath.init(roundedRect: endBounds, xRadius: radius, yRadius: radius)
 
 		CATransaction.withActionsDisabled {
-			leftEyeLayer.opacity = 1
-			rightEyeLayer.opacity = 1
+			//leftEyeLayer.opacity = 1
+			//rightEyeLayer.opacity = 1
 
 			backgroundLayer.path = startPath.cgPath
 			backgroundLayer.opacity = 1

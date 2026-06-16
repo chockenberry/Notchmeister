@@ -73,7 +73,7 @@ enum Effects: Int, CaseIterable {
 		case .mitt:
 			return "I am the voice of Macintosh Interface Two Thousand's microprocessor."
 		case .eye:
-			return "Surveillance."
+			return "Pointer surveillance."
 #if DEBUG && false
 		case .portal:
 			return "Activate Macintosh Interdimensional Computation Extension (MICE)."
