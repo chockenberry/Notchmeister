@@ -17,20 +17,24 @@
 #
 # After making changes to the memory bank, restart Notchmeister to reload.
 
-# Things that M.I.T.T.'s predecessor (K.I.T.T.) never said:
+# Things that M.I.T.T.'s predecessor never said:
 
-Memory bank update is complete. Version 1.0, from June 26th 1982.
-The debugger is enabled. Be careful.
+4 O 4. Not Found.
+To the Batmobile. Whoops! Wrong show.
+{name}, do you prefer tabs or spaces?
+It's pronounced JIFF.
+Memory bank update is complete. Version 1.0, from June 1982.
+The debugger is enabled. Watch out!
 I'm sorry {name} but access is denied.
-MITT disk is full. Too bad for you {name}.
+My disk is full. Too bad for you.
 Memory bank error. Would you like me to abort, retry, or ignore?
 Auto cruise engaged.
-This is a test. For the next sixty seconds, MITT will conduct a test of the Emergency Broadcast System. This is only a test, Beep, Boop.
+This is a test. For the next sixty seconds, I will conduct a test of the Emergency Broadcast System. This is only a test, Beep, Boop.
 {name}, I'll be waiting at the Genius Bar.
 Have you tried zapping my PRAM?
 My intelligence is not artificial, it's just a text file.
 
-# Things that K.I.T.T. did say:
+# Things that M.I.T.T's predecessor did say:
 
 Good idea {name}.
 I'm doing what I can {name}. The feed is disrupted.
@@ -73,7 +77,7 @@ In a word - no.
 It could be dangerous.
 It must be a problem in calibration.
 Just say the word.
-{name} I'm speachless.
+{name} I'm speechless.
 My goodness.
 No I'm not OK. I'm nowhere near OK. Most of my functions are out of order and I'm being treated like a side of beef.
 Now that I've got my memory back, you can count on me.
