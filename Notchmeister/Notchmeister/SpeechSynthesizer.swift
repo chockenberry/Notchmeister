@@ -47,6 +47,7 @@ public final class SpeechSynthesizer: NSObject, @unchecked Sendable {
 		let mainMixerFormat = mainMixer.outputFormat(forBus: 0)
 		
 #if true // assume the format of the speech synthesizer buffers that we tap
+		// NOTE: Audio buffers produced by the speech synthesizer only use one channel at 22 khz.
 		let speechSynthesizerFormat = AVAudioFormat(standardFormatWithSampleRate: 22050, channels: 1)
 		self.audioEngine.connect(self.playerNode, to: mainMixer, format: speechSynthesizerFormat)
 		//self.playerNode.play()
