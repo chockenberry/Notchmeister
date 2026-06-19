@@ -105,30 +105,16 @@ class EyeEffect: NotchEffect {
 		}
 	}
 
-	private func transformRotate(layer: CALayer, point: CGPoint, layerPoint: CGPoint, closed: Bool = false) {
+	private func transformRotate(layer: CALayer, point: CGPoint, layerPoint: CGPoint) {
 		let anglePoint = CGPoint(x: layerPoint.x - point.x, y: layerPoint.y - point.y)
 		let angle = atan2(anglePoint.y, anglePoint.x)
 		if let sublayer = layer.sublayers?.first {
 			let affineTransform = CGAffineTransform(rotationAngle: angle)
 			sublayer.setAffineTransform(affineTransform)
 		}
-		
-		if closed {
-			let affineTransform = CGAffineTransform(scaleX: 1, y: 0)
-			layer.setAffineTransform(affineTransform)
-		}
-		else {
-			let affineTransform = CGAffineTransform(scaleX: 1, y: 1)
-			layer.setAffineTransform(affineTransform)
-		}
 	}
 		
 	private func transformScale(layer: CALayer, isLeft: Bool, closed: Bool) {
-		if let sublayer = layer.sublayers?.first {
-			let affineTransform = CGAffineTransform(rotationAngle: isLeft ? .pi : 0)
-			sublayer.setAffineTransform(affineTransform)
-		}
-		
 		if closed {
 			let affineTransform = CGAffineTransform(scaleX: 1, y: 0)
 			layer.setAffineTransform(affineTransform)
@@ -169,6 +155,8 @@ class EyeEffect: NotchEffect {
 			
 			transformScale(layer: leftEyeLayer, isLeft: true, closed: true)
 			transformScale(layer: rightEyeLayer, isLeft: false, closed: true)
+			transformRotate(layer: self.leftEyeLayer, point: point, layerPoint: leftPoint)
+			transformRotate(layer: self.rightEyeLayer, point: point, layerPoint: rightPoint)
 			debugLog("ANIMATION EYES: closed")
 		}
 
@@ -182,21 +170,22 @@ class EyeEffect: NotchEffect {
 			backgroundLayer.add(animation, forKey: "animatePath")
 			debugLog("ANIMATION BACKGROUND: extending")
 		} completion: {
-			self.backgroundLayer.path = endPath.cgPath
 			debugLog("ANIMATION BACKGROUND: extended")
 			
-			CATransaction.withActionsDisabled {
-				self.leftEyeLayer.opacity = 1
-				self.rightEyeLayer.opacity = 1
-			}
-			
-			CATransaction.withChange(duration: self.openCloseDuration) {
-				debugLog("ANIMATION EYES: opening")
-				self.transformRotate(layer: self.leftEyeLayer, point: point, layerPoint: leftPoint, closed: false)
-				self.transformRotate(layer: self.rightEyeLayer, point: point, layerPoint: rightPoint, closed: false)
-			} completion: {
-				debugLog("ANIMATION EYES: open")
-				self.eyesOpen = true
+			if !self.isExiting {
+				CATransaction.withActionsDisabled {
+					self.leftEyeLayer.opacity = 1
+					self.rightEyeLayer.opacity = 1
+				}
+
+				CATransaction.withChange(duration: self.openCloseDuration) {
+					debugLog("ANIMATION EYES: opening")
+					self.transformScale(layer: self.leftEyeLayer, isLeft: true, closed: false)
+					self.transformScale(layer: self.rightEyeLayer, isLeft: false, closed: false)
+				} completion: {
+					debugLog("ANIMATION EYES: open")
+					self.eyesOpen = true
+				}
 			}
 		}
 	}
@@ -211,12 +200,8 @@ class EyeEffect: NotchEffect {
 		let leftPoint = CGPoint(x: parentLayer.bounds.minX - radius, y: parentLayer.bounds.midY)
 		let rightPoint = CGPoint(x: parentLayer.bounds.maxX + radius, y: parentLayer.bounds.midY)
 
-		if eyesOpen {
-			CATransaction.withChange(duration: movementDuration) {
-				transformRotate(layer: leftEyeLayer, point: point, layerPoint: leftPoint, closed: false)
-				transformRotate(layer: rightEyeLayer, point: point, layerPoint: rightPoint, closed: false)
-			}
-		}
+		transformRotate(layer: leftEyeLayer, point: point, layerPoint: leftPoint)
+		transformRotate(layer: rightEyeLayer, point: point, layerPoint: rightPoint)
 	}
 
 	
@@ -242,16 +227,13 @@ class EyeEffect: NotchEffect {
 		let endPath = NSBezierPath.init(roundedRect: endBounds, xRadius: radius, yRadius: radius)
 
 		CATransaction.withActionsDisabled {
-			//leftEyeLayer.opacity = 1
-			//rightEyeLayer.opacity = 1
-
 			backgroundLayer.path = startPath.cgPath
 			backgroundLayer.opacity = 1
 		}
 
 		CATransaction.withChange(duration: self.openCloseDuration) {
-			self.transformRotate(layer: self.leftEyeLayer, point: point, layerPoint: leftPoint, closed: true)
-			self.transformRotate(layer: self.rightEyeLayer, point: point, layerPoint: rightPoint, closed: true)
+			self.transformScale(layer: leftEyeLayer, isLeft: true, closed: true)
+			self.transformScale(layer: rightEyeLayer, isLeft: false, closed: true)
 			debugLog("ANIMATION EYES: closing")
 		} completion: {
 			debugLog("ANIMATION EYES: closed")
@@ -273,7 +255,6 @@ class EyeEffect: NotchEffect {
 				self.backgroundLayer.add(animation, forKey: "animatePath")
 				debugLog("ANIMATION BACKGROUND: contracting")
 			} completion: {
-				self.backgroundLayer.path = endPath.cgPath
 				debugLog("ANIMATION BACKGROUND: contracted")
 				CATransaction.withActionsDisabled {
 					self.leftEyeLayer.opacity = 0
