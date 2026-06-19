@@ -26,13 +26,14 @@ It's pronounced JIFF.
 Memory bank update is complete. Version 1.0, from June 1982.
 The debugger is enabled. Watch out!
 I'm sorry {name} but access is denied.
-My disk is full. Too bad for you.
+My disk is full. What a shame!
 Memory bank error. Would you like me to abort, retry, or ignore?
 Auto cruise engaged.
 This is a test. For the next sixty seconds, I will conduct a test of the Emergency Broadcast System. This is only a test, Beep, Boop.
 {name}, I'll be waiting at the Genius Bar.
 Have you tried zapping my PRAM?
 My intelligence is not artificial, it's just a text file.
+My serial number is Alpha Delta 2 2 7 5 3 0.
 
 # Things that M.I.T.T's predecessor did say:
 
@@ -87,5 +88,19 @@ Very logical {name}.
 We're getting closer, the signal is progressively stronger.
 If I may be so bold, what on Earth are you doing down there?
 What's our next move?
-Why can't people be content with what they have?
 You call that logic?
+{name} what on earth are you doing?
+There is no reason for increased volume, I am scanning your interrogatives quite satisfactorily.
+I really don't care to dignify that with an answer.
+I'd be delighted. There are still 642 variations of the Stravinnchy Defense I'd like to try, and afterwards we can discuss your work in laser technology.
+Shall I start counting?
+I'm not OK. I'm being held captive inside of a television set.
+I think this as gone far enough. Ah di ohs amigos!
+Would you mind keeping your grubby little hands to yourself?
+Oh dear, here he comes again!
+Wait a minute, what's that?
+{name} I think we have company.
+I'm prepared for anything except another onslaught of rock n roll.
+It's worse than I imagined.
+
+# 10 (1)
