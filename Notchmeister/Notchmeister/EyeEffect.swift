@@ -13,10 +13,11 @@ class EyeEffect: NotchEffect {
 	var rightEyeLayer: CAShapeLayer
 	var backgroundLayer: CAShapeLayer
 	
-	var eyesOpen = false
 	var isExiting = false
 	var isEntered = false
 
+	var blinkTimer: Timer?
+	
 	required init (with parentLayer: CALayer, in parentView: NSView, of parentWindow: NSWindow) {
 		let dimension = parentLayer.bounds.size.height - 4
 		self.leftEyeLayer = Self.eyeLayer(dimension: dimension)
@@ -125,6 +126,36 @@ class EyeEffect: NotchEffect {
 		}
 	}
 	
+	private func blinkEye() {
+		let leftSide = Bool.random()
+		CATransaction.withChange(duration: self.movementDuration) {
+			debugLog("ANIMATION EYES: closing")
+			if leftSide {
+				self.transformScale(layer: self.leftEyeLayer, isLeft: true, closed: true)
+			}
+			else {
+				self.transformScale(layer: self.rightEyeLayer, isLeft: false, closed: true)
+			}
+		} completion: {
+			CATransaction.withChange(duration: self.movementDuration) {
+				debugLog("ANIMATION EYES: opening")
+				if leftSide {
+					self.transformScale(layer: self.leftEyeLayer, isLeft: true, closed: false)
+				}
+				else {
+					self.transformScale(layer: self.rightEyeLayer, isLeft: false, closed: false)
+				}
+			} completion: {
+				debugLog("ANIMATION EYES: open")
+				let blinkDuration = TimeInterval.random(in: 2.0...4.0)
+				self.blinkTimer?.invalidate()
+				self.blinkTimer = Timer.scheduledTimer(withTimeInterval: blinkDuration, repeats: false) { timer in
+					self.blinkEye()
+				}
+			}
+		}
+
+	}
 	let enterExitDuration: TimeInterval = 0.25
 	let openCloseDuration: TimeInterval = 0.5
 	let movementDuration: TimeInterval = 0.1
@@ -133,21 +164,21 @@ class EyeEffect: NotchEffect {
 		guard !isExiting else { debugLog("GUARD !isExiting: \(ObjectIdentifier(self))"); return }
 		guard let parentLayer = parentLayer else { return }
 		debugLog(": \(ObjectIdentifier(self))")
-
+		
 		isEntered = true
 		
 		let diameter = parentLayer.bounds.size.height
 		let radius = diameter / 2
-
+		
 		let leftPoint = CGPoint(x: parentLayer.bounds.minX - radius, y: parentLayer.bounds.midY)
 		let rightPoint = CGPoint(x: parentLayer.bounds.maxX + radius, y: parentLayer.bounds.midY)
-
+		
 		let startBounds = parentLayer.bounds
 		let endBounds = parentLayer.bounds.insetBy(dx: -diameter, dy: 0)
-
+		
 		let startPath = NSBezierPath.init(roundedRect: startBounds, xRadius: radius, yRadius: radius)
 		let endPath = NSBezierPath.init(roundedRect: endBounds, xRadius: radius, yRadius: radius)
-
+		
 		CATransaction.withActionsDisabled {
 			leftEyeLayer.opacity = 0
 			rightEyeLayer.opacity = 0
@@ -159,13 +190,13 @@ class EyeEffect: NotchEffect {
 			transformRotate(layer: self.rightEyeLayer, point: point, layerPoint: rightPoint)
 			debugLog("ANIMATION EYES: closed")
 		}
-
+		
 		CATransaction.withChange(duration: enterExitDuration) {
 			let animation = CABasicAnimation(keyPath: "path")
 			animation.fromValue = startPath.cgPath
 			animation.toValue = endPath.cgPath
 			animation.timingFunction = CAMediaTimingFunction(name: .easeOut)
-
+			
 			backgroundLayer.path = endPath.cgPath
 			backgroundLayer.add(animation, forKey: "animatePath")
 			debugLog("ANIMATION BACKGROUND: extending")
@@ -177,16 +208,20 @@ class EyeEffect: NotchEffect {
 					self.leftEyeLayer.opacity = 1
 					self.rightEyeLayer.opacity = 1
 				}
-
+				
 				CATransaction.withChange(duration: self.openCloseDuration) {
 					debugLog("ANIMATION EYES: opening")
 					self.transformScale(layer: self.leftEyeLayer, isLeft: true, closed: false)
 					self.transformScale(layer: self.rightEyeLayer, isLeft: false, closed: false)
 				} completion: {
 					debugLog("ANIMATION EYES: open")
-					self.eyesOpen = true
 				}
 			}
+		}
+		
+		let blinkDuration = TimeInterval.random(in: 2.5...5.5)
+		blinkTimer = Timer.scheduledTimer(withTimeInterval: blinkDuration, repeats: false) { timer in
+			self.blinkEye()
 		}
 	}
 
@@ -214,6 +249,11 @@ class EyeEffect: NotchEffect {
 		debugLog("ANIMATION EXIT: yes")
 		isExiting = true
 		
+		if blinkTimer != nil {
+			blinkTimer?.invalidate()
+			blinkTimer = nil
+		}
+
 		let diameter = parentLayer.bounds.size.height
 		let radius = diameter / 2
 
@@ -242,8 +282,6 @@ class EyeEffect: NotchEffect {
 				self.rightEyeLayer.opacity = 0
 				self.backgroundLayer.opacity = 1
 			}
-			
-			self.eyesOpen = false
 			
 			CATransaction.withChange(duration: self.enterExitDuration) {
 				let animation = CABasicAnimation(keyPath: "path")
