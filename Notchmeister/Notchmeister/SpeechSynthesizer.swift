@@ -22,7 +22,7 @@ public final class SpeechSynthesizer: NSObject, @unchecked Sendable {
 	
 	public var voice = AVSpeechSynthesisVoice(identifier: "com.apple.voice.compact.en-GB.Daniel")
 	public var rate: Float = 0.55
-	public var pitchMultiplier: Float = 1.4
+	public var pitchMultiplier: Float = 1.8
 
 	private(set) var isSpeaking: Bool = false
 	private(set) var level: Float = 0.0
