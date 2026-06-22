@@ -29,7 +29,7 @@ I'm sorry {name} but access is denied.
 My disk is full. What a shame!
 Memory bank error. Would you like me to abort, retry, or ignore?
 Auto cruise engaged.
-This is a test. For the next sixty seconds, I will conduct a test of the Emergency Broadcast System. This is only a test, Beep, Boop.
+This is a test. For the next sixty seconds, I will conduct a test of the Emergency Broadcast System. This is only a test, Beep, Boop, Beep, Boop.
 {name}, I'll be waiting at the Genius Bar.
 Have you tried zapping my PRAM?
 My intelligence is not artificial, it's just a text file.
