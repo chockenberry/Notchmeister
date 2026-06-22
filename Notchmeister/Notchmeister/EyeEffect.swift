@@ -164,6 +164,17 @@ class EyeEffect: NotchEffect {
 		}
 
 	}
+	
+	override func end() {
+		debugLog()
+
+		if blinkTimer != nil {
+			debugLog("ANIMATION END: stopping blink")
+			blinkTimer?.invalidate()
+			blinkTimer = nil
+		}
+	}
+
 	let enterExitDuration: TimeInterval = 0.25
 	let openCloseDuration: TimeInterval = 0.5
 	let movementDuration: TimeInterval = 0.1
@@ -227,6 +238,7 @@ class EyeEffect: NotchEffect {
 			}
 		}
 		
+		debugLog("ANIMATION EXIT: starting blink")
 		let blinkDuration = TimeInterval.random(in: 2.5...5.5)
 		blinkTimer = Timer.scheduledTimer(withTimeInterval: blinkDuration, repeats: false) { timer in
 			self.blinkEye()
@@ -258,6 +270,7 @@ class EyeEffect: NotchEffect {
 		isExiting = true
 		
 		if blinkTimer != nil {
+			debugLog("ANIMATION EXIT: stopping blink")
 			blinkTimer?.invalidate()
 			blinkTimer = nil
 		}
