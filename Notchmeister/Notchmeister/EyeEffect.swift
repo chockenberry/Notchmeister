@@ -9,8 +9,8 @@ import AppKit
 
 class EyeEffect: NotchEffect {
 	
-	var leftEyeLayer: CAShapeLayer
-	var rightEyeLayer: CAShapeLayer
+	var leftEyeLayer: CAGradientLayer
+	var rightEyeLayer: CAGradientLayer
 	var backgroundLayer: CAShapeLayer
 	
 	var isExiting = false
@@ -29,14 +29,16 @@ class EyeEffect: NotchEffect {
 		configureSublayers()
 	}
 	
-	private static func eyeLayer(dimension: CGFloat) -> CAShapeLayer {
-		let layer = CAShapeLayer()
+	private static func eyeLayer(dimension: CGFloat) -> CAGradientLayer {
+		let layer = CAGradientLayer()
 		let size = CGSize(width: dimension, height: dimension)
-		let path = NSBezierPath.init(ovalIn: NSRect(origin: .zero, size: size))
 
-		layer.path = path.cgPath
 		layer.bounds.size = size
-
+		layer.cornerRadius = size.height / 2
+		layer.startPoint = CGPoint(x: 0.5, y: 0.5)
+		layer.endPoint = CGPoint(x: 1.0, y: 1.0)
+		layer.type = .radial
+		
 		let rotationLayer = CALayer()
 		rotationLayer.bounds = layer.bounds
 		rotationLayer.position = CGPoint(x: layer.bounds.midX, y: layer.bounds.midY)
@@ -56,12 +58,18 @@ class EyeEffect: NotchEffect {
 		layer.addSublayer(rotationLayer)
 
 		if Defaults.shouldDebugDrawing {
-			layer.fillColor = NSColor.systemRed.cgColor
+			layer.backgroundColor = NSColor.systemRed.cgColor
+			let innerColor = NSColor.systemOrange.cgColor
+			let outerColor = NSColor.systemPurple.cgColor
+			layer.colors = [innerColor, outerColor]
 			pupilLayer.fillColor = NSColor.systemBlue.cgColor
-			rotationLayer.backgroundColor = NSColor.systemGreen.withAlphaComponent(0.75).cgColor
+			rotationLayer.backgroundColor = NSColor.systemGreen.withAlphaComponent(0.25).cgColor
 		}
 		else {
-			layer.fillColor = NSColor(named: "eyeEffect-iris")?.cgColor ?? NSColor.white.cgColor
+			layer.backgroundColor = NSColor(named: "eyeEffect-iris")?.cgColor ?? NSColor.white.cgColor
+			let innerColor = NSColor(named: "eyeEffect-iris-inner")?.cgColor ?? NSColor.white.cgColor
+			let outerColor = NSColor(named: "eyeEffect-iris-outer")?.cgColor ?? NSColor.gray.cgColor
+			layer.colors = [innerColor, outerColor]
 			pupilLayer.fillColor =  NSColor(named: "eyeEffect-pupil")?.cgColor ?? NSColor.black.cgColor
 		}
 		
@@ -81,8 +89,8 @@ class EyeEffect: NotchEffect {
 			leftEyeLayer.position = CGPoint(x: parentLayer.bounds.minX - radius, y: parentLayer.bounds.midY)
 			rightEyeLayer.position = CGPoint(x: parentLayer.bounds.maxX + radius, y: parentLayer.bounds.midY)
 
-			transformScale(layer: leftEyeLayer, isLeft: true, closed: true)
-			transformScale(layer: rightEyeLayer, isLeft: false, closed: true)
+			transformScaleEye(layer: leftEyeLayer, isLeft: true, closed: true)
+			transformScaleEye(layer: rightEyeLayer, isLeft: false, closed: true)
 
 			let backgroundBounds = parentLayer.bounds
 			let backgroundPath = NSBezierPath.init(roundedRect: backgroundBounds, xRadius: radius, yRadius: radius)
@@ -106,7 +114,7 @@ class EyeEffect: NotchEffect {
 		}
 	}
 
-	private func transformRotate(layer: CALayer, point: CGPoint, layerPoint: CGPoint) {
+	private func transformRotateEye(layer: CALayer, point: CGPoint, layerPoint: CGPoint) {
 		let anglePoint = CGPoint(x: layerPoint.x - point.x, y: layerPoint.y - point.y)
 		let angle = atan2(anglePoint.y, anglePoint.x)
 		if let sublayer = layer.sublayers?.first {
@@ -115,7 +123,7 @@ class EyeEffect: NotchEffect {
 		}
 	}
 		
-	private func transformScale(layer: CALayer, isLeft: Bool, closed: Bool) {
+	private func transformScaleEye(layer: CALayer, isLeft: Bool, closed: Bool) {
 		if closed {
 			let affineTransform = CGAffineTransform(scaleX: 1, y: 0)
 			layer.setAffineTransform(affineTransform)
@@ -131,19 +139,19 @@ class EyeEffect: NotchEffect {
 		CATransaction.withChange(duration: self.movementDuration) {
 			debugLog("ANIMATION EYES: closing")
 			if leftSide {
-				self.transformScale(layer: self.leftEyeLayer, isLeft: true, closed: true)
+				self.transformScaleEye(layer: self.leftEyeLayer, isLeft: true, closed: true)
 			}
 			else {
-				self.transformScale(layer: self.rightEyeLayer, isLeft: false, closed: true)
+				self.transformScaleEye(layer: self.rightEyeLayer, isLeft: false, closed: true)
 			}
 		} completion: {
 			CATransaction.withChange(duration: self.movementDuration) {
 				debugLog("ANIMATION EYES: opening")
 				if leftSide {
-					self.transformScale(layer: self.leftEyeLayer, isLeft: true, closed: false)
+					self.transformScaleEye(layer: self.leftEyeLayer, isLeft: true, closed: false)
 				}
 				else {
-					self.transformScale(layer: self.rightEyeLayer, isLeft: false, closed: false)
+					self.transformScaleEye(layer: self.rightEyeLayer, isLeft: false, closed: false)
 				}
 			} completion: {
 				debugLog("ANIMATION EYES: open")
@@ -184,10 +192,10 @@ class EyeEffect: NotchEffect {
 			rightEyeLayer.opacity = 0
 			backgroundLayer.opacity = 1
 			
-			transformScale(layer: leftEyeLayer, isLeft: true, closed: true)
-			transformScale(layer: rightEyeLayer, isLeft: false, closed: true)
-			transformRotate(layer: self.leftEyeLayer, point: point, layerPoint: leftPoint)
-			transformRotate(layer: self.rightEyeLayer, point: point, layerPoint: rightPoint)
+			transformScaleEye(layer: leftEyeLayer, isLeft: true, closed: true)
+			transformScaleEye(layer: rightEyeLayer, isLeft: false, closed: true)
+			transformRotateEye(layer: self.leftEyeLayer, point: point, layerPoint: leftPoint)
+			transformRotateEye(layer: self.rightEyeLayer, point: point, layerPoint: rightPoint)
 			debugLog("ANIMATION EYES: closed")
 		}
 		
@@ -211,8 +219,8 @@ class EyeEffect: NotchEffect {
 				
 				CATransaction.withChange(duration: self.openCloseDuration) {
 					debugLog("ANIMATION EYES: opening")
-					self.transformScale(layer: self.leftEyeLayer, isLeft: true, closed: false)
-					self.transformScale(layer: self.rightEyeLayer, isLeft: false, closed: false)
+					self.transformScaleEye(layer: self.leftEyeLayer, isLeft: true, closed: false)
+					self.transformScaleEye(layer: self.rightEyeLayer, isLeft: false, closed: false)
 				} completion: {
 					debugLog("ANIMATION EYES: open")
 				}
@@ -235,8 +243,8 @@ class EyeEffect: NotchEffect {
 		let leftPoint = CGPoint(x: parentLayer.bounds.minX - radius, y: parentLayer.bounds.midY)
 		let rightPoint = CGPoint(x: parentLayer.bounds.maxX + radius, y: parentLayer.bounds.midY)
 
-		transformRotate(layer: leftEyeLayer, point: point, layerPoint: leftPoint)
-		transformRotate(layer: rightEyeLayer, point: point, layerPoint: rightPoint)
+		transformRotateEye(layer: leftEyeLayer, point: point, layerPoint: leftPoint)
+		transformRotateEye(layer: rightEyeLayer, point: point, layerPoint: rightPoint)
 	}
 
 	
@@ -272,8 +280,8 @@ class EyeEffect: NotchEffect {
 		}
 
 		CATransaction.withChange(duration: self.openCloseDuration) {
-			self.transformScale(layer: leftEyeLayer, isLeft: true, closed: true)
-			self.transformScale(layer: rightEyeLayer, isLeft: false, closed: true)
+			self.transformScaleEye(layer: leftEyeLayer, isLeft: true, closed: true)
+			self.transformScaleEye(layer: rightEyeLayer, isLeft: false, closed: true)
 			debugLog("ANIMATION EYES: closing")
 		} completion: {
 			debugLog("ANIMATION EYES: closed")
