@@ -32,6 +32,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		if Defaults.shouldHideDockIcon {
 			if Defaults.shouldActivateUnderNotch && Defaults.shouldHideWindowAtLaunch {
 				if let window = NSApplication.shared.windows.first {
+					debugLog("closing window at launch")
+					// NOTE: The notch windows are created on the window's view controller when the application
+					// is activated. If the window closes at launch, we have to ensure that happens without the
+					// window being loaded. This is called living with decisions that were made many years ago.
+					NSApplication.shared.activate(ignoringOtherApps: true)
 					window.orderOut(self)
 				}
 			}
@@ -53,14 +58,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	}
 
 	func applicationWillTerminate(_ aNotification: Notification) {
-		// Insert code here to tear down your application
+		debugLog()
 	}
 
 	func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
-		return true;
+		debugLog()
+		return false;
 	}
 
 	func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
+		debugLog()
 		// clicking on the Dock icon will cause the main window to reappear
 		if let window = sender.windows.first {
 			window.makeKeyAndOrderFront(self)
