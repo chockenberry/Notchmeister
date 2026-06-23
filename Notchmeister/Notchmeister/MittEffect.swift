@@ -21,11 +21,19 @@ class MittEffect: NotchEffect {
 	var ledLayers: [CALayer]
 	var speechSynthesizerLevelsNotificationObserver: NSObjectProtocol? = nil
 
+	let smallWidth: CGFloat = 128
+	
 	let ledCount = 12
-	let padding: CGFloat = 15
 
-	let ledBounds = CGRect(origin: .zero, size: CGSize(width: 15, height: 15))
-
+	var ledBounds: CGRect {
+		if backgroundLayer.bounds.size.width > smallWidth {
+			return CGRect(origin: .zero, size: CGSize(width: 15, height: 15))
+		}
+		else {
+			return CGRect(origin: .zero, size: CGSize(width: 10, height: 10))
+		}
+	}
+	
 	static let storageName = "MITT-MEM.TXT"
 	
 	lazy var mittStorage: [String] = {
@@ -190,9 +198,9 @@ class MittEffect: NotchEffect {
 
 		do { // the layer that is a frame holding the screen
 			backgroundLayer.bounds = parentLayer.bounds
-#if DEBUG && true
+#if DEBUG && false
 			var bounds = parentLayer.bounds
-			bounds.size.width = 220
+			//bounds.size.width = parentLayer.size.width
 			bounds.size.height = 50
 
 			backgroundLayer.bounds = bounds
@@ -211,7 +219,7 @@ class MittEffect: NotchEffect {
 #else
 			backgroundLayer.bounds = parentLayer.bounds
 			backgroundLayer.backgroundColor = NSColor.black.cgColor
-			backgroundLayer.cornerRadius = parentLayer.bounds.height / 2
+			backgroundLayer.cornerRadius = CGFloat.notchLowerRadius //parentLayer.bounds.height / 2
 #endif
 			backgroundLayer.masksToBounds = true
 			backgroundLayer.contentsScale = parentLayer.contentsScale
@@ -220,6 +228,13 @@ class MittEffect: NotchEffect {
 		}
 		
 		parentLayer.addSublayer(backgroundLayer)
+
+		let padding = if backgroundLayer.bounds.size.width > smallWidth {
+			CGFloat(15)
+		}
+		else {
+			CGFloat(10)
+		}
 
 		let availableWidth = parentLayer.bounds.width - (padding * 2)
 		let ledSpacing = availableWidth / CGFloat(ledCount - 1)
