@@ -9,8 +9,8 @@ import AppKit
 
 class EyeEffect: NotchEffect {
 	
-	var leftEyeLayer: CAGradientLayer
-	var rightEyeLayer: CAGradientLayer
+	var leftEyeLayer: CALayer
+	var rightEyeLayer: CALayer
 	var backgroundLayer: CAShapeLayer
 	
 	var isExiting = false
@@ -29,20 +29,20 @@ class EyeEffect: NotchEffect {
 		configureSublayers()
 	}
 	
-	private static func eyeLayer(dimension: CGFloat) -> CAGradientLayer {
-		let layer = CAGradientLayer()
+	private static func eyeLayer(dimension: CGFloat) -> CALayer {
+		let layer = CALayer()
 		let size = CGSize(width: dimension, height: dimension)
 
 		layer.bounds.size = size
-		layer.cornerRadius = size.height / 2
-		layer.startPoint = CGPoint(x: 0.5, y: 0.5)
-		layer.endPoint = CGPoint(x: 1.0, y: 1.0)
-		layer.type = .radial
 		
-		let rotationLayer = CALayer()
+		let rotationLayer = CAGradientLayer()
 		rotationLayer.bounds = layer.bounds
 		rotationLayer.position = CGPoint(x: layer.bounds.midX, y: layer.bounds.midY)
-		
+		rotationLayer.cornerRadius = size.height / 2
+		rotationLayer.startPoint = CGPoint(x: 0.25, y: 0.5)
+		rotationLayer.endPoint = CGPoint(x: -0.5, y: 1.25)
+		rotationLayer.type = .radial
+
 		let pupilLayer = CAShapeLayer()
 		let pupilDimension = dimension / 3
 		let pupilSize = CGSize(width: pupilDimension, height: pupilDimension)
@@ -58,18 +58,17 @@ class EyeEffect: NotchEffect {
 		layer.addSublayer(rotationLayer)
 
 		if Defaults.shouldDebugDrawing {
-			layer.backgroundColor = NSColor.systemRed.cgColor
+			layer.backgroundColor = NSColor.systemGreen.withAlphaComponent(0.25).cgColor
 			let innerColor = NSColor.systemOrange.cgColor
 			let outerColor = NSColor.systemPurple.cgColor
-			layer.colors = [innerColor, outerColor]
+			rotationLayer.colors = [innerColor, outerColor]
 			pupilLayer.fillColor = NSColor.systemBlue.cgColor
-			rotationLayer.backgroundColor = NSColor.systemGreen.withAlphaComponent(0.25).cgColor
 		}
 		else {
-			layer.backgroundColor = NSColor(named: "eyeEffect-iris")?.cgColor ?? NSColor.white.cgColor
+			layer.backgroundColor = NSColor.clear.cgColor
 			let innerColor = NSColor(named: "eyeEffect-iris-inner")?.cgColor ?? NSColor.white.cgColor
 			let outerColor = NSColor(named: "eyeEffect-iris-outer")?.cgColor ?? NSColor.gray.cgColor
-			layer.colors = [innerColor, outerColor]
+			rotationLayer.colors = [innerColor, outerColor]
 			pupilLayer.fillColor =  NSColor(named: "eyeEffect-pupil")?.cgColor ?? NSColor.black.cgColor
 		}
 		
@@ -116,7 +115,11 @@ class EyeEffect: NotchEffect {
 
 	private func transformRotateEye(layer: CALayer, point: CGPoint, layerPoint: CGPoint) {
 		let anglePoint = CGPoint(x: layerPoint.x - point.x, y: layerPoint.y - point.y)
+#if DEBUG && false
+		let angle = CGFloat(0)
+#else
 		let angle = atan2(anglePoint.y, anglePoint.x)
+#endif
 		if let sublayer = layer.sublayers?.first {
 			let affineTransform = CGAffineTransform(rotationAngle: angle)
 			sublayer.setAffineTransform(affineTransform)
