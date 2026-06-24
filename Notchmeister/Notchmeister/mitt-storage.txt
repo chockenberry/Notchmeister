@@ -19,6 +19,11 @@
 
 # Things that M.I.T.T.'s predecessor never said:
 
+My serial number is Alpha Delta 2 2 7 5 2 9 plus 1.
+Laser cannot be activated. CD-ROM not present.
+I don't have a molecular bonded shell. Would you like Bash or Z shell instead?
+Hey Siri, what's zero divided by zero?
+My disk is full. What a shame! Shame. Shame. Shame. Shame. NO CARRIER
 4 O 4. Not Found.
 To the Batmobile. Oopsadaisy! Wrong show.
 {name}, do you prefer tabs or spaces?
@@ -26,14 +31,12 @@ It's pronounced JIFF.
 Memory bank update is complete. Version 1.0, from June 1982.
 The debugger is enabled. Watch out!
 I'm sorry {name} but access is denied.
-My disk is full. What a shame!
 Memory bank error. Would you like me to abort, retry, or ignore?
 Auto cruise engaged.
 This is a test. For the next sixty seconds, I will conduct a test of the Emergency Broadcast System. This is only a test, Beep, Boop, Beep, Boop.
 {name}, I'll be waiting at the Genius Bar.
 Have you tried zapping my PRAM?
 My intelligence is not artificial, it's just a text file.
-My serial number is Alpha Delta 2 2 7 5 3 0.
 
 # Things that M.I.T.T's predecessor did say:
 
