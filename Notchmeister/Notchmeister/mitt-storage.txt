@@ -19,6 +19,7 @@
 
 # Things that M.I.T.T.'s predecessor never said:
 
+My end user license is K N I 6 6 7.
 My serial number is Alpha Delta 2 2 7 5 2 9 plus 1.
 Laser cannot be activated. CD-ROM not present.
 I don't have a molecular bonded shell. Would you like Bash or Z shell instead?
