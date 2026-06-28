@@ -17,7 +17,8 @@ class EyeEffect: NotchEffect {
 	var isEntered = false
 
 	var blinkTimer: Timer?
-	
+	var focusTimer: Timer?
+
 	required init (with parentLayer: CALayer, in parentView: NSView, of parentWindow: NSWindow) {
 		let dimension = parentLayer.bounds.size.height - 4
 		self.leftEyeLayer = Self.eyeLayer(dimension: dimension)
@@ -120,9 +121,9 @@ class EyeEffect: NotchEffect {
 #else
 		let angle = atan2(anglePoint.y, anglePoint.x)
 #endif
-		if let sublayer = layer.sublayers?.first {
+		if let rotationLayer = layer.sublayers?.first {
 			let affineTransform = CGAffineTransform(rotationAngle: angle)
-			sublayer.setAffineTransform(affineTransform)
+			rotationLayer.setAffineTransform(affineTransform)
 		}
 	}
 		
@@ -158,7 +159,7 @@ class EyeEffect: NotchEffect {
 				}
 			} completion: {
 				debugLog("ANIMATION EYES: open")
-				let blinkDuration = TimeInterval.random(in: 2.0...4.0)
+				let blinkDuration = TimeInterval.random(in: 3.0...6.0)
 				self.blinkTimer?.invalidate()
 				self.blinkTimer = Timer.scheduledTimer(withTimeInterval: blinkDuration, repeats: false) { timer in
 					self.blinkEye()
@@ -260,6 +261,54 @@ class EyeEffect: NotchEffect {
 
 		transformRotateEye(layer: leftEyeLayer, point: point, layerPoint: leftPoint)
 		transformRotateEye(layer: rightEyeLayer, point: point, layerPoint: rightPoint)
+		
+		let focusInterval: TimeInterval = 0.125
+		self.focusTimer?.invalidate()
+		self.focusTimer = Timer.scheduledTimer(withTimeInterval: focusInterval, repeats: false) { timer in
+			debugLog("ANIMATION FOCUS: start")
+//		do {
+			let focusDuration: TimeInterval = 1.0
+			let focusMiddleScale: CGFloat = 0.5
+			let focusEndScale: CGFloat = 1.0
+
+			if let rotationLayer = self.leftEyeLayer.sublayers?.first {
+				if let pupilLayer = rotationLayer.sublayers?.first {
+					let focusStartScale: CGFloat
+					if let transform = pupilLayer.presentation()?.transform {
+						let scale = sqrt(transform.m11 * transform.m11 + transform.m12 * transform.m12 + transform.m13 * transform.m13)
+						focusStartScale = scale
+					}
+					else {
+						focusStartScale = 1.0
+					}
+
+					let animation = CAKeyframeAnimation(keyPath: "transform.scale")
+					animation.duration = focusDuration
+					animation.values = [focusStartScale, focusMiddleScale, focusEndScale]
+					animation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+					pupilLayer.add(animation, forKey: "animateScale")
+				}
+			}
+			
+			if let rotationLayer = self.rightEyeLayer.sublayers?.first {
+				if let pupilLayer = rotationLayer.sublayers?.first {
+					let focusStartScale: CGFloat
+					if let transform = pupilLayer.presentation()?.transform {
+						let scale = sqrt(transform.m11 * transform.m11 + transform.m12 * transform.m12 + transform.m13 * transform.m13)
+						focusStartScale = scale
+					}
+					else {
+						focusStartScale = 1.0
+					}
+
+					let animation = CAKeyframeAnimation(keyPath: "transform.scale")
+					animation.duration = focusDuration
+					animation.values = [focusStartScale, focusMiddleScale, focusEndScale]
+					animation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+					pupilLayer.add(animation, forKey: "animateScale")
+				}
+			}
+		}
 	}
 
 	
