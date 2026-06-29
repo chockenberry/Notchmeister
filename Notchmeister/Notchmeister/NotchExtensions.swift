@@ -78,12 +78,12 @@ extension NSScreen {
 			fakeNotchSize = NSSize(width:220, height:38) // more space
 		}
 		else {
-#if DEBUG && true
+#if DEBUG && false
 			//fakeNotchSize = NSSize(width:127, height:22) // larger text
 			fakeNotchSize = NSSize(width:185, height:32) // default
 			//fakeNotchSize = NSSize(width:220, height:38) // more space
 #else
-			fakeNotchSize = NSSize(width:220, height:screenFrame.maxY - visibleFrame.maxY)
+			fakeNotchSize = NSSize(width:185, height:screenFrame.maxY - visibleFrame.maxY)
 #endif
 		}
 
