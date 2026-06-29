@@ -179,8 +179,8 @@ class EyeEffect: NotchEffect {
 		}
 	}
 
-	let enterExitDuration: TimeInterval = 0.25
-	let openCloseDuration: TimeInterval = 0.5
+	let enterExitDuration: TimeInterval = 0.3
+	let openCloseDuration: TimeInterval = 0.2
 	let movementDuration: TimeInterval = 0.1
 
 	override func mouseEntered(at point: CGPoint, underNotch: Bool) {
